@@ -78,6 +78,18 @@ public class Record implements Map<String, Object> {
         return new HashSet<Error>( this.errors );
     }
 
+    public String getString( String key ) {
+        return (String)this.get( key );
+    }
+
+    public Long getLong( String key ) {
+        return (Long)this.get( key );
+    }
+
+    public Integer getInteger( String key ) {
+        return (Integer)this.get( key );
+    }
+
     @Override
     public Set<String> keySet() {
         return data.keySet();

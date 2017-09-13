@@ -33,6 +33,9 @@ public class Format {
     }
 
     public Optional<Integer> getLength() {
+        if( this.length == null ) {
+            return Optional.empty();
+        }
         return Optional.of( this.length );
     }
 

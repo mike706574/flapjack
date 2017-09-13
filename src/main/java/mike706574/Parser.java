@@ -24,21 +24,29 @@ public class Parser {
 
         Optional<Integer> length = format.getLength();
 
-        if( length.isPresent() && !length.get().equals( line.length() ) ) {
-            Error lengthMismatch = new Error( "length-mismatch" );
+        Integer lineLength = line.length();
+        if( length.isPresent() && !length.get().equals( lineLength ) ) {
+            Error lengthMismatch = new LengthMismatchError( length.get(),
+                                                            lineLength );
             errors.add( lengthMismatch );
+            return Record.with( index, data, errors );
         }
 
         for( Field field : format.getFields() ) {
             String fieldId = field.getId();
-            try {
-                String value = line.substring( field.getStart() - 1,
-                                               field.getEnd() );
-                data.put( fieldId, value );
-            }
-            catch( IndexOutOfBoundsException ex ) {
-                Error outOfBounds = new Error( "field-out-of-bounds", fieldId );
+            Integer fieldStart = field.getStart();
+            Integer fieldEnd = field.getEnd();
+
+            if( fieldEnd > lineLength ) {
+                Error outOfBounds = new OutOfBoundsError( fieldId,
+                                                          fieldEnd,
+                                                          lineLength );
                 errors.add( outOfBounds );
+            }
+            else {
+                String value = line.substring( fieldStart - 1,
+                                               fieldEnd );
+                data.put( fieldId, value );
             }
         }
 
