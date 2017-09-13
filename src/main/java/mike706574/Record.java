@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import java.util.function.Supplier;;
+import java.util.function.Supplier;
 
 public class Record implements Map<String, Object> {
     private final Long index;
