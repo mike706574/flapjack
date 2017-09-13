@@ -1,50 +1,64 @@
 package mike706574;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import java.util.function.Function;
+import java.util.function.Supplier;;
 
-public class Record implements Map<String, String> {
+public class Record implements Map<String, Object> {
     private final Long index;
+    private final Map<String, Object> data;
+    private final Set<Error> errors;
     private final String line;
-    private final Map<String, String> data;
-    private final String errorCategory;
 
-    private Record( Long index, Map<String, String> data ) {
+    private Record( Record record ) {
+        this.index = record.getIndex();
+        this.line = record.getLine().orElse( null );
+        this.data = new LinkedHashMap<String, Object>( record );
+        this.errors = new HashSet<Error>( record.getErrors() );
+    }
+
+    private Record( Record record, Error error ) {
+        this.index = record.getIndex();
+        this.line = record.getLine().orElse( null );
+        this.data = new LinkedHashMap<String, Object>( record );
+        this.errors = new HashSet<Error>( record.getErrors() );
+        this.errors.add( error );
+    }
+
+    private Record( Long index, Map<String, Object> data, Set<Error> errors ) {
         this.index = index;
-        this.data = data;
+        this.data = new LinkedHashMap<String, Object>( data );
+        this.errors = new HashSet<Error>( errors );
         this.line = null;
-        this.errorCategory = null;
     }
 
-    public Record( Long index,
-                   String errorCategory,
-                   String line ) {
+    private Record( Long index, Map<String, Object> data, Error error, String line ) {
         this.index = index;
+        this.data = new LinkedHashMap<String, Object>( data );
+        this.errors = new HashSet<Error>();
+        this.errors.add( error );
         this.line = line;
-        this.data = null;
-        this.errorCategory = errorCategory;
     }
 
-    public static Record error( Long index,
-                                String errorCategory,
-                                String line ) {
-        return new Record( index, errorCategory, line );
+    public static Record with( Long index, Map<String, Object> data, Set<Error> errors ) {
+        return new Record( index, data, errors );
     }
 
-    public static Record of( Long index, Map<String, String> data ) {
-        return new Record( index, data );
+    public Record withError( Error error ) {
+        return new Record( this, error );
     }
 
-    public <X extends Throwable> Record orElseThrow( Function<Record, ? extends X> exceptionSupplier ) throws X {
-        if( data != null ) {
+    public <X extends Throwable> Record orElseThrow( Supplier<? extends X> exceptionSupplier ) throws X {
+        if( errors.isEmpty() ) {
             return this;
         }
         else {
-            throw exceptionSupplier.apply( this );
+            throw exceptionSupplier.get();
         }
     }
 
@@ -56,8 +70,12 @@ public class Record implements Map<String, String> {
         return Optional.of( this.line );
     }
 
-    public Optional<String> getErrorCategory() {
-        return Optional.of( this.errorCategory );
+    public boolean hasErrors() {
+        return this.errors.isEmpty();
+    }
+
+    public Set<Error> getErrors() {
+        return new HashSet<Error>( this.errors );
     }
 
     @Override
@@ -66,12 +84,12 @@ public class Record implements Map<String, String> {
     }
 
     @Override
-    public Set<Map.Entry<String, String>> entrySet() {
+    public Set<Map.Entry<String, Object>> entrySet() {
         return data.entrySet();
     }
 
     @Override
-    public Collection<String> values() {
+    public Collection<Object> values() {
         return data.values();
     }
 
@@ -86,12 +104,12 @@ public class Record implements Map<String, String> {
     }
 
     @Override
-    public String put( String key, String values ) {
+    public String put( String key, Object value ) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String get( Object key ) {
+    public Object get( Object key ) {
         return data.get( key );
     }
 
@@ -116,7 +134,7 @@ public class Record implements Map<String, String> {
     }
 
     @Override
-    public void putAll( Map<? extends String, ? extends String> m ) {
+    public void putAll( Map<? extends String, ? extends Object> m ) {
         throw new UnsupportedOperationException();
     }
 }

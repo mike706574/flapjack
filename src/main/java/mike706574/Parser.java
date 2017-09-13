@@ -1,8 +1,11 @@
 package mike706574;
 
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import java.util.stream.Stream;
 
@@ -16,26 +19,30 @@ public class Parser {
     }
 
     private Record parseLine( Long index, String line ) {
+        Map<String, Object> data = new HashMap<String, Object>();
+        Set<Error> errors = new HashSet<Error>();
+
         Optional<Integer> length = format.getLength();
 
         if( length.isPresent() && !length.get().equals( line.length() ) ) {
-            return Record.error( index, "length-mismatch", line );
+            Error lengthMismatch = new Error( "length-mismatch" );
+            errors.add( lengthMismatch );
         }
 
-        Map<String, String> data = new LinkedHashMap<String, String>();
-
-        try {
-            for( Field field : format.getFields() ) {
+        for( Field field : format.getFields() ) {
+            String fieldId = field.getId();
+            try {
                 String value = line.substring( field.getStart() - 1,
                                                field.getEnd() );
-                data.put( field.getId(), value );
+                data.put( fieldId, value );
+            }
+            catch( IndexOutOfBoundsException ex ) {
+                Error outOfBounds = new Error( "field-out-of-bounds", fieldId );
+                errors.add( outOfBounds );
             }
         }
-        catch( IndexOutOfBoundsException ex ) {
-            return Record.error( index, "too-short", line );
-        }
 
-        return Record.of( index, data );
+        return Record.with( index, data, errors );
     }
 
     public Stream<Record> stream( Stream<String> lines ) {

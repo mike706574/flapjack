@@ -17,6 +17,11 @@ public class Field {
         this.end = end;
     }
 
+    public static Field with( String id, Integer start, Integer end ) {
+        return new Field( id, start, end );
+    }
+
+
     public String getId() {
         return this.id;
     }
