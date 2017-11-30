@@ -2,12 +2,17 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>mike706574</groupId>
+  <parent>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>9</version>
+  </parent>
+
+  <groupId>fun.mike</groupId>
   <artifactId>flapjack</artifactId>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>playground</name>
   <url>https://github.com/mike706574/flapjack</url>
 
   <properties>
@@ -17,8 +22,41 @@
     <jackson.version>2.9.1</jackson.version>
   </properties>
 
-  <dependencies>
+  <licenses>
+    <license>
+      <name>The Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <scm>
+    <connection>scm:git:https://github.com/mike706574/java-crypto-pgp.git</connection>
+    <developerConnection>scm:git:https://github.com/mike706574/java-crypto-pgp.git</developerConnection>
+    <url>http://github.com/mike706574/java-crypto-pgp/tree/master</url>
+    <tag>HEAD</tag>
+  </scm>
+
+  <developers>
+    <developer>
+      <name>Michael Easter</name>
+      <email>mike706574@gmail.com</email>
+      <organization>None</organization>
+      <organizationUrl>http://github.com/mike706574</organizationUrl>
+    </developer>
+  </developers>
+
+  <dependencies>
     <dependency>
       <groupId>com.codepoetics</groupId>
       <artifactId>protonpack</artifactId>
@@ -46,7 +84,18 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.20</version>
         <configuration>
+          <trimStackTrace>false</trimStackTrace>
           <workingDirectory>src/test/resources</workingDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <compilerArgs>
+            <arg>-Xlint:all,-options,-path</arg>
+          </compilerArgs>
         </configuration>
       </plugin>
     </plugins>

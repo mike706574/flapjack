@@ -1,4 +1,4 @@
-package mike706574;
+package fun.mike.flapjack;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -11,9 +11,6 @@ import org.junit.rules.ExpectedException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import java.util.stream.Collectors;
@@ -63,9 +60,9 @@ public class ParserTest {
         Record record1 = records.get( 0 );
         assertTrue( record1.isEmpty() );
 
-        Set<Error> errors = record1.getErrors();
+        Set<fun.mike.flapjack.Error> errors = record1.getErrors();
         assertEquals( 1, errors.size() );
-        Error error = errors.iterator().next();
+        fun.mike.flapjack.Error error = errors.iterator().next();
         assertTrue( error instanceof LengthMismatchError );
     }
 
@@ -87,10 +84,10 @@ public class ParserTest {
         assertEquals( "ab", record1.get( "foo" ) );
         assertFalse( record1.containsKey( "bar" ) );
 
-        Set<Error> errors = record1.getErrors();
+        Set<fun.mike.flapjack.Error> errors = record1.getErrors();
         assertEquals( 1, errors.size() );
 
-        Error error = errors.iterator().next();
+        fun.mike.flapjack.Error error = errors.iterator().next();
         assertTrue( error instanceof OutOfBoundsError );
         OutOfBoundsError outOfBoundsError = (OutOfBoundsError)error;
         assertEquals( "bar", outOfBoundsError.getFieldId() );

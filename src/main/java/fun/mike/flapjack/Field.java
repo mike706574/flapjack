@@ -1,4 +1,4 @@
-package mike706574;
+package fun.mike.flapjack;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

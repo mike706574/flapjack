@@ -1,6 +1,5 @@
-package mike706574;
+package fun.mike.flapjack;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,13 +19,13 @@ public class Parser {
 
     private Record parseLine( Long index, String line ) {
         Map<String, Object> data = new HashMap<String, Object>();
-        Set<Error> errors = new HashSet<Error>();
+        Set<fun.mike.flapjack.Error> errors = new HashSet<fun.mike.flapjack.Error>();
 
         Optional<Integer> length = format.getLength();
 
         Integer lineLength = line.length();
         if( length.isPresent() && !length.get().equals( lineLength ) ) {
-            Error lengthMismatch = new LengthMismatchError( length.get(),
+            fun.mike.flapjack.Error lengthMismatch = new LengthMismatchError( length.get(),
                                                             lineLength );
             errors.add( lengthMismatch );
             return Record.with( index, data, errors );
@@ -38,7 +37,7 @@ public class Parser {
             Integer fieldEnd = field.getEnd();
 
             if( fieldEnd > lineLength ) {
-                Error outOfBounds = new OutOfBoundsError( fieldId,
+                fun.mike.flapjack.Error outOfBounds = new OutOfBoundsError( fieldId,
                                                           fieldEnd,
                                                           lineLength );
                 errors.add( outOfBounds );

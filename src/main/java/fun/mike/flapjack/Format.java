@@ -1,4 +1,4 @@
-package mike706574;
+package fun.mike.flapjack;
 
 import java.util.Collections;
 import java.util.List;
