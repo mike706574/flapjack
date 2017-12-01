@@ -45,7 +45,14 @@ public class Parser {
             else {
                 String value = line.substring( fieldStart - 1,
                                                fieldEnd );
-                data.put( fieldId, value );
+                ObjectOrError result = parseType(field, value);
+
+                if(result.isError()) {
+                    errors.add(result.getError());
+                }
+                else {
+                    data.put( fieldId, result.getObject() );
+                }
             }
         }
 
@@ -55,5 +62,25 @@ public class Parser {
     public Stream<Record> stream( Stream<String> lines ) {
         return StreamUtils.zipWithIndex( lines )
             .map( item -> parseLine( item.getIndex(), item.getValue() ) );
+    }
+
+    private ObjectOrError parseType(Field field, String value) {
+        switch(field.getType()) {
+            case "string":
+                return ObjectOrError.object(value);
+            case "integer":
+                return parseInt(field, value);
+        }
+
+        return ObjectOrError.error(new NoSuchTypeError(field));
+    }
+
+    private ObjectOrError parseInt(Field field, String value) {
+        try {
+            return ObjectOrError.object(Integer.parseInt(value));
+        }
+        catch(NumberFormatException ex) {
+            return ObjectOrError.error(new TypeError(field, value));
+        }
     }
 }

@@ -21,8 +21,8 @@ public class ParserTest {
 
     @Test
     public void valid() {
-        List<Field> fields = Arrays.asList( new Field( "foo", 1, 5 ),
-                                            new Field( "bar", 6, 10 ) );
+        List<Field> fields = Arrays.asList( new Field( "foo", 1, 5, "string" ),
+                                            new Field( "bar", 6, 10, "string" ) );
 
         Format format = new Format( "baz", "Baz", 10, fields );
 
@@ -46,8 +46,34 @@ public class ParserTest {
     }
 
     @Test
+    public void validInteger() {
+        List<Field> fields = Arrays.asList( new Field( "foo", 1, 5, "integer" ),
+                                            new Field( "bar", 6, 10, "string" ) );
+
+        Format format = new Format( "baz", "Baz", 10, fields );
+
+        Parser parser = new Parser( format );
+
+        List<String> lines = Arrays.asList( "1234567890",
+                                            "54321fghij" );
+
+        List<Record> records = parser.stream( lines.stream() )
+            .collect( Collectors.toList() );
+
+        assertEquals( 2, records.size() );
+
+        Record record1 = records.get( 0 );
+        assertEquals( new Integer(12345), record1.get( "foo" ) );
+        assertEquals( "67890", record1.get( "bar" ) );
+
+        Record record2 = records.get( 1 );
+        assertEquals( new Integer(54321), record2.get( "foo" ) );
+        assertEquals( "fghij", record2.get( "bar" ) );
+    }
+
+    @Test
     public void lengthMismatch() {
-        List<Field> fields = Arrays.asList( Field.with( "foo", 1, 2 ) );
+        List<Field> fields = Arrays.asList( Field.with( "foo", 1, 2, "string" ) );
         Format format = new Format( "baz", "Baz", 2, fields );
         Parser parser = new Parser( format );
 
@@ -68,8 +94,8 @@ public class ParserTest {
 
     @Test
     public void outOfBounds() {
-        List<Field> fields = Arrays.asList( Field.with( "foo", 1, 2 ),
-                                            Field.with( "bar", 3, 4 ));
+        List<Field> fields = Arrays.asList( Field.with( "foo", 1, 2, "string" ),
+                                            Field.with( "bar", 3, 4, "string" ));
         Format format = new Format( "baz", "Baz", null, fields );
         Parser parser = new Parser( format );
 
@@ -93,7 +119,5 @@ public class ParserTest {
         assertEquals( "bar", outOfBoundsError.getFieldId() );
         assertEquals( new Integer( 4 ), outOfBoundsError.getFieldEnd() );
         assertEquals( new Integer( 3 ), outOfBoundsError.getLineLength() );
-
-
     }
 }
