@@ -4,8 +4,8 @@ public class ObjectOrError {
     private Object object;
     private fun.mike.flapjack.Error error;
 
-    public ObjectOrError( Object object,
-                          Error error ) {
+    public ObjectOrError(Object object,
+                         Error error) {
         this.object = object;
         this.error = error;
     }

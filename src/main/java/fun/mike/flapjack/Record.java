@@ -1,13 +1,7 @@
 package fun.mike.flapjack;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 
 public class Record implements Map<String, Object> {
     private final Long index;
@@ -15,49 +9,48 @@ public class Record implements Map<String, Object> {
     private final Set<fun.mike.flapjack.Error> errors;
     private final String line;
 
-    private Record( Record record ) {
+    private Record(Record record) {
         this.index = record.getIndex();
-        this.line = record.getLine().orElse( null );
-        this.data = new LinkedHashMap<String, Object>( record );
-        this.errors = new HashSet<fun.mike.flapjack.Error>( record.getErrors() );
+        this.line = record.getLine().orElse(null);
+        this.data = new LinkedHashMap<String, Object>(record);
+        this.errors = new HashSet<fun.mike.flapjack.Error>(record.getErrors());
     }
 
-    private Record( Record record, fun.mike.flapjack.Error error ) {
+    private Record(Record record, fun.mike.flapjack.Error error) {
         this.index = record.getIndex();
-        this.line = record.getLine().orElse( null );
-        this.data = new LinkedHashMap<String, Object>( record );
-        this.errors = new HashSet<fun.mike.flapjack.Error>( record.getErrors() );
-        this.errors.add( error );
+        this.line = record.getLine().orElse(null);
+        this.data = new LinkedHashMap<String, Object>(record);
+        this.errors = new HashSet<fun.mike.flapjack.Error>(record.getErrors());
+        this.errors.add(error);
     }
 
-    private Record( Long index, Map<String, Object> data, Set<fun.mike.flapjack.Error> errors ) {
+    private Record(Long index, Map<String, Object> data, Set<fun.mike.flapjack.Error> errors) {
         this.index = index;
-        this.data = new LinkedHashMap<String, Object>( data );
-        this.errors = new HashSet<fun.mike.flapjack.Error>( errors );
+        this.data = new LinkedHashMap<String, Object>(data);
+        this.errors = new HashSet<fun.mike.flapjack.Error>(errors);
         this.line = null;
     }
 
-    private Record(Long index, Map<String, Object> data, fun.mike.flapjack.Error error, String line ) {
+    private Record(Long index, Map<String, Object> data, fun.mike.flapjack.Error error, String line) {
         this.index = index;
-        this.data = new LinkedHashMap<String, Object>( data );
+        this.data = new LinkedHashMap<String, Object>(data);
         this.errors = new HashSet<fun.mike.flapjack.Error>();
-        this.errors.add( error );
+        this.errors.add(error);
         this.line = line;
     }
 
-    public static Record with( Long index, Map<String, Object> data, Set<fun.mike.flapjack.Error> errors ) {
-        return new Record( index, data, errors );
+    public static Record with(Long index, Map<String, Object> data, Set<fun.mike.flapjack.Error> errors) {
+        return new Record(index, data, errors);
     }
 
-    public Record withError( fun.mike.flapjack.Error error ) {
-        return new Record( this, error );
+    public Record withError(fun.mike.flapjack.Error error) {
+        return new Record(this, error);
     }
 
-    public <X extends Throwable> Record orElseThrow( Supplier<? extends X> exceptionSupplier ) throws X {
-        if( errors.isEmpty() ) {
+    public <X extends Throwable> Record orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        if (errors.isEmpty()) {
             return this;
-        }
-        else {
+        } else {
             throw exceptionSupplier.get();
         }
     }
@@ -67,7 +60,7 @@ public class Record implements Map<String, Object> {
     }
 
     public Optional<String> getLine() {
-        return Optional.of( this.line );
+        return Optional.of(this.line);
     }
 
     public boolean hasErrors() {
@@ -75,19 +68,19 @@ public class Record implements Map<String, Object> {
     }
 
     public Set<fun.mike.flapjack.Error> getErrors() {
-        return new HashSet<fun.mike.flapjack.Error>( this.errors );
+        return new HashSet<fun.mike.flapjack.Error>(this.errors);
     }
 
-    public String getString( String key ) {
-        return (String)this.get( key );
+    public String getString(String key) {
+        return (String) this.get(key);
     }
 
-    public Long getLong( String key ) {
-        return (Long)this.get( key );
+    public Long getLong(String key) {
+        return (Long) this.get(key);
     }
 
-    public Integer getInteger( String key ) {
-        return (Integer)this.get( key );
+    public Integer getInteger(String key) {
+        return (Integer) this.get(key);
     }
 
     @Override
@@ -111,28 +104,28 @@ public class Record implements Map<String, Object> {
     }
 
     @Override
-    public String remove( Object key ) {
+    public String remove(Object key) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public String put( String key, Object value ) {
+    public String put(String key, Object value) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Object get( Object key ) {
-        return data.get( key );
+    public Object get(Object key) {
+        return data.get(key);
     }
 
     @Override
-    public boolean containsValue( Object value ) {
-        return data.containsValue( value );
+    public boolean containsValue(Object value) {
+        return data.containsValue(value);
     }
 
     @Override
-    public boolean containsKey( Object key ) {
-        return data.containsKey( key );
+    public boolean containsKey(Object key) {
+        return data.containsKey(key);
     }
 
     @Override
@@ -146,7 +139,7 @@ public class Record implements Map<String, Object> {
     }
 
     @Override
-    public void putAll( Map<? extends String, ? extends Object> m ) {
+    public void putAll(Map<? extends String, ? extends Object> m) {
         throw new UnsupportedOperationException();
     }
 }

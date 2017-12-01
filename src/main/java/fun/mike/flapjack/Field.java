@@ -1,7 +1,6 @@
 package fun.mike.flapjack;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 public class Field {
     private final String id;
@@ -10,18 +9,18 @@ public class Field {
     private final String type;
 
     @JsonCreator
-    public Field( @JsonProperty( "id" ) String id,
-                  @JsonProperty( "start" ) Integer start,
-                  @JsonProperty( "end" ) Integer end,
-                  @JsonProperty( "type" ) String type ) {
+    public Field(@JsonProperty("id") String id,
+                 @JsonProperty("start") Integer start,
+                 @JsonProperty("end") Integer end,
+                 @JsonProperty("type") String type) {
         this.id = id;
         this.start = start;
         this.end = end;
         this.type = type;
     }
 
-    public static Field with( String id, Integer start, Integer end, String type) {
-        return new Field( id, start, end, type );
+    public static Field with(String id, Integer start, Integer end, String type) {
+        return new Field(id, start, end, type);
     }
 
     public String getId() {
@@ -36,5 +35,7 @@ public class Field {
         return this.end;
     }
 
-    public String getType() { return this.type; }
+    public String getType() {
+        return this.type;
+    }
 }

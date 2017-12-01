@@ -1,11 +1,8 @@
 package fun.mike.flapjack;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 
 public class Format {
     private final String id;
@@ -14,14 +11,14 @@ public class Format {
     private final List<Field> fields;
 
     @JsonCreator
-    public Format( @JsonProperty( "id" ) String id,
-                   @JsonProperty( "description" ) String description,
-                   @JsonProperty( "length" ) Integer length,
-                   @JsonProperty( "fields" ) List<Field> fields) {
+    public Format(@JsonProperty("id") String id,
+                  @JsonProperty("description") String description,
+                  @JsonProperty("length") Integer length,
+                  @JsonProperty("fields") List<Field> fields) {
         this.id = id;
         this.description = description;
         this.length = length;
-        this.fields = Collections.unmodifiableList( fields );
+        this.fields = Collections.unmodifiableList(fields);
     }
 
     public String getId() {
@@ -33,10 +30,10 @@ public class Format {
     }
 
     public Optional<Integer> getLength() {
-        if( this.length == null ) {
+        if (this.length == null) {
             return Optional.empty();
         }
-        return Optional.of( this.length );
+        return Optional.of(this.length);
     }
 
     public List<Field> getFields() {
