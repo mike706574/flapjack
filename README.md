@@ -1,6 +1,6 @@
 # flapjack
 
-A fixed-width file parsing library.
+Flat file parsing library for Java.
 
 
 ## Copyright and License
