@@ -1,21 +1,18 @@
 package fun.mike.flapjack.alpha;
 
-import java.util.Date;
-import java.util.Map;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-
-import static fun.mike.map.alpha.Factory.mapOf;
+import java.util.Date;
+import java.util.Map;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static fun.mike.map.alpha.Factory.mapOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 
 
 public class ValueParserTest {
@@ -49,7 +46,7 @@ public class ValueParserTest {
         ObjectOrProblem notAnIntegerResult = ValueParser.parse("foo", "integer", null, "bar");
         assertTrue(notAnIntegerResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"integer\".",
-                     notAnIntegerResult.getProblem().explain());
+                notAnIntegerResult.getProblem().explain());
     }
 
     @Test
@@ -67,14 +64,13 @@ public class ValueParserTest {
         ObjectOrProblem invalidDateResult = ValueParser.parse("foo", "formatted-date", props, "bar");
         assertTrue(invalidDateResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"formatted-date\".",
-                     invalidDateResult.getProblem().explain());
+                invalidDateResult.getProblem().explain());
     }
 
     private Date parseDate(String format, String date) {
         try {
             return new SimpleDateFormat(format).parse(date);
-        }
-        catch(ParseException ex) {
+        } catch (ParseException ex) {
             throw new IllegalArgumentException(ex);
         }
     }
