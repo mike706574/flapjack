@@ -1,11 +1,11 @@
 package fun.mike.flapjack.alpha;
 
-public class FramingError implements Error {
+public class FramingProblem implements Problem {
     private final Integer columnIndex;
     private final Integer charIndex;
 
-    public FramingError(Integer columnIndex,
-                        Integer charIndex) {
+    public FramingProblem(Integer columnIndex,
+                          Integer charIndex) {
         this.columnIndex = columnIndex;
         this.charIndex = charIndex;
     }

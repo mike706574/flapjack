@@ -111,4 +111,18 @@ public class SerializationTest {
         String reserializedFormat = mapper.writeValueAsString(deserializedFormat);
         assertEquals(serializedFormat, reserializedFormat);
     }
+
+    @Test
+    public void generalProblem() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+
+        GeneralProblem problem = new GeneralProblem("foo");
+
+        String serialized = mapper.writeValueAsString(problem);
+        System.out.println(serialized);
+        GeneralProblem deserialized = mapper.readValue(serialized, GeneralProblem.class);
+        String reserialized = mapper.writeValueAsString(deserialized);
+        assertEquals(serialized, reserialized);
+    }
 }

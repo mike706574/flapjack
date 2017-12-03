@@ -1,27 +1,50 @@
 package fun.mike.flapjack.alpha;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Map;
 
+import static fun.mike.map.alpha.Get.requiredString;
+
 public class ValueParser {
-    public static ObjectOrError parse(String id, String type, Map<String, Object> props,
-                                      String value) {
+    public static ObjectOrProblem parse(String id, String type, Map<String, Object> props,
+                                        String value) {
         switch (type) {
             case "string":
-                return ObjectOrError.object(value);
+                return ObjectOrProblem.object(value);
             case "integer":
                 return parseInt(id, type, value);
             case "trimmed-string":
-                return ObjectOrError.object(value.trim());
+                return ObjectOrProblem.object(value.trim());
+            case "formatted-date":
+                return parseAndFormatDate(id, type, props, value);
+
         }
 
-        return ObjectOrError.error(new NoSuchTypeError(id, type));
+        return ObjectOrProblem.problem(new NoSuchTypeProblem(id, type));
     }
 
-    private static ObjectOrError parseInt(String id, String type, String value) {
+    private static ObjectOrProblem parseInt(String id, String type, String value) {
         try {
-            return ObjectOrError.object(Integer.parseInt(value));
+            return ObjectOrProblem.object(Integer.parseInt(value));
         } catch (NumberFormatException ex) {
-            return ObjectOrError.error(new TypeError(id, type, value));
+            return ObjectOrProblem.problem(new TypeProblem(id, type, value));
+        }
+    }
+
+    private static ObjectOrProblem parseAndFormatDate(String id,
+                                                      String type,
+                                                      Map<String, Object> props,
+                                                      String value) {
+
+        try {
+            String format = requiredString(props, "format");
+            SimpleDateFormat formatter = new SimpleDateFormat(format);
+            return ObjectOrProblem.object(formatter.parse(value));
+        } catch (ParseException ex) {
+            return ObjectOrProblem.problem(new TypeProblem(id, type, value));
+        } catch (IllegalArgumentException ex) {
+            return ObjectOrProblem.problem(new GeneralProblem(ex.getMessage()));
         }
     }
 }

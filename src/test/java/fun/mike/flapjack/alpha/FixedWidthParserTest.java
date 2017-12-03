@@ -84,10 +84,10 @@ public class FixedWidthParserTest {
         Record record1 = records.get(0);
         assertTrue(record1.isEmpty());
 
-        Set<fun.mike.flapjack.alpha.Error> errors = record1.getErrors();
-        assertEquals(1, errors.size());
-        fun.mike.flapjack.alpha.Error error = errors.iterator().next();
-        assertTrue(error instanceof LengthMismatchError);
+        Set<Problem> problems = record1.getProblems();
+        assertEquals(1, problems.size());
+        Problem problem = problems.iterator().next();
+        assertTrue(problem instanceof LengthMismatchProblem);
     }
 
     @Test
@@ -108,14 +108,14 @@ public class FixedWidthParserTest {
         assertEquals("ab", record1.get("foo"));
         assertFalse(record1.containsKey("bar"));
 
-        Set<fun.mike.flapjack.alpha.Error> errors = record1.getErrors();
-        assertEquals(1, errors.size());
+        Set<Problem> problems = record1.getProblems();
+        assertEquals(1, problems.size());
 
-        fun.mike.flapjack.alpha.Error error = errors.iterator().next();
-        assertTrue(error instanceof OutOfBoundsError);
-        OutOfBoundsError outOfBoundsError = (OutOfBoundsError) error;
-        assertEquals("bar", outOfBoundsError.getFieldId());
-        assertEquals(new Integer(4), outOfBoundsError.getFieldEnd());
-        assertEquals(new Integer(3), outOfBoundsError.getLineLength());
+        Problem problem = problems.iterator().next();
+        assertTrue(problem instanceof OutOfBoundsProblem);
+        OutOfBoundsProblem outOfBoundsProblem = (OutOfBoundsProblem) problem;
+        assertEquals("bar", outOfBoundsProblem.getFieldId());
+        assertEquals(new Integer(4), outOfBoundsProblem.getFieldEnd());
+        assertEquals(new Integer(3), outOfBoundsProblem.getLineLength());
     }
 }

@@ -85,7 +85,7 @@ public class DelimitedParserTest {
         Record record1 = records.get(0);
 
         Assert.assertEquals("Column 1 was not properly framed (at character 1).",
-                record1.getErrors().iterator().next().explain());
+                record1.getProblems().iterator().next().explain());
     }
 
     @Test
@@ -107,6 +107,6 @@ public class DelimitedParserTest {
         Record record1 = records.get(0);
 
         Assert.assertEquals("Column 2 was not properly framed (at character 6).",
-                record1.getErrors().iterator().next().explain());
+                record1.getProblems().iterator().next().explain());
     }
 }

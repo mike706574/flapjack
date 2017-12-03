@@ -1,13 +1,13 @@
 package fun.mike.flapjack.alpha;
 
-public class OutOfBoundsError implements fun.mike.flapjack.alpha.Error {
+public class OutOfBoundsProblem implements Problem {
     private final String fieldId;
     private final Integer fieldEnd;
     private final Integer lineLength;
 
-    public OutOfBoundsError(String fieldId,
-                            Integer fieldEnd,
-                            Integer lineLength) {
+    public OutOfBoundsProblem(String fieldId,
+                              Integer fieldEnd,
+                              Integer lineLength) {
         this.fieldId = fieldId;
         this.fieldEnd = fieldEnd;
         this.lineLength = lineLength;

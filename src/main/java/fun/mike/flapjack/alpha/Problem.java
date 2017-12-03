@@ -1,5 +1,5 @@
 package fun.mike.flapjack.alpha;
 
-public interface Error {
+public interface Problem {
     public String explain();
 }

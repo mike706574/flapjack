@@ -7,7 +7,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FixedWidthFormat implements Format {
+public class FixedWidthFormat {
     private final String id;
     private final String description;
     private final Integer length;

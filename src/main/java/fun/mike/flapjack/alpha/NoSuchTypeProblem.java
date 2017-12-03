@@ -1,10 +1,10 @@
 package fun.mike.flapjack.alpha;
 
-public class NoSuchTypeError implements fun.mike.flapjack.alpha.Error {
+public class NoSuchTypeProblem implements Problem {
     private final String id;
     private final String type;
 
-    public NoSuchTypeError(String id, String type) {
+    public NoSuchTypeProblem(String id, String type) {
         this.id = id;
         this.type = type;
     }

@@ -26,7 +26,7 @@ public class DelimitedParser {
 
     public Record parseUnframedLine(Long index, String line) {
         Map<String, Object> data = new HashMap<String, Object>();
-        Set<fun.mike.flapjack.alpha.Error> errors = new HashSet<fun.mike.flapjack.alpha.Error>();
+        Set<Problem> problems = new HashSet<Problem>();
 
         String value = "";
         StringBuffer cell = new StringBuffer();
@@ -41,7 +41,7 @@ public class DelimitedParser {
             if (inside) {
                 if (ch == delimiter) {
                     inside = false;
-                    setColumn(data, errors, columnIndex, cell.toString());
+                    setColumn(data, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
                 } else {
@@ -53,13 +53,13 @@ public class DelimitedParser {
             }
         }
 
-        setColumn(data, errors, columnIndex, cell.toString());
-        return Record.with(index, data, errors);
+        setColumn(data, problems, columnIndex, cell.toString());
+        return Record.with(index, data, problems);
     }
 
     public Record parseFramedLine(Long index, String line) {
         Map<String, Object> data = new HashMap<String, Object>();
-        Set<fun.mike.flapjack.alpha.Error> errors = new HashSet<fun.mike.flapjack.alpha.Error>();
+        Set<Problem> problems = new HashSet<Problem>();
 
         String value = "";
         StringBuffer cell = new StringBuffer();
@@ -80,13 +80,13 @@ public class DelimitedParser {
                     inside = false;
                     quoted = false;
                     afterEndQuote = true;
-                    setColumn(data, errors, columnIndex, cell.toString());
+                    setColumn(data, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
                 } else if (ch == delimiter) {
                     inside = false;
                     quoted = false;
-                    setColumn(data, errors, columnIndex, cell.toString());
+                    setColumn(data, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
                 } else {
@@ -96,7 +96,7 @@ public class DelimitedParser {
                 if (ch == delimiter) {
                     afterEndQuote = false;
                 } else {
-                    errors.add(new FramingError(columnIndex, i));
+                    problems.add(new FramingProblem(columnIndex, i));
                     break;
                 }
             } else {
@@ -104,16 +104,16 @@ public class DelimitedParser {
                 if (ch == frameDelimiter) {
                     quoted = true;
                 } else {
-                    errors.add(new FramingError(columnIndex, i));
+                    problems.add(new FramingProblem(columnIndex, i));
                     break;
                 }
             }
         }
 
-        return Record.with(index, data, errors);
+        return Record.with(index, data, problems);
     }
 
-    private void setColumn(Map<String, Object> data, Set<fun.mike.flapjack.alpha.Error> errors, int index, String value) {
+    private void setColumn(Map<String, Object> data, Set<Problem> problems, int index, String value) {
         boolean indexInRange = index < format.getColumns().size();
         if (indexInRange) {
             Column column = format.getColumns().get(index);
@@ -121,10 +121,10 @@ public class DelimitedParser {
             String columnId = column.getId();
             String columnType = column.getType();
             Map<String, Object> props = column.getProps();
-            ObjectOrError result = ValueParser.parse(columnId, columnType, props, value);
+            ObjectOrProblem result = ValueParser.parse(columnId, columnType, props, value);
 
-            if (result.isError()) {
-                errors.add(result.getError());
+            if (result.hasProblem()) {
+                problems.add(result.getProblem());
             } else {
                 data.put(columnId, result.getObject());
             }

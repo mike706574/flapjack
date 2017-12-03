@@ -11,49 +11,49 @@ import java.util.function.Supplier;
 public class Record implements Map<String, Object> {
     private final Long index;
     private final Map<String, Object> data;
-    private final Set<fun.mike.flapjack.alpha.Error> errors;
+    private final Set<Problem> problems;
     private final String line;
 
     private Record(Record record) {
         this.index = record.getIndex();
         this.line = record.getLine().orElse(null);
         this.data = new LinkedHashMap<String, Object>(record);
-        this.errors = new HashSet<fun.mike.flapjack.alpha.Error>(record.getErrors());
+        this.problems = new HashSet<Problem>(record.getProblems());
     }
 
-    private Record(Record record, fun.mike.flapjack.alpha.Error error) {
+    private Record(Record record, Problem problem) {
         this.index = record.getIndex();
         this.line = record.getLine().orElse(null);
         this.data = new LinkedHashMap<String, Object>(record);
-        this.errors = new HashSet<fun.mike.flapjack.alpha.Error>(record.getErrors());
-        this.errors.add(error);
+        this.problems = new HashSet<Problem>(record.getProblems());
+        this.problems.add(problem);
     }
 
-    private Record(Long index, Map<String, Object> data, Set<fun.mike.flapjack.alpha.Error> errors) {
+    private Record(Long index, Map<String, Object> data, Set<Problem> problems) {
         this.index = index;
         this.data = new LinkedHashMap<String, Object>(data);
-        this.errors = new HashSet<fun.mike.flapjack.alpha.Error>(errors);
+        this.problems = new HashSet<Problem>(problems);
         this.line = null;
     }
 
-    private Record(Long index, Map<String, Object> data, fun.mike.flapjack.alpha.Error error, String line) {
+    private Record(Long index, Map<String, Object> data, Problem problem, String line) {
         this.index = index;
         this.data = new LinkedHashMap<String, Object>(data);
-        this.errors = new HashSet<fun.mike.flapjack.alpha.Error>();
-        this.errors.add(error);
+        this.problems = new HashSet<Problem>();
+        this.problems.add(problem);
         this.line = line;
     }
 
-    public static Record with(Long index, Map<String, Object> data, Set<fun.mike.flapjack.alpha.Error> errors) {
-        return new Record(index, data, errors);
+    public static Record with(Long index, Map<String, Object> data, Set<Problem> problems) {
+        return new Record(index, data, problems);
     }
 
-    public Record withError(fun.mike.flapjack.alpha.Error error) {
-        return new Record(this, error);
+    public Record withProblem(Problem problem) {
+        return new Record(this, problem);
     }
 
     public <X extends Throwable> Record orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
-        if (errors.isEmpty()) {
+        if (problems.isEmpty()) {
             return this;
         } else {
             throw exceptionSupplier.get();
@@ -68,12 +68,12 @@ public class Record implements Map<String, Object> {
         return Optional.of(this.line);
     }
 
-    public boolean hasErrors() {
-        return !this.errors.isEmpty();
+    public boolean hasProblems() {
+        return !this.problems.isEmpty();
     }
 
-    public Set<fun.mike.flapjack.alpha.Error> getErrors() {
-        return new HashSet<fun.mike.flapjack.alpha.Error>(this.errors);
+    public Set<Problem> getProblems() {
+        return new HashSet<Problem>(this.problems);
     }
 
     public String getString(String key) {

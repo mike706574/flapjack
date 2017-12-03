@@ -18,16 +18,16 @@ public class FixedWidthParser {
 
     private Record parseLine(Long index, String line) {
         Map<String, Object> data = new HashMap<String, Object>();
-        Set<fun.mike.flapjack.alpha.Error> errors = new HashSet<fun.mike.flapjack.alpha.Error>();
+        Set<Problem> problems = new HashSet<Problem>();
 
         Optional<Integer> length = format.getLength();
 
         Integer lineLength = line.length();
         if (length.isPresent() && !length.get().equals(lineLength)) {
-            fun.mike.flapjack.alpha.Error lengthMismatch = new LengthMismatchError(length.get(),
+            Problem lengthMismatch = new LengthMismatchProblem(length.get(),
                     lineLength);
-            errors.add(lengthMismatch);
-            return Record.with(index, data, errors);
+            problems.add(lengthMismatch);
+            return Record.with(index, data, problems);
         }
 
         for (Field field : format.getFields()) {
@@ -36,26 +36,26 @@ public class FixedWidthParser {
             Integer fieldEnd = field.getEnd();
 
             if (fieldEnd > lineLength) {
-                fun.mike.flapjack.alpha.Error outOfBounds = new OutOfBoundsError(fieldId,
+                Problem outOfBounds = new OutOfBoundsProblem(fieldId,
                         fieldEnd,
                         lineLength);
-                errors.add(outOfBounds);
+                problems.add(outOfBounds);
             } else {
                 String value = line.substring(fieldStart - 1,
                         fieldEnd);
                 String fieldType = field.getType();
                 Map<String, Object> props = field.getProps();
-                ObjectOrError result = ValueParser.parse(fieldId, fieldType, props, value);
+                ObjectOrProblem result = ValueParser.parse(fieldId, fieldType, props, value);
 
-                if (result.isError()) {
-                    errors.add(result.getError());
+                if (result.hasProblem()) {
+                    problems.add(result.getProblem());
                 } else {
                     data.put(fieldId, result.getObject());
                 }
             }
         }
 
-        return Record.with(index, data, errors);
+        return Record.with(index, data, problems);
     }
 
     public Stream<Record> stream(Stream<String> lines) {
