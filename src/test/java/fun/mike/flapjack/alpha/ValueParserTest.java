@@ -87,7 +87,7 @@ public class ValueParserTest {
 
         ObjectOrProblem orangeResult = ValueParser.parse("foo", "string-enum", props, "orange");
         assertTrue(orangeResult.hasProblem());
-        assertEquals("Expected field \"foo\" with value \"orange\" must be one of the following 3 string: \"apple\", \"banana\", \"carrot\"",
+        assertEquals("Expected field \"foo\" with value \"orange\" must be one of the following 3 string options: \"apple\", \"banana\", \"carrot\"",
                 orangeResult.getProblem().explain());
     }
 
