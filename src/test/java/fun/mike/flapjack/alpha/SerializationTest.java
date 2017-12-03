@@ -120,7 +120,7 @@ public class SerializationTest {
         GeneralProblem problem = new GeneralProblem("foo");
 
         String serialized = mapper.writeValueAsString(problem);
-        System.out.println(serialized);
+        // System.out.println(serialized);
         GeneralProblem deserialized = mapper.readValue(serialized, GeneralProblem.class);
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
