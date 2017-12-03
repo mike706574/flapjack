@@ -3,7 +3,9 @@ package fun.mike.flapjack.alpha;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Rule;
@@ -64,6 +66,29 @@ public class ValueParserTest {
         assertTrue(problemResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"big-decimal\".",
                 problemResult.getProblem().explain());
+    }
+
+    @Test
+    public void stringEnum() {
+        List<String> options = Arrays.asList("apple", "banana", "carrot");
+        Map<String, Object> props = mapOf("options", options);
+
+        ObjectOrProblem appleResult = ValueParser.parse("foo", "string-enum", props, "apple");
+        assertFalse(appleResult.explain(), appleResult.hasProblem());
+        assertEquals("apple", appleResult.getObject());
+
+        ObjectOrProblem bananaResult = ValueParser.parse("foo", "string-enum", props, "banana");
+        assertFalse(bananaResult.explain(), bananaResult.hasProblem());
+        assertEquals("banana", bananaResult.getObject());
+
+        ObjectOrProblem carrotResult = ValueParser.parse("foo", "string-enum", props, "carrot");
+        assertFalse(carrotResult.explain(), carrotResult.hasProblem());
+        assertEquals("carrot", carrotResult.getObject());
+
+        ObjectOrProblem orangeResult = ValueParser.parse("foo", "string-enum", props, "orange");
+        assertTrue(orangeResult.hasProblem());
+        assertEquals("Expected field \"foo\" with value \"orange\" must be one of the following 3 string: \"apple\", \"banana\", \"carrot\"",
+                orangeResult.getProblem().explain());
     }
 
     @Test

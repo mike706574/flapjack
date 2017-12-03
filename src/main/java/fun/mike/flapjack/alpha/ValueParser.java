@@ -3,6 +3,7 @@ package fun.mike.flapjack.alpha;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Map;
 
 import static fun.mike.map.alpha.Get.requiredString;
@@ -21,7 +22,8 @@ public class ValueParser {
                 return parseAndFormatDate(id, type, props, value);
             case "big-decimal":
                 return parseBigDecimal(id, type, value);
-
+            case "string-enum":
+                return parseStringEnum(id, type, props, value);
         }
 
         return ObjectOrProblem.problem(new NoSuchTypeProblem(id, type));
@@ -40,6 +42,21 @@ public class ValueParser {
             return ObjectOrProblem.object(new BigDecimal(value));
         } catch (NumberFormatException ex) {
             return ObjectOrProblem.problem(new TypeProblem(id, type, value));
+        }
+    }
+
+    private static ObjectOrProblem parseStringEnum(String id, String type, Map<String, Object> props, String value) {
+        try {
+            @SuppressWarnings("unchecked")
+            List<String> options = (List<String>) props.get("options");
+
+            if (options.contains(value)) {
+                return ObjectOrProblem.object(value);
+            }
+
+            return ObjectOrProblem.problem(new StringEnumProblem(id, value, options));
+        } catch (ClassCastException ex) {
+            return ObjectOrProblem.problem(new GeneralProblem(ex.getMessage()));
         }
     }
 
