@@ -27,7 +27,7 @@ public class StringEnumProblem implements Problem {
         String optionsStr = options.stream()
                 .map(option -> String.format("\"%s\"", option))
                 .collect(Collectors.joining(", "));
-        return String.format("Expected field \"%s\" with value \"%s\" must be one of the following %d string: %s",
+        return String.format("Expected field \"%s\" with value \"%s\" must be one of the following %d string options: %s",
                 id,
                 value,
                 count,
