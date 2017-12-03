@@ -1,16 +1,16 @@
-package fun.mike.flapjack;
+package fun.mike.flapjack.alpha;
 
 public class ObjectOrError {
     private Object object;
-    private fun.mike.flapjack.Error error;
+    private fun.mike.flapjack.alpha.Error error;
 
     public ObjectOrError(Object object,
-                         Error error) {
+                         fun.mike.flapjack.alpha.Error error) {
         this.object = object;
         this.error = error;
     }
 
-    public static ObjectOrError error(Error error) {
+    public static ObjectOrError error(fun.mike.flapjack.alpha.Error error) {
         return new ObjectOrError(null, error);
     }
 
@@ -26,7 +26,7 @@ public class ObjectOrError {
         return this.object;
     }
 
-    public fun.mike.flapjack.Error getError() {
+    public fun.mike.flapjack.alpha.Error getError() {
         return this.error;
     }
 }

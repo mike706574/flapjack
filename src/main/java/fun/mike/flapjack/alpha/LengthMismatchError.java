@@ -1,6 +1,6 @@
-package fun.mike.flapjack;
+package fun.mike.flapjack.alpha;
 
-public class LengthMismatchError implements fun.mike.flapjack.Error {
+public class LengthMismatchError implements fun.mike.flapjack.alpha.Error {
     private final Integer expectedLength;
     private final Integer actualLength;
 

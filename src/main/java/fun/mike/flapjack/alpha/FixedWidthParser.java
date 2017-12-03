@@ -1,26 +1,30 @@
-package fun.mike.flapjack;
+package fun.mike.flapjack.alpha;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
 
-import com.codepoetics.protonpack.*;
+import com.codepoetics.protonpack.StreamUtils;
 
-public class Parser {
-    private final Format format;
+public class FixedWidthParser {
+    private final FixedWidthFormat format;
 
-    public Parser(Format format) {
+    public FixedWidthParser(FixedWidthFormat format) {
         this.format = format;
     }
 
     private Record parseLine(Long index, String line) {
         Map<String, Object> data = new HashMap<String, Object>();
-        Set<fun.mike.flapjack.Error> errors = new HashSet<fun.mike.flapjack.Error>();
+        Set<fun.mike.flapjack.alpha.Error> errors = new HashSet<fun.mike.flapjack.alpha.Error>();
 
         Optional<Integer> length = format.getLength();
 
         Integer lineLength = line.length();
         if (length.isPresent() && !length.get().equals(lineLength)) {
-            fun.mike.flapjack.Error lengthMismatch = new LengthMismatchError(length.get(),
+            fun.mike.flapjack.alpha.Error lengthMismatch = new LengthMismatchError(length.get(),
                     lineLength);
             errors.add(lengthMismatch);
             return Record.with(index, data, errors);
@@ -32,14 +36,16 @@ public class Parser {
             Integer fieldEnd = field.getEnd();
 
             if (fieldEnd > lineLength) {
-                fun.mike.flapjack.Error outOfBounds = new OutOfBoundsError(fieldId,
+                fun.mike.flapjack.alpha.Error outOfBounds = new OutOfBoundsError(fieldId,
                         fieldEnd,
                         lineLength);
                 errors.add(outOfBounds);
             } else {
                 String value = line.substring(fieldStart - 1,
                         fieldEnd);
-                ObjectOrError result = parseType(field, value);
+                String fieldType = field.getType();
+                Map<String, Object> props = field.getProps();
+                ObjectOrError result = ValueParser.parse(fieldId, fieldType, props, value);
 
                 if (result.isError()) {
                     errors.add(result.getError());
@@ -57,24 +63,4 @@ public class Parser {
                 .map(item -> parseLine(item.getIndex(), item.getValue()));
     }
 
-    private ObjectOrError parseType(Field field, String value) {
-        switch (field.getType()) {
-            case "string":
-                return ObjectOrError.object(value);
-            case "integer":
-                return parseInt(field, value);
-            case "trimmed-string":
-                return ObjectOrError.object(value.trim());
-        }
-
-        return ObjectOrError.error(new NoSuchTypeError(field));
-    }
-
-    private ObjectOrError parseInt(Field field, String value) {
-        try {
-            return ObjectOrError.object(Integer.parseInt(value));
-        } catch (NumberFormatException ex) {
-            return ObjectOrError.error(new TypeError(field, value));
-        }
-    }
 }

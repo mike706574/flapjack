@@ -1,24 +1,30 @@
-package fun.mike.flapjack;
+package fun.mike.flapjack.alpha;
 
-import java.util.*;
-import java.util.stream.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
-import org.junit.*;
-import org.junit.rules.*;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
-public class ParserTest {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class FixedWidthParserTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void valid() {
-        List<Field> fields = Arrays.asList(new Field("foo", 1, 5, "string"),
-                new Field("bar", 6, 10, "string"));
+        List<Field> fields = Arrays.asList(Field.with("foo", 1, 5, "string"),
+                Field.with("bar", 6, 10, "string"));
 
-        Format format = new Format("baz", "Baz", 10, fields);
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 10, fields);
 
-        Parser parser = new Parser(format);
+        FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("1234567890",
                 "abcdefghij");
@@ -39,12 +45,12 @@ public class ParserTest {
 
     @Test
     public void validInteger() {
-        List<Field> fields = Arrays.asList(new Field("foo", 1, 5, "integer"),
-                new Field("bar", 6, 10, "string"));
+        List<Field> fields = Arrays.asList(Field.with("foo", 1, 5, "integer"),
+                Field.with("bar", 6, 10, "string"));
 
-        Format format = new Format("baz", "Baz", 10, fields);
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 10, fields);
 
-        Parser parser = new Parser(format);
+        FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("1234567890",
                 "54321fghij");
@@ -66,8 +72,8 @@ public class ParserTest {
     @Test
     public void lengthMismatch() {
         List<Field> fields = Arrays.asList(Field.with("foo", 1, 2, "string"));
-        Format format = new Format("baz", "Baz", 2, fields);
-        Parser parser = new Parser(format);
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 2, fields);
+        FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("abc");
         List<Record> records = parser.stream(lines.stream())
@@ -78,9 +84,9 @@ public class ParserTest {
         Record record1 = records.get(0);
         assertTrue(record1.isEmpty());
 
-        Set<fun.mike.flapjack.Error> errors = record1.getErrors();
+        Set<fun.mike.flapjack.alpha.Error> errors = record1.getErrors();
         assertEquals(1, errors.size());
-        fun.mike.flapjack.Error error = errors.iterator().next();
+        fun.mike.flapjack.alpha.Error error = errors.iterator().next();
         assertTrue(error instanceof LengthMismatchError);
     }
 
@@ -88,8 +94,8 @@ public class ParserTest {
     public void outOfBounds() {
         List<Field> fields = Arrays.asList(Field.with("foo", 1, 2, "string"),
                 Field.with("bar", 3, 4, "string"));
-        Format format = new Format("baz", "Baz", null, fields);
-        Parser parser = new Parser(format);
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", null, fields);
+        FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("abc");
         List<Record> records = parser.stream(lines.stream())
@@ -102,10 +108,10 @@ public class ParserTest {
         assertEquals("ab", record1.get("foo"));
         assertFalse(record1.containsKey("bar"));
 
-        Set<fun.mike.flapjack.Error> errors = record1.getErrors();
+        Set<fun.mike.flapjack.alpha.Error> errors = record1.getErrors();
         assertEquals(1, errors.size());
 
-        fun.mike.flapjack.Error error = errors.iterator().next();
+        fun.mike.flapjack.alpha.Error error = errors.iterator().next();
         assertTrue(error instanceof OutOfBoundsError);
         OutOfBoundsError outOfBoundsError = (OutOfBoundsError) error;
         assertEquals("bar", outOfBoundsError.getFieldId());

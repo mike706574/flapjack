@@ -1,6 +1,6 @@
-package fun.mike.flapjack;
+package fun.mike.flapjack.alpha;
 
-public class OutOfBoundsError implements fun.mike.flapjack.Error {
+public class OutOfBoundsError implements fun.mike.flapjack.alpha.Error {
     private final String fieldId;
     private final Integer fieldEnd;
     private final Integer lineLength;
