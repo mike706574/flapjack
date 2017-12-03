@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,31 +23,47 @@ public class ValueParserTest {
     @Test
     public void string() {
         ObjectOrProblem result = ValueParser.parse("foo", "string", null, "bar");
-        assertFalse(result.hasProblem());
+        assertFalse(result.explain(), result.hasProblem());
         assertEquals("bar", result.getObject());
     }
 
     @Test
     public void trimmedString() {
         ObjectOrProblem alreadyTrimmedResult = ValueParser.parse("foo", "trimmed-string", null, "bar");
-        assertFalse(alreadyTrimmedResult.hasProblem());
+        assertFalse(alreadyTrimmedResult.explain(), alreadyTrimmedResult.hasProblem());
         assertEquals("bar", alreadyTrimmedResult.getObject());
 
         ObjectOrProblem untrimmedResult = ValueParser.parse("foo", "trimmed-string", null, "  bar  ");
-        assertFalse(untrimmedResult.hasProblem());
+        assertFalse(untrimmedResult.explain(), untrimmedResult.hasProblem());
         assertEquals("bar", untrimmedResult.getObject());
     }
 
     @Test
     public void integer() {
-        ObjectOrProblem validIntegerResult = ValueParser.parse("foo", "integer", null, "5");
-        assertFalse(validIntegerResult.hasProblem());
-        assertEquals(5, validIntegerResult.getObject());
+        ObjectOrProblem validResult = ValueParser.parse("foo", "integer", null, "5");
+        assertFalse(validResult.explain(),
+                validResult.hasProblem());
+        assertEquals(5, validResult.getObject());
 
-        ObjectOrProblem notAnIntegerResult = ValueParser.parse("foo", "integer", null, "bar");
-        assertTrue(notAnIntegerResult.hasProblem());
+        ObjectOrProblem invalidResult = ValueParser.parse("foo", "integer", null, "bar");
+        assertTrue(invalidResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"integer\".",
-                notAnIntegerResult.getProblem().explain());
+                invalidResult.getProblem().explain());
+    }
+
+    @Test
+    public void bigDecimal() {
+        String validValue = "5.20932021";
+        ObjectOrProblem validResult = ValueParser.parse("foo", "big-decimal", null, validValue);
+        assertFalse(validResult.explain(), validResult.hasProblem());
+
+        BigDecimal expectedValue = new BigDecimal(validValue);
+        assertEquals(expectedValue, validResult.getObject());
+
+        ObjectOrProblem problemResult = ValueParser.parse("foo", "big-decimal", null, "bar");
+        assertTrue(problemResult.hasProblem());
+        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"big-decimal\".",
+                problemResult.getProblem().explain());
     }
 
     @Test
@@ -55,16 +72,16 @@ public class ValueParserTest {
         Map<String, Object> props = mapOf("format", format);
 
         String unformattedDate = "19950215";
-        ObjectOrProblem validDateResult = ValueParser.parse("foo", "formatted-date", props, unformattedDate);
-        assertFalse(validDateResult.hasProblem());
+        ObjectOrProblem validResult = ValueParser.parse("foo", "formatted-date", props, unformattedDate);
+        assertFalse(validResult.hasProblem());
 
         Date expectedDate = parseDate(format, unformattedDate);
-        assertEquals(expectedDate, validDateResult.getObject());
+        assertEquals(expectedDate, validResult.getObject());
 
-        ObjectOrProblem invalidDateResult = ValueParser.parse("foo", "formatted-date", props, "bar");
-        assertTrue(invalidDateResult.hasProblem());
+        ObjectOrProblem invalidResult = ValueParser.parse("foo", "formatted-date", props, "bar");
+        assertTrue(invalidResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"formatted-date\".",
-                invalidDateResult.getProblem().explain());
+                invalidResult.getProblem().explain());
     }
 
     private Date parseDate(String format, String date) {

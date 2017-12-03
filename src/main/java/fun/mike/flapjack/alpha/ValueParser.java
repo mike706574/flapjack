@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
@@ -18,6 +19,8 @@ public class ValueParser {
                 return ObjectOrProblem.object(value.trim());
             case "formatted-date":
                 return parseAndFormatDate(id, type, props, value);
+            case "big-decimal":
+                return parseBigDecimal(id, type, value);
 
         }
 
@@ -27,6 +30,14 @@ public class ValueParser {
     private static ObjectOrProblem parseInt(String id, String type, String value) {
         try {
             return ObjectOrProblem.object(Integer.parseInt(value));
+        } catch (NumberFormatException ex) {
+            return ObjectOrProblem.problem(new TypeProblem(id, type, value));
+        }
+    }
+
+    private static ObjectOrProblem parseBigDecimal(String id, String type, String value) {
+        try {
+            return ObjectOrProblem.object(new BigDecimal(value));
         } catch (NumberFormatException ex) {
             return ObjectOrProblem.problem(new TypeProblem(id, type, value));
         }

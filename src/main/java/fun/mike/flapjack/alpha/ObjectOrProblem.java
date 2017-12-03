@@ -30,6 +30,13 @@ public class ObjectOrProblem {
         return this.problem;
     }
 
+    public String explain() {
+        if (hasProblem()) {
+            return this.problem.explain();
+        }
+        return "No problem.";
+    }
+
     @Override
     public String toString() {
         return "ObjectOrProblem{" +

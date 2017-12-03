@@ -10,7 +10,7 @@ public class NoSuchTypeProblem implements Problem {
     }
 
     public String explain() {
-        return String.format("Type %s of field %s does not exist.",
+        return String.format("Type \"%s\" specified for field \"%s\" does not exist.",
                 type,
                 id);
     }
