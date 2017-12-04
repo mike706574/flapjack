@@ -1,11 +1,15 @@
 package fun.mike.flapjack.alpha;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class FramingProblem implements Problem {
     private final Integer columnIndex;
     private final Integer charIndex;
 
-    public FramingProblem(Integer columnIndex,
-                          Integer charIndex) {
+    @JsonCreator
+    public FramingProblem(@JsonProperty("columnIndex") Integer columnIndex,
+                          @JsonProperty("charIndex") Integer charIndex) {
         this.columnIndex = columnIndex;
         this.charIndex = charIndex;
     }

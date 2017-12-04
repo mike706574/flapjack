@@ -8,7 +8,14 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public class Record implements Map<String, Object> {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(as = RecordInterface.class)
+public class Record implements Map<String, Object>, RecordInterface{
     private final Long index;
     private final Map<String, Object> data;
     private final Set<Problem> problems;
@@ -29,7 +36,10 @@ public class Record implements Map<String, Object> {
         this.problems.add(problem);
     }
 
-    private Record(Long index, Map<String, Object> data, Set<Problem> problems) {
+    @JsonCreator
+    public Record(@JsonProperty("index") Long index,
+                  @JsonProperty("data") Map<String, Object> data,
+                  @JsonProperty("problems") Set<Problem> problems) {
         this.index = index;
         this.data = new LinkedHashMap<String, Object>(data);
         this.problems = new HashSet<Problem>(problems);
@@ -48,8 +58,14 @@ public class Record implements Map<String, Object> {
         return new Record(index, data, problems);
     }
 
-    public Record withProblem(Problem problem) {
-        return new Record(this, problem);
+    public static Record withData(Long index, Map<String, Object> data) {
+        return new Record(index, data, new HashSet<>());
+    }
+
+    public static Record withProblem(Long index, Map<String, Object> data, Problem problem) {
+        HashSet<Problem> problems = new HashSet<>();
+        problems.add(problem);
+        return new Record(index, data, problems);
     }
 
     public <X extends Throwable> Record orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
@@ -86,6 +102,10 @@ public class Record implements Map<String, Object> {
 
     public Integer getInteger(String key) {
         return (Integer) this.get(key);
+    }
+
+    public Map<String, Object> getData() {
+        return data;
     }
 
     @Override
@@ -150,6 +170,33 @@ public class Record implements Map<String, Object> {
 
     @Override
     public String toString() {
-        return data.toString();
+        return "Record{" +
+                "index=" + index +
+                ", data=" + data +
+                ", problems=" + problems +
+                ", line='" + line + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Record record = (Record) o;
+
+        if (index != null ? !index.equals(record.index) : record.index != null) return false;
+        if (data != null ? !data.equals(record.data) : record.data != null) return false;
+        if (problems != null ? !problems.equals(record.problems) : record.problems != null) return false;
+        return line != null ? line.equals(record.line) : record.line == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = index != null ? index.hashCode() : 0;
+        result = 31 * result + (data != null ? data.hashCode() : 0);
+        result = 31 * result + (problems != null ? problems.hashCode() : 0);
+        result = 31 * result + (line != null ? line.hashCode() : 0);
+        return result;
     }
 }

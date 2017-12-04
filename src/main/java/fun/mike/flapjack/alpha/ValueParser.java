@@ -56,23 +56,22 @@ public class ValueParser {
 
             return ObjectOrProblem.problem(new StringEnumProblem(id, value, options));
         } catch (ClassCastException ex) {
-            return ObjectOrProblem.problem(new GeneralProblem(ex.getMessage()));
+            throw new IllegalArgumentException("Required property \"options\" must be a list of strings.", ex);
+
         }
     }
+
 
     private static ObjectOrProblem parseAndFormatDate(String id,
                                                       String type,
                                                       Map<String, Object> props,
                                                       String value) {
-
         try {
             String format = requiredString(props, "format");
             SimpleDateFormat formatter = new SimpleDateFormat(format);
             return ObjectOrProblem.object(formatter.parse(value));
         } catch (ParseException ex) {
             return ObjectOrProblem.problem(new TypeProblem(id, type, value));
-        } catch (IllegalArgumentException ex) {
-            return ObjectOrProblem.problem(new GeneralProblem(ex.getMessage()));
         }
     }
 }

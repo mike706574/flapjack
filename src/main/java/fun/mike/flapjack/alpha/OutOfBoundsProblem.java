@@ -1,34 +1,38 @@
 package fun.mike.flapjack.alpha;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class OutOfBoundsProblem implements Problem {
     private final String fieldId;
-    private final Integer fieldEnd;
-    private final Integer lineLength;
+    private final Integer end;
+    private final Integer length;
 
-    public OutOfBoundsProblem(String fieldId,
-                              Integer fieldEnd,
-                              Integer lineLength) {
-        this.fieldId = fieldId;
-        this.fieldEnd = fieldEnd;
-        this.lineLength = lineLength;
+    @JsonCreator
+    public OutOfBoundsProblem(@JsonProperty("fieldId") String id,
+                              @JsonProperty("end") Integer end,
+                              @JsonProperty("length") Integer length) {
+        this.fieldId = id;
+        this.end = end;
+        this.length = length;
     }
 
     public String explain() {
         return String.format("The %s ends at character %d, but the line was only %d characters long.",
                 fieldId,
-                fieldEnd,
-                lineLength);
+                end,
+                length);
     }
 
     public String getFieldId() {
         return this.fieldId;
     }
 
-    public Integer getFieldEnd() {
-        return this.fieldEnd;
+    public Integer getEnd() {
+        return this.end;
     }
 
-    public Integer getLineLength() {
-        return this.lineLength;
+    public Integer getLength() {
+        return this.length;
     }
 }

@@ -12,6 +12,8 @@ import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 
+import static fun.mike.map.alpha.Factory.mapOf;
+
 public class SerializationTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -113,15 +115,44 @@ public class SerializationTest {
     }
 
     @Test
-    public void generalProblem() throws IOException {
+    public void typeProblem() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        GeneralProblem problem = new GeneralProblem("foo");
+        TypeProblem problem = new TypeProblem("foo", "string", "bar");
 
         String serialized = mapper.writeValueAsString(problem);
         // System.out.println(serialized);
-        GeneralProblem deserialized = mapper.readValue(serialized, GeneralProblem.class);
+        TypeProblem deserialized = mapper.readValue(serialized, TypeProblem.class);
+        String reserialized = mapper.writeValueAsString(deserialized);
+        assertEquals(serialized, reserialized);
+    }
+
+    @Test
+    public void record() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+
+        Record record = Record.withData(1L, mapOf("foo", "bar"));
+        String serialized = mapper.writeValueAsString(record);
+        // System.out.println(serialized);
+        Record deserialized = mapper.readValue(serialized, Record.class);
+        String reserialized = mapper.writeValueAsString(deserialized);
+        assertEquals(serialized, reserialized);
+    }
+
+    @Test
+    public void recordWithProblem() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+
+        TypeProblem problem = new TypeProblem("foo", "string", "bar");
+
+        Record record = Record.withProblem(1L, mapOf("foo", "bar"), problem);
+
+        String serialized = mapper.writeValueAsString(record);
+        // System.out.println(serialized);
+        Record deserialized = mapper.readValue(serialized, Record.class);
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
     }

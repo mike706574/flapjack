@@ -2,9 +2,7 @@ package fun.mike.flapjack.alpha;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "problem")
 public class TypeProblem implements Problem {
     private final String id;
     private final String type;

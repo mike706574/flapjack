@@ -115,7 +115,7 @@ public class FixedWidthParserTest {
         assertTrue(problem instanceof OutOfBoundsProblem);
         OutOfBoundsProblem outOfBoundsProblem = (OutOfBoundsProblem) problem;
         assertEquals("bar", outOfBoundsProblem.getFieldId());
-        assertEquals(new Integer(4), outOfBoundsProblem.getFieldEnd());
-        assertEquals(new Integer(3), outOfBoundsProblem.getLineLength());
+        assertEquals(new Integer(4), outOfBoundsProblem.getEnd());
+        assertEquals(new Integer(3), outOfBoundsProblem.getLength());
     }
 }
