@@ -54,8 +54,6 @@ public class Field {
         return this.props;
     }
 
-    ;
-
     @Override
     public String toString() {
         return "Field{" +

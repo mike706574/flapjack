@@ -156,4 +156,38 @@ public class SerializationTest {
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
     }
+
+    @Test
+    public void fixedWidthViaInterface() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+
+        List<Field> fields = Arrays.asList(Field.with("foo", 1, 5, "string"),
+                                           Field.with("bar", 6, 10, "string"));
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 10, fields);
+
+        String serializedFormat = mapper.writeValueAsString(format);
+        // System.out.println(serializedFormat);
+        Format deserializedFormat = mapper.readValue(serializedFormat, Format.class);
+
+        String reserializedFormat = mapper.writeValueAsString(deserializedFormat);
+        assertEquals(serializedFormat, reserializedFormat);
+    }
+
+    @Test
+    public void delimitedWidthViaInterface() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
+
+        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ",", columns);
+
+        String serializedFormat = mapper.writeValueAsString(format);
+        // System.out.println(serializedFormat);
+        Format deserializedFormat = mapper.readValue(serializedFormat, Format.class);
+        String reserializedFormat = mapper.writeValueAsString(deserializedFormat);
+        assertEquals(serializedFormat, reserializedFormat);
+    }
 }
