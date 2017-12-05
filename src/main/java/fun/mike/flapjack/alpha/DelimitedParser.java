@@ -28,7 +28,6 @@ public class DelimitedParser {
         Map<String, Object> data = new HashMap<String, Object>();
         Set<Problem> problems = new HashSet<Problem>();
 
-        String value = "";
         StringBuffer cell = new StringBuffer();
         boolean inside = false;
 
@@ -61,7 +60,6 @@ public class DelimitedParser {
         Map<String, Object> data = new HashMap<String, Object>();
         Set<Problem> problems = new HashSet<Problem>();
 
-        String value = "";
         StringBuffer cell = new StringBuffer();
         boolean inside = false;
         boolean quoted = false;
