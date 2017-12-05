@@ -31,7 +31,10 @@ public class ValueParserTest {
 
     @Test
     public void trimmedString() {
-        ObjectOrProblem alreadyTrimmedResult = ValueParser.parse("foo", "trimmed-string", null, "bar");
+        ObjectOrProblem alreadyTrimmedResult = ValueParser.parse("foo",
+                                                                 "trimmed-string",
+                                                                 mapOf(),
+                                                                 "bar");
         assertFalse(alreadyTrimmedResult.explain(), alreadyTrimmedResult.hasProblem());
         assertEquals("bar", alreadyTrimmedResult.getObject());
 
@@ -42,30 +45,66 @@ public class ValueParserTest {
 
     @Test
     public void integer() {
-        ObjectOrProblem validResult = ValueParser.parse("foo", "integer", null, "5");
+        ObjectOrProblem validResult = ValueParser.parse("foo",
+                                                        "integer",
+                                                        mapOf(),
+                                                        "5");
         assertFalse(validResult.explain(),
                 validResult.hasProblem());
         assertEquals(5, validResult.getObject());
 
-        ObjectOrProblem invalidResult = ValueParser.parse("foo", "integer", null, "bar");
+        ObjectOrProblem invalidResult = ValueParser.parse("foo", "integer", mapOf(), "bar");
         assertTrue(invalidResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"integer\".",
                 invalidResult.getProblem().explain());
     }
 
     @Test
+    public void optionalInteger() {
+        Map<String, Object> props = mapOf("default", 0);
+        ObjectOrProblem validResult = ValueParser.parse("foo", "integer", props, " ");
+        assertFalse(validResult.explain(), validResult.hasProblem());
+        assertEquals(0, validResult.getObject());
+    }
+
+    @Test
     public void bigDecimal() {
         String validValue = "5.20932021";
-        ObjectOrProblem validResult = ValueParser.parse("foo", "big-decimal", null, validValue);
+        ObjectOrProblem validResult = ValueParser.parse("foo", "big-decimal", mapOf(), validValue);
         assertFalse(validResult.explain(), validResult.hasProblem());
 
         BigDecimal expectedValue = new BigDecimal(validValue);
         assertEquals(expectedValue, validResult.getObject());
 
-        ObjectOrProblem problemResult = ValueParser.parse("foo", "big-decimal", null, "bar");
+        ObjectOrProblem problemResult = ValueParser.parse("foo", "big-decimal", mapOf(), "bar");
         assertTrue(problemResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"big-decimal\".",
                 problemResult.getProblem().explain());
+    }
+
+    @Test
+    public void untrimmedBigDecimal() {
+        ObjectOrProblem result = ValueParser.parse("foo",
+                                                   "big-decimal",
+                                                   mapOf(),
+                                                   " 5.0");
+        assertFalse(result.explain(), result.hasProblem());
+
+        BigDecimal expectedValue = new BigDecimal(5.0);
+        assertEquals(0, expectedValue.compareTo((BigDecimal)result.getObject()));
+    }
+
+    @Test
+    public void optionalBigDecimal() {
+        Map<String, Object> props = mapOf("default", new BigDecimal(2.5));
+        ObjectOrProblem result = ValueParser.parse("foo",
+                                                   "big-decimal",
+                                                   props,
+                                                   " ");
+        assertFalse(result.explain(), result.hasProblem());
+
+        BigDecimal expectedValue = new BigDecimal(2.5);
+        assertEquals(expectedValue, result.getObject());
     }
 
     @Test

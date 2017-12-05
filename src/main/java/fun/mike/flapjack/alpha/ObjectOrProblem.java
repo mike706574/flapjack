@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+// TODO: Make this generic.
 public class ObjectOrProblem {
     private Object object;
     private Problem problem;
