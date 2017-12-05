@@ -42,8 +42,6 @@ public class Column {
         return this.props;
     }
 
-    ;
-
     @Override
     public String toString() {
         return "Column{" +

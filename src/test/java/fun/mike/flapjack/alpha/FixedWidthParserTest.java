@@ -65,7 +65,6 @@ public class FixedWidthParserTest {
         assertEquals(2, records.size());
 
 
-
         Record record1 = records.get(0);
         assertFalse(record1.hasProblems());
 

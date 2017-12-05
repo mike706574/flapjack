@@ -30,6 +30,34 @@ public class StringEnumProblem implements Problem {
                 value,
                 count,
                 optionsStr);
+    }
 
+    @Override
+    public String toString() {
+        return "StringEnumProblem{" +
+                "id='" + id + '\'' +
+                ", value='" + value + '\'' +
+                ", options=" + options +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StringEnumProblem that = (StringEnumProblem) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+        return options != null ? options.equals(that.options) : that.options == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + (options != null ? options.hashCode() : 0);
+        return result;
     }
 }

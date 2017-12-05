@@ -19,4 +19,30 @@ public class FramingProblem implements Problem {
                 columnIndex + 1,
                 charIndex + 1);
     }
+
+    @Override
+    public String toString() {
+        return "FramingProblem{" +
+                "columnIndex=" + columnIndex +
+                ", charIndex=" + charIndex +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FramingProblem that = (FramingProblem) o;
+
+        if (columnIndex != null ? !columnIndex.equals(that.columnIndex) : that.columnIndex != null) return false;
+        return charIndex != null ? charIndex.equals(that.charIndex) : that.charIndex == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = columnIndex != null ? columnIndex.hashCode() : 0;
+        result = 31 * result + (charIndex != null ? charIndex.hashCode() : 0);
+        return result;
+    }
 }

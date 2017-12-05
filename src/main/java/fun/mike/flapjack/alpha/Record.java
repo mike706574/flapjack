@@ -9,13 +9,11 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize(as = RecordInterface.class)
-public class Record implements Map<String, Object>, RecordInterface{
+public class Record implements Map<String, Object>, RecordInterface {
     private final Long index;
     private final Map<String, Object> data;
     private final Set<Problem> problems;

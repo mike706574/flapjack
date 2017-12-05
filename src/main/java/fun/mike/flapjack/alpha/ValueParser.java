@@ -6,8 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import java.util.function.Function;
 
 import static fun.mike.map.alpha.Get.requiredString;
@@ -45,14 +43,13 @@ public class ValueParser {
                                                      String value,
                                                      Function<String, ValueOrProblem> parseValue) {
 
-        if(isBlank(value)) {
-            if(props.containsKey("default")) {
+        if (isBlank(value)) {
+            if (props.containsKey("default")) {
                 try {
                     @SuppressWarnings("unchecked")
-                    T defaultValue = (T)props.get("default");
+                    T defaultValue = (T) props.get("default");
                     return ValueOrProblem.value(defaultValue);
-                }
-                catch(ClassCastException ex) {
+                } catch (ClassCastException ex) {
                     String message = String.format("Expected default value for field \"%s\" to be an %s.", id, type);
                     return ValueOrProblem.problem(new FormatProblem(message));
                 }
@@ -67,8 +64,7 @@ public class ValueParser {
         Function<String, ValueOrProblem> parseValue = stringValue -> {
             try {
                 return ValueOrProblem.value(Integer.parseInt(stringValue.trim()));
-            }
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 return ValueOrProblem.problem(new TypeProblem(id, type, stringValue));
             }
         };
@@ -80,8 +76,7 @@ public class ValueParser {
         Function<String, ValueOrProblem> parseValue = stringValue -> {
             try {
                 return ValueOrProblem.value(new BigDecimal(stringValue.trim()));
-            }
-            catch (NumberFormatException ex) {
+            } catch (NumberFormatException ex) {
                 return ValueOrProblem.problem(new TypeProblem(id, type, stringValue));
             }
         };
@@ -106,20 +101,20 @@ public class ValueParser {
     }
 
     private static ValueOrProblem parseDate(String id,
-                                             String type,
-                                             Map<String, Object> props,
-                                             String value) {
+                                            String type,
+                                            Map<String, Object> props,
+                                            String value) {
         try {
             ValueOrProblem optionalOrProblem = getOptionalFlag(id, props);
 
-            if(optionalOrProblem.hasProblem()) {
+            if (optionalOrProblem.hasProblem()) {
                 return optionalOrProblem;
             }
 
-            Boolean optional = (Boolean)optionalOrProblem.getValue();
+            Boolean optional = (Boolean) optionalOrProblem.getValue();
 
-            if(isBlank(value)) {
-                if(optional) {
+            if (isBlank(value)) {
+                if (optional) {
                     return ValueOrProblem.value(null);
                 }
 
@@ -136,11 +131,10 @@ public class ValueParser {
     }
 
     private static ValueOrProblem getOptionalFlag(String id, Map<String, Object> props) {
-        if(props.containsKey("optional")) {
+        if (props.containsKey("optional")) {
             try {
-                return ValueOrProblem.value((Boolean)props.get("optional"));
-            }
-            catch(ClassCastException ex) {
+                return ValueOrProblem.value((Boolean) props.get("optional"));
+            } catch (ClassCastException ex) {
                 String message = String.format("Expected optional flag for field \"%s\" to be a boolean.", id);
                 return ValueOrProblem.problem(new FormatProblem(message));
             }

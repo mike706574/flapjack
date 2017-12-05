@@ -19,4 +19,30 @@ public class NoSuchTypeProblem implements Problem {
                 type,
                 id);
     }
+
+    @Override
+    public String toString() {
+        return "NoSuchTypeProblem{" +
+                "id='" + id + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NoSuchTypeProblem that = (NoSuchTypeProblem) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return type != null ? type.equals(that.type) : that.type == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        return result;
+    }
 }

@@ -10,9 +10,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.junit.Assert.assertEquals;
-
 import static fun.mike.map.alpha.Factory.mapOf;
+import static org.junit.Assert.assertEquals;
 
 public class SerializationTest {
     @Rule
@@ -148,7 +147,7 @@ public class SerializationTest {
         mapper.registerModule(new Jdk8Module());
 
         List<Field> fields = Arrays.asList(Field.with("foo", 5, "string"),
-                                           Field.with("bar", 5, "string"));
+                Field.with("bar", 5, "string"));
         FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         String serializedFormat = mapper.writeValueAsString(format);
@@ -165,7 +164,7 @@ public class SerializationTest {
         mapper.registerModule(new Jdk8Module());
 
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
-                                             Column.with("bar", "string"));
+                Column.with("bar", "string"));
 
         DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ",", columns);
 

@@ -37,4 +37,30 @@ public class ValueOrProblem<T> {
         }
         return "No problem.";
     }
+
+    @Override
+    public String toString() {
+        return "ValueOrProblem{" +
+                "value=" + value +
+                ", problem=" + problem +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ValueOrProblem<?> that = (ValueOrProblem<?>) o;
+
+        if (value != null ? !value.equals(that.value) : that.value != null) return false;
+        return problem != null ? problem.equals(that.problem) : that.problem == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = value != null ? value.hashCode() : 0;
+        result = 31 * result + (problem != null ? problem.hashCode() : 0);
+        return result;
+    }
 }

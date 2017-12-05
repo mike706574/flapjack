@@ -3,7 +3,6 @@ package fun.mike.flapjack.alpha;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -31,8 +30,8 @@ public class FixedWidthParser {
 
             if (endIndex > lineLength) {
                 Problem outOfBounds = new OutOfBoundsProblem(id,
-                                                             endIndex,
-                                                             lineLength);
+                        endIndex,
+                        lineLength);
                 problems.add(outOfBounds);
                 return Record.with(index, data, problems);
             }

@@ -33,9 +33,9 @@ public class ValueParserTest {
     @Test
     public void trimmedString() {
         ValueOrProblem alreadyTrimmedResult = ValueParser.parse("foo",
-                                                                 "trimmed-string",
-                                                                 mapOf(),
-                                                                 "bar");
+                "trimmed-string",
+                mapOf(),
+                "bar");
         assertFalse(alreadyTrimmedResult.explain(), alreadyTrimmedResult.hasProblem());
         assertEquals("bar", alreadyTrimmedResult.getValue());
 
@@ -47,9 +47,9 @@ public class ValueParserTest {
     @Test
     public void integer() {
         ValueOrProblem validResult = ValueParser.parse("foo",
-                                                        "integer",
-                                                        mapOf(),
-                                                        "5");
+                "integer",
+                mapOf(),
+                "5");
         assertFalse(validResult.explain(),
                 validResult.hasProblem());
         assertEquals(5, validResult.getValue());
@@ -86,22 +86,22 @@ public class ValueParserTest {
     @Test
     public void untrimmedBigDecimal() {
         ValueOrProblem result = ValueParser.parse("foo",
-                                                   "big-decimal",
-                                                   mapOf(),
-                                                   " 5.0");
+                "big-decimal",
+                mapOf(),
+                " 5.0");
         assertFalse(result.explain(), result.hasProblem());
 
         BigDecimal expectedValue = new BigDecimal(5.0);
-        assertEquals(0, expectedValue.compareTo((BigDecimal)result.getValue()));
+        assertEquals(0, expectedValue.compareTo((BigDecimal) result.getValue()));
     }
 
     @Test
     public void optionalBigDecimal() {
         Map<String, Object> props = mapOf("default", new BigDecimal(2.5));
         ValueOrProblem result = ValueParser.parse("foo",
-                                                   "big-decimal",
-                                                   props,
-                                                   " ");
+                "big-decimal",
+                props,
+                " ");
         assertFalse(result.explain(), result.hasProblem());
 
         BigDecimal expectedValue = new BigDecimal(2.5);
@@ -153,7 +153,7 @@ public class ValueParserTest {
     public void optionalFormattedDate() {
         String format = "yyyyMMdd";
         Map<String, Object> props = mapOf("format", format,
-                                          "optional", true);
+                "optional", true);
 
         ValueOrProblem result = ValueParser.parse("foo", "date", props, "        ");
         assertFalse(result.hasProblem());
