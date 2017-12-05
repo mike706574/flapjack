@@ -121,12 +121,12 @@ public class DelimitedParser {
             String columnId = column.getId();
             String columnType = column.getType();
             Map<String, Object> props = column.getProps();
-            ObjectOrProblem result = ValueParser.parse(columnId, columnType, props, value);
+            ValueOrProblem result = ValueParser.parse(columnId, columnType, props, value);
 
             if (result.hasProblem()) {
                 problems.add(result.getProblem());
             } else {
-                data.put(columnId, result.getObject());
+                data.put(columnId, result.getValue());
             }
         } else {
             throw new RuntimeException("TODO");

@@ -40,12 +40,12 @@ public class FixedWidthParser {
             String value = line.substring(startIndex, endIndex);
             String type = field.getType();
             Map<String, Object> props = field.getProps();
-            ObjectOrProblem result = ValueParser.parse(id, type, props, value);
+            ValueOrProblem result = ValueParser.parse(id, type, props, value);
 
             if (result.hasProblem()) {
                 problems.add(result.getProblem());
             } else {
-                data.put(id, result.getObject());
+                data.put(id, result.getValue());
             }
 
             startIndex = endIndex;
