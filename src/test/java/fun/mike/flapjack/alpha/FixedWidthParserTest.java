@@ -19,10 +19,10 @@ public class FixedWidthParserTest {
 
     @Test
     public void valid() {
-        List<Field> fields = Arrays.asList(Field.with("foo", 1, 5, "string"),
-                Field.with("bar", 6, 10, "string"));
+        List<Field> fields = Arrays.asList(Field.with("foo", 5, "string"),
+                Field.with("bar", 5, "string"));
 
-        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 10, fields);
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         FixedWidthParser parser = new FixedWidthParser(format);
 
@@ -35,20 +35,24 @@ public class FixedWidthParserTest {
         assertEquals(2, records.size());
 
         Record record1 = records.get(0);
+
+        assertFalse(record1.hasProblems());
         assertEquals("12345", record1.get("foo"));
         assertEquals("67890", record1.get("bar"));
 
         Record record2 = records.get(1);
+
+        assertFalse(record2.hasProblems());
         assertEquals("abcde", record2.get("foo"));
         assertEquals("fghij", record2.get("bar"));
     }
 
     @Test
     public void validInteger() {
-        List<Field> fields = Arrays.asList(Field.with("foo", 1, 5, "integer"),
-                Field.with("bar", 6, 10, "string"));
+        List<Field> fields = Arrays.asList(Field.with("foo", 5, "integer"),
+                Field.with("bar", 5, "string"));
 
-        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 10, fields);
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         FixedWidthParser parser = new FixedWidthParser(format);
 
@@ -60,41 +64,26 @@ public class FixedWidthParserTest {
 
         assertEquals(2, records.size());
 
+
+
         Record record1 = records.get(0);
+        assertFalse(record1.hasProblems());
+
         assertEquals(new Integer(12345), record1.get("foo"));
         assertEquals("67890", record1.get("bar"));
 
         Record record2 = records.get(1);
+        assertFalse(record2.hasProblems());
+
         assertEquals(new Integer(54321), record2.get("foo"));
         assertEquals("fghij", record2.get("bar"));
     }
 
     @Test
-    public void lengthMismatch() {
-        List<Field> fields = Arrays.asList(Field.with("foo", 1, 2, "string"));
-        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 2, fields);
-        FixedWidthParser parser = new FixedWidthParser(format);
-
-        List<String> lines = Arrays.asList("abc");
-        List<Record> records = parser.stream(lines.stream())
-                .collect(Collectors.toList());
-
-        assertEquals(1, records.size());
-
-        Record record1 = records.get(0);
-        assertTrue(record1.isEmpty());
-
-        Set<Problem> problems = record1.getProblems();
-        assertEquals(1, problems.size());
-        Problem problem = problems.iterator().next();
-        assertTrue(problem instanceof LengthMismatchProblem);
-    }
-
-    @Test
     public void outOfBounds() {
-        List<Field> fields = Arrays.asList(Field.with("foo", 1, 2, "string"),
-                Field.with("bar", 3, 4, "string"));
-        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", null, fields);
+        List<Field> fields = Arrays.asList(Field.with("foo", 2, "string"),
+                Field.with("bar", 2, "string"));
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
         FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("abc");

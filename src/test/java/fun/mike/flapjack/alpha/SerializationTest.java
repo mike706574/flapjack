@@ -23,24 +23,9 @@ public class SerializationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        List<Field> fields = Arrays.asList(Field.with("foo", 1, 5, "string"),
-                Field.with("bar", 6, 10, "string"));
-        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 10, fields);
-
-        String serializedFormat = mapper.writeValueAsString(format);
-        // System.out.println(serializedFormat);
-        FixedWidthFormat deserializedFormat = mapper.readValue(serializedFormat, FixedWidthFormat.class);
-        String reserializedFormat = mapper.writeValueAsString(deserializedFormat);
-        assertEquals(serializedFormat, reserializedFormat);
-    }
-
-    @Test
-    public void fixedWidthNoLength() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new Jdk8Module());
-
-        List<Field> fields = Arrays.asList(Field.with("foo", 1, 5, "string"));
-        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", null, fields);
+        List<Field> fields = Arrays.asList(Field.with("foo", 5, "string"),
+                Field.with("bar", 5, "string"));
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         String serializedFormat = mapper.writeValueAsString(format);
         // System.out.println(serializedFormat);
@@ -54,8 +39,8 @@ public class SerializationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        List<Field> fields = Arrays.asList(new Field("foo", 1, 5, "string", null));
-        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 10, fields);
+        List<Field> fields = Arrays.asList(new Field("foo", 5, "string", null));
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         String serializedFormat = mapper.writeValueAsString(format);
         // System.out.println(serializedFormat);
@@ -162,9 +147,9 @@ public class SerializationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        List<Field> fields = Arrays.asList(Field.with("foo", 1, 5, "string"),
-                                           Field.with("bar", 6, 10, "string"));
-        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", 10, fields);
+        List<Field> fields = Arrays.asList(Field.with("foo", 5, "string"),
+                                           Field.with("bar", 5, "string"));
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         String serializedFormat = mapper.writeValueAsString(format);
         // System.out.println(serializedFormat);

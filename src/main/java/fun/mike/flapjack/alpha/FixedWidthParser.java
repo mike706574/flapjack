@@ -20,39 +20,35 @@ public class FixedWidthParser {
         Map<String, Object> data = new HashMap<String, Object>();
         Set<Problem> problems = new HashSet<Problem>();
 
-        Optional<Integer> length = format.getLength();
+        int lineLength = line.length();
 
-        Integer lineLength = line.length();
-        if (length.isPresent() && !length.get().equals(lineLength)) {
-            Problem lengthMismatch = new LengthMismatchProblem(length.get(),
-                    lineLength);
-            problems.add(lengthMismatch);
-            return Record.with(index, data, problems);
-        }
+        int startIndex = 0;
 
         for (Field field : format.getFields()) {
-            String fieldId = field.getId();
-            Integer fieldStart = field.getStart();
-            Integer fieldEnd = field.getEnd();
+            String id = field.getId();
+            int length = field.getLength();
+            int endIndex = startIndex + length;
 
-            if (fieldEnd > lineLength) {
-                Problem outOfBounds = new OutOfBoundsProblem(fieldId,
-                        fieldEnd,
-                        lineLength);
+            if (endIndex > lineLength) {
+                Problem outOfBounds = new OutOfBoundsProblem(id,
+                                                             endIndex,
+                                                             lineLength);
                 problems.add(outOfBounds);
-            } else {
-                String value = line.substring(fieldStart - 1,
-                        fieldEnd);
-                String fieldType = field.getType();
-                Map<String, Object> props = field.getProps();
-                ObjectOrProblem result = ValueParser.parse(fieldId, fieldType, props, value);
-
-                if (result.hasProblem()) {
-                    problems.add(result.getProblem());
-                } else {
-                    data.put(fieldId, result.getObject());
-                }
+                return Record.with(index, data, problems);
             }
+
+            String value = line.substring(startIndex, endIndex);
+            String type = field.getType();
+            Map<String, Object> props = field.getProps();
+            ObjectOrProblem result = ValueParser.parse(id, type, props, value);
+
+            if (result.hasProblem()) {
+                problems.add(result.getProblem());
+            } else {
+                data.put(id, result.getObject());
+            }
+
+            startIndex = endIndex;
         }
 
         return Record.with(index, data, problems);
