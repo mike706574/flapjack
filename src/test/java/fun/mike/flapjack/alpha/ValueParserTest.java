@@ -15,6 +15,7 @@ import org.junit.rules.ExpectedException;
 import static fun.mike.map.alpha.Factory.mapOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 
@@ -136,16 +137,27 @@ public class ValueParserTest {
         Map<String, Object> props = mapOf("format", format);
 
         String unformattedDate = "19950215";
-        ObjectOrProblem validResult = ValueParser.parse("foo", "formatted-date", props, unformattedDate);
+        ObjectOrProblem validResult = ValueParser.parse("foo", "date", props, unformattedDate);
         assertFalse(validResult.hasProblem());
 
         Date expectedDate = parseDate(format, unformattedDate);
         assertEquals(expectedDate, validResult.getObject());
 
-        ObjectOrProblem invalidResult = ValueParser.parse("foo", "formatted-date", props, "bar");
+        ObjectOrProblem invalidResult = ValueParser.parse("foo", "date", props, "bar");
         assertTrue(invalidResult.hasProblem());
-        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"formatted-date\".",
+        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"date\".",
                 invalidResult.getProblem().explain());
+    }
+
+    @Test
+    public void optionalFormattedDate() {
+        String format = "yyyyMMdd";
+        Map<String, Object> props = mapOf("format", format,
+                                          "optional", true);
+
+        ObjectOrProblem result = ValueParser.parse("foo", "date", props, "        ");
+        assertFalse(result.hasProblem());
+        assertNull(result.getObject());
     }
 
     private Date parseDate(String format, String date) {

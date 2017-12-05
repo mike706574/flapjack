@@ -3,8 +3,10 @@ package fun.mike.flapjack.alpha;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import java.util.function.Function;
 
@@ -20,8 +22,8 @@ public class ValueParser {
                 return ObjectOrProblem.object(value.trim());
             case "integer":
                 return parseInt(id, type, props, value);
-            case "formatted-date":
-                return parseAndFormatDate(id, type, props, value);
+            case "date":
+                return parseDate(id, type, props, value);
             case "big-decimal":
                 return parseBigDecimal(id, type, props, value);
             case "string-enum":
@@ -101,17 +103,47 @@ public class ValueParser {
         }
     }
 
-
-    private static ObjectOrProblem parseAndFormatDate(String id,
-                                                      String type,
-                                                      Map<String, Object> props,
-                                                      String value) {
+    private static ObjectOrProblem parseDate(String id,
+                                             String type,
+                                             Map<String, Object> props,
+                                             String value) {
         try {
+            ObjectOrProblem optionalOrProblem = getOptionalFlag(id, props);
+
+            if(optionalOrProblem.hasProblem()) {
+                return optionalOrProblem;
+            }
+
+            Boolean optional = (Boolean)optionalOrProblem.getObject();
+
+            if(isBlank(value)) {
+                if(optional) {
+                    return ObjectOrProblem.object(null);
+                }
+
+                return ObjectOrProblem.problem(new TypeProblem(id, type, value));
+            }
+
             String format = requiredString(props, "format");
             SimpleDateFormat formatter = new SimpleDateFormat(format);
-            return ObjectOrProblem.object(formatter.parse(value));
+            Date date = formatter.parse(value);
+            return ObjectOrProblem.object(date);
         } catch (ParseException ex) {
             return ObjectOrProblem.problem(new TypeProblem(id, type, value));
         }
+    }
+
+    private static ObjectOrProblem getOptionalFlag(String id, Map<String, Object> props) {
+        if(props.containsKey("optional")) {
+            try {
+                return ObjectOrProblem.object((Boolean)props.get("optional"));
+            }
+            catch(ClassCastException ex) {
+                String message = String.format("Expected optional flag for field \"%s\" to be a boolean.", id);
+                return ObjectOrProblem.problem(new FormatProblem(message));
+            }
+        }
+
+        return ObjectOrProblem.object(new Boolean(false));
     }
 }
