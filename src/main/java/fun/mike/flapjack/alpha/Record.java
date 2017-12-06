@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -96,6 +97,10 @@ public class Record implements Map<String, Object>, RecordInterface {
 
     public Long getLong(String key) {
         return (Long) this.get(key);
+    }
+
+    public BigDecimal getBigDecimal(String key) {
+        return (BigDecimal) this.get(key);
     }
 
     public Integer getInteger(String key) {
