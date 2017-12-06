@@ -123,17 +123,17 @@ public class Record implements Map<String, Object>, RecordInterface {
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException();
+        data.clear();
     }
 
     @Override
-    public String remove(Object key) {
-        throw new UnsupportedOperationException();
+    public Object remove(Object key) {
+        return data.remove(key);
     }
 
     @Override
-    public String put(String key, Object value) {
-        throw new UnsupportedOperationException();
+    public Object put(String key, Object value) {
+        return data.put(key, value);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class Record implements Map<String, Object>, RecordInterface {
 
     @Override
     public void putAll(Map<? extends String, ? extends Object> m) {
-        throw new UnsupportedOperationException();
+        data.putAll(m);
     }
 
     @Override
