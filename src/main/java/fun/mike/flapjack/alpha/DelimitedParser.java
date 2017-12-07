@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import com.codepoetics.protonpack.StreamUtils;
 
 public class DelimitedParser {
     private final DelimitedFormat format;
-    private final BiFunction<Long, String, Record> parseLine;
+    private final Function<String, Record> parseLine;
 
     public DelimitedParser(DelimitedFormat format) {
         this.format = format;
@@ -21,10 +21,18 @@ public class DelimitedParser {
 
     public Stream<Record> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
-                .map(item -> parseLine.apply(item.getIndex(), item.getValue()));
+                .map(item -> {
+                    Record record = parse(item.getValue());
+                    record.put("lineIndex", item.getIndex());
+                    return record;
+                });
     }
 
-    public Record parseUnframedLine(Long index, String line) {
+    public Record parse(String line) {
+        return parseLine.apply(line);
+    }
+
+    public Record parseUnframedLine(String line) {
         Map<String, Object> data = new HashMap<String, Object>();
         Set<Problem> problems = new HashSet<Problem>();
 
@@ -53,10 +61,10 @@ public class DelimitedParser {
         }
 
         setColumn(data, problems, columnIndex, cell.toString());
-        return Record.with(index, data, problems);
+        return Record.with(data, problems);
     }
 
-    public Record parseFramedLine(Long index, String line) {
+    public Record parseFramedLine(String line) {
         Map<String, Object> data = new HashMap<String, Object>();
         Set<Problem> problems = new HashSet<Problem>();
 
@@ -108,7 +116,7 @@ public class DelimitedParser {
             }
         }
 
-        return Record.with(index, data, problems);
+        return Record.with(data, problems);
     }
 
     private void setColumn(Map<String, Object> data, Set<Problem> problems, int index, String value) {

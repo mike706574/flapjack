@@ -15,7 +15,7 @@ public class FixedWidthParser {
         this.format = format;
     }
 
-    private Record parseLine(Long index, String line) {
+    public Record parse(String line) {
         Map<String, Object> data = new HashMap<String, Object>();
         Set<Problem> problems = new HashSet<Problem>();
 
@@ -33,7 +33,7 @@ public class FixedWidthParser {
                         endIndex,
                         lineLength);
                 problems.add(outOfBounds);
-                return Record.with(index, data, problems);
+                return Record.with(data, problems);
             }
 
             String value = line.substring(startIndex, endIndex);
@@ -50,12 +50,15 @@ public class FixedWidthParser {
             startIndex = endIndex;
         }
 
-        return Record.with(index, data, problems);
+        return Record.with(data, problems);
     }
 
     public Stream<Record> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
-                .map(item -> parseLine(item.getIndex(), item.getValue()));
+                .map(item -> {
+                    Record record = parse(item.getValue());
+                    record.put("lineIndex", item.getIndex());
+                    return record;
+                });
     }
-
 }

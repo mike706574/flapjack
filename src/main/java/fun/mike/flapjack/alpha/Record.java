@@ -2,10 +2,10 @@ package fun.mike.flapjack.alpha;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -15,56 +15,28 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @JsonSerialize(as = RecordInterface.class)
 public class Record implements Map<String, Object>, RecordInterface {
-    private final Long index;
     private final Map<String, Object> data;
     private final Set<Problem> problems;
-    private final String line;
-
-    private Record(Record record) {
-        this.index = record.getIndex();
-        this.line = record.getLine().orElse(null);
-        this.data = new LinkedHashMap<String, Object>(record);
-        this.problems = new HashSet<Problem>(record.getProblems());
-    }
-
-    private Record(Record record, Problem problem) {
-        this.index = record.getIndex();
-        this.line = record.getLine().orElse(null);
-        this.data = new LinkedHashMap<String, Object>(record);
-        this.problems = new HashSet<Problem>(record.getProblems());
-        this.problems.add(problem);
-    }
 
     @JsonCreator
-    public Record(@JsonProperty("index") Long index,
-                  @JsonProperty("data") Map<String, Object> data,
+    public Record(@JsonProperty("data") Map<String, Object> data,
                   @JsonProperty("problems") Set<Problem> problems) {
-        this.index = index;
-        this.data = new LinkedHashMap<String, Object>(data);
-        this.problems = new HashSet<Problem>(problems);
-        this.line = null;
+        this.data = new LinkedHashMap<>(data);
+        this.problems = new HashSet<>(problems);
     }
 
-    private Record(Long index, Map<String, Object> data, Problem problem, String line) {
-        this.index = index;
-        this.data = new LinkedHashMap<String, Object>(data);
-        this.problems = new HashSet<Problem>();
-        this.problems.add(problem);
-        this.line = line;
+    public static Record with(Map<String, Object> data) {
+        return new Record(data, new HashSet<>());
     }
 
-    public static Record with(Long index, Map<String, Object> data, Set<Problem> problems) {
-        return new Record(index, data, problems);
-    }
-
-    public static Record withData(Long index, Map<String, Object> data) {
-        return new Record(index, data, new HashSet<>());
-    }
-
-    public static Record withProblem(Long index, Map<String, Object> data, Problem problem) {
-        HashSet<Problem> problems = new HashSet<>();
+    public static Record with(Map<String, Object> data, Problem problem) {
+        Set<Problem> problems = new HashSet<>();
         problems.add(problem);
-        return new Record(index, data, problems);
+        return with(data, problems);
+    }
+
+    public static Record with(Map<String, Object> data, Set<Problem> problems) {
+        return new Record(data, problems);
     }
 
     public <X extends Throwable> Record orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
@@ -73,14 +45,6 @@ public class Record implements Map<String, Object>, RecordInterface {
         } else {
             throw exceptionSupplier.get();
         }
-    }
-
-    public Long getIndex() {
-        return this.index;
-    }
-
-    public Optional<String> getLine() {
-        return Optional.of(this.line);
     }
 
     public boolean hasProblems() {
@@ -99,9 +63,20 @@ public class Record implements Map<String, Object>, RecordInterface {
         return (Long) this.get(key);
     }
 
+    public Date getDate(String key) {
+        return (Date) this.get(key);
+    }
+
     public BigDecimal getBigDecimal(String key) {
         return (BigDecimal) this.get(key);
     }
+
+    // public Record <T> updateBigDecimal(String key, Function<BigDecimal, T> f) {
+    //     BigDecimal value = getBigDecimal(key);
+    //     T newValue = f(value);
+    //     put(key, newValue);
+    //     return this;
+    // }
 
     public Integer getInteger(String key) {
         return (Integer) this.get(key);
@@ -174,10 +149,8 @@ public class Record implements Map<String, Object>, RecordInterface {
     @Override
     public String toString() {
         return "Record{" +
-                "index=" + index +
-                ", data=" + data +
+                "data=" + data +
                 ", problems=" + problems +
-                ", line='" + line + '\'' +
                 '}';
     }
 
@@ -188,18 +161,14 @@ public class Record implements Map<String, Object>, RecordInterface {
 
         Record record = (Record) o;
 
-        if (index != null ? !index.equals(record.index) : record.index != null) return false;
         if (data != null ? !data.equals(record.data) : record.data != null) return false;
-        if (problems != null ? !problems.equals(record.problems) : record.problems != null) return false;
-        return line != null ? line.equals(record.line) : record.line == null;
+        return problems != null ? problems.equals(record.problems) : record.problems == null;
     }
 
     @Override
     public int hashCode() {
-        int result = index != null ? index.hashCode() : 0;
-        result = 31 * result + (data != null ? data.hashCode() : 0);
+        int result = data != null ? data.hashCode() : 0;
         result = 31 * result + (problems != null ? problems.hashCode() : 0);
-        result = 31 * result + (line != null ? line.hashCode() : 0);
         return result;
     }
 }

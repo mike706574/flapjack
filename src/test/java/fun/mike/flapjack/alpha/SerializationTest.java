@@ -117,7 +117,7 @@ public class SerializationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        Record record = Record.withData(1L, mapOf("foo", "bar"));
+        Record record = Record.with(mapOf("foo", "bar"));
         String serialized = mapper.writeValueAsString(record);
         // System.out.println(serialized);
         Record deserialized = mapper.readValue(serialized, Record.class);
@@ -132,7 +132,7 @@ public class SerializationTest {
 
         TypeProblem problem = new TypeProblem("foo", "string", "bar");
 
-        Record record = Record.withProblem(1L, mapOf("foo", "bar"), problem);
+        Record record = Record.with(mapOf("foo", "bar"), problem);
 
         String serialized = mapper.writeValueAsString(record);
         // System.out.println(serialized);
