@@ -2,10 +2,11 @@ package fun.mike.flapjack.alpha;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -17,6 +18,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class Record implements Map<String, Object>, RecordInterface {
     private final Map<String, Object> data;
     private final Set<Problem> problems;
+
+    public Record() {
+        this.data = new LinkedHashMap<>();
+        this.problems = new HashSet<>();
+    }
 
     @JsonCreator
     public Record(@JsonProperty("data") Map<String, Object> data,
@@ -146,29 +152,132 @@ public class Record implements Map<String, Object>, RecordInterface {
         data.putAll(m);
     }
 
-    @Override
-    public String toString() {
-        return "Record{" +
-                "data=" + data +
-                ", problems=" + problems +
-                '}';
+    public static Record of() {
+        return new Record();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Record record = (Record) o;
-
-        if (data != null ? !data.equals(record.data) : record.data != null) return false;
-        return problems != null ? problems.equals(record.problems) : record.problems == null;
+    public static Record of(String k1, Object v1) {
+        Record record = new Record();
+        record.put(k1, v1);
+        return record;
     }
 
-    @Override
-    public int hashCode() {
-        int result = data != null ? data.hashCode() : 0;
-        result = 31 * result + (problems != null ? problems.hashCode() : 0);
-        return result;
+    public static Record of(String k1, Object v1, String k2, Object v2) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        return record;
+    }
+
+    public static Record of(String k1, Object v1, String k2, Object v2,
+                                         String k3, Object v3) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        record.put(k3, v3);
+        return record;
+    }
+
+    public static Record of(String k1, Object v1, String k2, Object v2,
+                                          String k3, Object v3, String k4, Object v4) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        record.put(k3, v3);
+        record.put(k4, v4);
+        return record;
+    }
+
+    public static Record of(String k1, Object v1, String k2, Object v2,
+                                         String k3, Object v3, String k4, Object v4,
+                                         String k5, Object v5) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        record.put(k3, v3);
+        record.put(k4, v4);
+        record.put(k5, v5);
+        return record;
+    }
+
+    public static Record of(String k1, Object v1, String k2, Object v2,
+                                          String k3, Object v3, String k4, Object v4,
+                                          String k5, Object v5, String k6, Object v6) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        record.put(k3, v3);
+        record.put(k4, v4);
+        record.put(k5, v5);
+        record.put(k6, v6);
+        return record;
+    }
+
+    public static Record of(String k1, Object v1, String k2, Object v2,
+                                          String k3, Object v3, String k4, Object v4,
+                                          String k5, Object v5, String k6, Object v6,
+                                          String k7, Object v7) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        record.put(k3, v3);
+        record.put(k4, v4);
+        record.put(k5, v5);
+        record.put(k6, v6);
+        record.put(k7, v7);
+        return record;
+    }
+
+    public static Record of(String k1, Object v1, String k2, Object v2,
+                                         String k3, Object v3, String k4, Object v4,
+                                         String k5, Object v5, String k6, Object v6,
+                                         String k7, Object v7, String k8, Object v8) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        record.put(k3, v3);
+        record.put(k4, v4);
+        record.put(k5, v5);
+        record.put(k6, v6);
+        record.put(k7, v7);
+        record.put(k8, v8);
+        return record;
+    }
+
+    public static Record of(String k1, Object v1, String k2, Object v2,
+                                         String k3, Object v3, String k4, Object v4,
+                                         String k5, Object v5, String k6, Object v6,
+                                         String k7, Object v7, String k8, Object v8,
+                                         String k9, Object v9) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        record.put(k3, v3);
+        record.put(k4, v4);
+        record.put(k5, v5);
+        record.put(k6, v6);
+        record.put(k7, v7);
+        record.put(k8, v8);
+        record.put(k9, v9);
+        return record;
+    }
+
+    public static Record of(String k1, Object v1, String k2, Object v2,
+                                          String k3, Object v3, String k4, Object v4,
+                                          String k5, Object v5, String k6, Object v6,
+                                          String k7, Object v7, String k8, Object v8,
+                                          String k9, Object v9, String k10, Object v10) {
+        Record record = new Record();
+        record.put(k1, v1);
+        record.put(k2, v2);
+        record.put(k3, v3);
+        record.put(k4, v4);
+        record.put(k5, v5);
+        record.put(k6, v6);
+        record.put(k7, v7);
+        record.put(k8, v8);
+        record.put(k9, v9);
+        record.put(k10, v10);
+        return record;
     }
 }
