@@ -280,4 +280,30 @@ public class Record implements Map<String, Object>, RecordInterface {
         record.put(k10, v10);
         return record;
     }
+
+    @Override
+    public String toString() {
+        return "Record{" +
+                "data=" + data +
+                ", problems=" + problems +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Record record = (Record) o;
+
+        if (data != null ? !data.equals(record.data) : record.data != null) return false;
+        return problems != null ? problems.equals(record.problems) : record.problems == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = data != null ? data.hashCode() : 0;
+        result = 31 * result + (problems != null ? problems.hashCode() : 0);
+        return result;
+    }
 }
