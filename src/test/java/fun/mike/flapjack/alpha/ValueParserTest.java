@@ -84,6 +84,21 @@ public class ValueParserTest {
     }
 
     @Test
+    public void parsingDoubles() {
+        String validValue = "5.20932021";
+        ValueOrProblem validResult = ValueParser.parse("foo", "double", mapOf(), validValue);
+        assertFalse(validResult.explain(), validResult.hasProblem());
+
+        Double expectedValue = new Double(validValue);
+        assertEquals(expectedValue, validResult.getValue());
+
+        ValueOrProblem problemResult = ValueParser.parse("foo", "double", mapOf(), "bar");
+        assertTrue(problemResult.hasProblem());
+        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"double\".",
+                problemResult.getProblem().explain());
+    }
+
+    @Test
     public void untrimmedBigDecimal() {
         ValueOrProblem result = ValueParser.parse("foo",
                 "big-decimal",

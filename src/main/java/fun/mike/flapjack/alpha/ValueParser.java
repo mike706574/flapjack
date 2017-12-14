@@ -24,6 +24,8 @@ public class ValueParser {
                 return parseInt(id, type, props, value);
             case "date":
                 return parseDate(id, type, props, value);
+            case "double":
+                return parseDouble(id, type, props, value);
             case "big-decimal":
                 return parseBigDecimal(id, type, props, value);
             case "string-enum":
@@ -76,6 +78,18 @@ public class ValueParser {
         Function<String, ValueOrProblem> parseValue = stringValue -> {
             try {
                 return ValueOrProblem.value(new BigDecimal(stringValue.trim()));
+            } catch (NumberFormatException ex) {
+                return ValueOrProblem.problem(new TypeProblem(id, type, stringValue));
+            }
+        };
+
+        return parseSomething(id, type, props, value, parseValue);
+    }
+
+    private static ValueOrProblem parseDouble(String id, String type, Map<String, Object> props, String value) {
+        Function<String, ValueOrProblem> parseValue = stringValue -> {
+            try {
+                return ValueOrProblem.value(new Double(stringValue.trim()));
             } catch (NumberFormatException ex) {
                 return ValueOrProblem.problem(new TypeProblem(id, type, stringValue));
             }
