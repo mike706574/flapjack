@@ -77,19 +77,22 @@ public class Record implements Map<String, Object>, RecordInterface {
         return (BigDecimal) this.get(key);
     }
 
-    // public Record <T> updateBigDecimal(String key, Function<BigDecimal, T> f) {
-    //     BigDecimal value = getBigDecimal(key);
-    //     T newValue = f(value);
-    //     put(key, newValue);
-    //     return this;
-    // }
-
     public Integer getInteger(String key) {
         return (Integer) this.get(key);
     }
 
     public Map<String, Object> getData() {
         return data;
+    }
+
+    public Record assoc(String key, Object value) {
+        this.put(key, value);
+        return this;
+    }
+
+    public Record dissoc(String key) {
+        this.remove(key);
+        return this;
     }
 
     @Override
