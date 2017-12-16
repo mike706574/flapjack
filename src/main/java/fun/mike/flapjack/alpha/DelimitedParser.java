@@ -1,9 +1,8 @@
 package fun.mike.flapjack.alpha;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -11,7 +10,7 @@ import com.codepoetics.protonpack.StreamUtils;
 
 public class DelimitedParser {
     private final DelimitedFormat format;
-    private final Function<String, Record> parseLine;
+    private final Function<String, Result> parseLine;
 
     public DelimitedParser(DelimitedFormat format) {
         this.format = format;
@@ -19,22 +18,22 @@ public class DelimitedParser {
         this.parseLine = format.isFramed() ? this::parseFramedLine : this::parseUnframedLine;
     }
 
-    public Stream<Record> stream(Stream<String> lines) {
+    public Stream<Result> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
                 .map(item -> {
-                    Record record = parse(item.getValue());
-                    record.put("lineIndex", item.getIndex());
-                    return record;
+                    Result result = parse(item.getValue());
+                    result.getRecord().put("lineIndex", item.getIndex());
+                    return result;
                 });
     }
 
-    public Record parse(String line) {
+    public Result parse(String line) {
         return parseLine.apply(line);
     }
 
-    public Record parseUnframedLine(String line) {
-        Map<String, Object> data = new HashMap<String, Object>();
-        Set<Problem> problems = new HashSet<Problem>();
+    public Result parseUnframedLine(String line) {
+        Record record = new Record();
+        List<Problem> problems = new LinkedList<>();
 
         StringBuffer cell = new StringBuffer();
         boolean inside = false;
@@ -48,7 +47,7 @@ public class DelimitedParser {
             if (inside) {
                 if (ch == delimiter) {
                     inside = false;
-                    setColumn(data, problems, columnIndex, cell.toString());
+                    setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
                 } else {
@@ -60,13 +59,13 @@ public class DelimitedParser {
             }
         }
 
-        setColumn(data, problems, columnIndex, cell.toString());
-        return Record.with(data, problems);
+        setColumn(record, problems, columnIndex, cell.toString());
+        return Result.withProblems(record, problems);
     }
 
-    public Record parseFramedLine(String line) {
-        Map<String, Object> data = new HashMap<String, Object>();
-        Set<Problem> problems = new HashSet<Problem>();
+    public Result parseFramedLine(String line) {
+        Record record = new Record();
+        List<Problem> problems = new LinkedList<>();
 
         StringBuffer cell = new StringBuffer();
         boolean inside = false;
@@ -86,13 +85,13 @@ public class DelimitedParser {
                     inside = false;
                     quoted = false;
                     afterEndQuote = true;
-                    setColumn(data, problems, columnIndex, cell.toString());
+                    setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
                 } else if (ch == delimiter) {
                     inside = false;
                     quoted = false;
-                    setColumn(data, problems, columnIndex, cell.toString());
+                    setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
                 } else {
@@ -103,7 +102,7 @@ public class DelimitedParser {
                     afterEndQuote = false;
                 } else {
                     problems.add(new FramingProblem(columnIndex, i));
-                    break;
+                    return Result.withProblems(record, problems);
                 }
             } else {
                 inside = true;
@@ -111,15 +110,15 @@ public class DelimitedParser {
                     quoted = true;
                 } else {
                     problems.add(new FramingProblem(columnIndex, i));
-                    break;
+                    return Result.withProblems(record, problems);
                 }
             }
         }
 
-        return Record.with(data, problems);
+        return Result.withProblems(record, problems);
     }
 
-    private void setColumn(Map<String, Object> data, Set<Problem> problems, int index, String value) {
+    private boolean setColumn(Map<String, Object> data, List<Problem> problems, int index, String value) {
         boolean indexInRange = index < format.getColumns().size();
         if (indexInRange) {
             Column column = format.getColumns().get(index);
@@ -134,8 +133,9 @@ public class DelimitedParser {
             } else {
                 data.put(columnId, result.getValue());
             }
-        } else {
-            throw new RuntimeException("TODO");
+            return true;
         }
+
+        return false;
     }
 }

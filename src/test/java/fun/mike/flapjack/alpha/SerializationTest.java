@@ -10,7 +10,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static fun.mike.map.alpha.Factory.mapOf;
 import static org.junit.Assert.assertEquals;
 
 public class SerializationTest {
@@ -113,30 +112,30 @@ public class SerializationTest {
     }
 
     @Test
-    public void record() throws IOException {
+    public void result() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        Record record = Record.with(mapOf("foo", "bar"));
-        String serialized = mapper.writeValueAsString(record);
+        Result result = Result.ok(Record.of("foo", "bar"));
+        String serialized = mapper.writeValueAsString(result);
         // System.out.println(serialized);
-        Record deserialized = mapper.readValue(serialized, Record.class);
+        Result deserialized = mapper.readValue(serialized, Result.class);
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
     }
 
     @Test
-    public void recordWithProblem() throws IOException {
+    public void resultWithProblem() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
         TypeProblem problem = new TypeProblem("foo", "string", "bar");
 
-        Record record = Record.with(mapOf("foo", "bar"), problem);
+        Result result = Result.withProblem(Record.of("foo", "bar"), problem);
 
-        String serialized = mapper.writeValueAsString(record);
+        String serialized = mapper.writeValueAsString(result);
         // System.out.println(serialized);
-        Record deserialized = mapper.readValue(serialized, Record.class);
+        Result deserialized = mapper.readValue(serialized, Result.class);
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
     }

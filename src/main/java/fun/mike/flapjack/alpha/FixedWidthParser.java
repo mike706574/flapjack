@@ -1,9 +1,8 @@
 package fun.mike.flapjack.alpha;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import com.codepoetics.protonpack.StreamUtils;
@@ -15,9 +14,9 @@ public class FixedWidthParser {
         this.format = format;
     }
 
-    public Record parse(String line) {
-        Map<String, Object> data = new HashMap<String, Object>();
-        Set<Problem> problems = new HashSet<Problem>();
+    public Result parse(String line) {
+        Record record = new Record();
+        List<Problem> problems = new LinkedList<>();
 
         int lineLength = line.length();
 
@@ -33,7 +32,7 @@ public class FixedWidthParser {
                         endIndex,
                         lineLength);
                 problems.add(outOfBounds);
-                return Record.with(data, problems);
+                return Result.withProblems(record, problems);
             }
 
             String value = line.substring(startIndex, endIndex);
@@ -44,21 +43,21 @@ public class FixedWidthParser {
             if (result.hasProblem()) {
                 problems.add(result.getProblem());
             } else {
-                data.put(id, result.getValue());
+                record.assoc(id, result.getValue());
             }
 
             startIndex = endIndex;
         }
 
-        return Record.with(data, problems);
+        return Result.withProblems(record, problems);
     }
 
-    public Stream<Record> stream(Stream<String> lines) {
+    public Stream<Result> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
                 .map(item -> {
-                    Record record = parse(item.getValue());
-                    record.put("lineIndex", item.getIndex());
-                    return record;
+                    Result result = parse(item.getValue());
+                    result.getRecord().put("lineIndex", item.getIndex());
+                    return result;
                 });
     }
 }

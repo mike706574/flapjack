@@ -2,7 +2,6 @@ package fun.mike.flapjack.alpha;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Rule;
@@ -29,20 +28,20 @@ public class FixedWidthParserTest {
         List<String> lines = Arrays.asList("1234567890",
                 "abcdefghij");
 
-        List<Record> records = parser.stream(lines.stream())
+        List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
 
-        assertEquals(2, records.size());
+        assertEquals(2, results.size());
 
-        Record record1 = records.get(0);
-
-        assertFalse(record1.hasProblems());
+        Result result1 = results.get(0);
+        assertTrue(result1.isOk());
+        Record record1 = result1.getRecord();
         assertEquals("12345", record1.get("foo"));
         assertEquals("67890", record1.get("bar"));
 
-        Record record2 = records.get(1);
-
-        assertFalse(record2.hasProblems());
+        Result result2 = results.get(1);
+        assertTrue(result2.isOk());
+        Record record2 = result2.getRecord();
         assertEquals("abcde", record2.get("foo"));
         assertEquals("fghij", record2.get("bar"));
     }
@@ -59,21 +58,20 @@ public class FixedWidthParserTest {
         List<String> lines = Arrays.asList("1234567890",
                 "54321fghij");
 
-        List<Record> records = parser.stream(lines.stream())
+        List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
 
-        assertEquals(2, records.size());
+        assertEquals(2, results.size());
 
-
-        Record record1 = records.get(0);
-        assertFalse(record1.hasProblems());
-
+        Result result1 = results.get(0);
+        assertTrue(result1.isOk());
+        Record record1 = result1.getRecord();
         assertEquals(new Integer(12345), record1.get("foo"));
         assertEquals("67890", record1.get("bar"));
 
-        Record record2 = records.get(1);
-        assertFalse(record2.hasProblems());
-
+        Result result2 = results.get(1);
+        assertTrue(result2.isOk());
+        Record record2 = result2.getRecord();
         assertEquals(new Integer(54321), record2.get("foo"));
         assertEquals("fghij", record2.get("bar"));
     }
@@ -86,20 +84,21 @@ public class FixedWidthParserTest {
         FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("abc");
-        List<Record> records = parser.stream(lines.stream())
+        List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
 
-        assertEquals(1, records.size());
+        assertEquals(1, results.size());
 
-        Record record1 = records.get(0);
-
+        Result result1 = results.get(0);
+        assertTrue(result1.hasProblems());
+        Record record1 = result1.getRecord();
         assertEquals("ab", record1.get("foo"));
         assertFalse(record1.containsKey("bar"));
 
-        Set<Problem> problems = record1.getProblems();
+        List<Problem> problems = result1.getProblems();
         assertEquals(1, problems.size());
 
-        Problem problem = problems.iterator().next();
+        Problem problem = problems.get(0);
         assertTrue(problem instanceof OutOfBoundsProblem);
         OutOfBoundsProblem outOfBoundsProblem = (OutOfBoundsProblem) problem;
         assertEquals("bar", outOfBoundsProblem.getFieldId());
