@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import fun.mike.record.alpha.Record;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

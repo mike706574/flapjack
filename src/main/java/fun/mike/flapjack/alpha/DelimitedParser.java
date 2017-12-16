@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import com.codepoetics.protonpack.StreamUtils;
+import fun.mike.record.alpha.Record;
 
 public class DelimitedParser {
     private final DelimitedFormat format;

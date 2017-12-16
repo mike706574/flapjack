@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fun.mike.record.alpha.Record;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -83,19 +84,15 @@ public class FixedWidthParserTest {
         FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
         FixedWidthParser parser = new FixedWidthParser(format);
 
-        List<String> lines = Arrays.asList("abc");
-        List<Result> results = parser.stream(lines.stream())
-                .collect(Collectors.toList());
+        Result result = parser.parse("abc");
+        assertTrue(result.hasProblems());
 
-        assertEquals(1, results.size());
+        Record record = result.getRecord();
+        System.out.println(record);
+        assertEquals("ab", record.get("foo"));
+        assertFalse(record.containsKey("bar"));
 
-        Result result1 = results.get(0);
-        assertTrue(result1.hasProblems());
-        Record record1 = result1.getRecord();
-        assertEquals("ab", record1.get("foo"));
-        assertFalse(record1.containsKey("bar"));
-
-        List<Problem> problems = result1.getProblems();
+        List<Problem> problems = result.getProblems();
         assertEquals(1, problems.size());
 
         Problem problem = problems.get(0);

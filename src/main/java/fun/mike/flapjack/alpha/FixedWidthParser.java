@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import com.codepoetics.protonpack.StreamUtils;
+import fun.mike.record.alpha.Record;
 
 public class FixedWidthParser {
     private final FixedWidthFormat format;
@@ -43,7 +44,7 @@ public class FixedWidthParser {
             if (result.hasProblem()) {
                 problems.add(result.getProblem());
             } else {
-                record.assoc(id, result.getValue());
+                record.put(id, result.getValue());
             }
 
             startIndex = endIndex;

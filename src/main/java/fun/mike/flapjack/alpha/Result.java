@@ -7,6 +7,8 @@ import java.util.function.Function;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import fun.mike.record.alpha.Record;
+
 
 @JsonSerialize(as = IResult.class)
 public class Result implements IResult {
