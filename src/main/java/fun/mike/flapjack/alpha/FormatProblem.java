@@ -15,6 +15,10 @@ public class FormatProblem implements Problem {
         return message;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
     @Override
     public String toString() {
         return "FormatProblem{" +

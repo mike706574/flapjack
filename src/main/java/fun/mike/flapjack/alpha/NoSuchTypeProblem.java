@@ -14,6 +14,15 @@ public class NoSuchTypeProblem implements Problem {
         this.type = type;
     }
 
+
+    public String getId() {
+        return id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
     public String explain() {
         return String.format("Type \"%s\" specified for field \"%s\" does not exist.",
                 type,

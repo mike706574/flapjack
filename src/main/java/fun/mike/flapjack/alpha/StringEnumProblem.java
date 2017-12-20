@@ -20,6 +20,18 @@ public class StringEnumProblem implements Problem {
         this.options = options;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+
     public String explain() {
         Integer count = options.size();
         String optionsStr = options.stream()

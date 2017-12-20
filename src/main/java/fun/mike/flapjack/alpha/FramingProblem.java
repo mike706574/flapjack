@@ -14,6 +14,14 @@ public class FramingProblem implements Problem {
         this.charIndex = charIndex;
     }
 
+    public Integer getColumnIndex() {
+        return columnIndex;
+    }
+
+    public Integer getCharIndex() {
+        return charIndex;
+    }
+
     public String explain() {
         return String.format("Column %d was not properly framed (at character %d).",
                 columnIndex + 1,

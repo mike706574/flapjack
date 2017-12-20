@@ -88,7 +88,6 @@ public class FixedWidthParserTest {
         assertTrue(result.hasProblems());
 
         Record record = result.getRecord();
-        System.out.println(record);
         assertEquals("ab", record.get("foo"));
         assertFalse(record.containsKey("bar"));
 

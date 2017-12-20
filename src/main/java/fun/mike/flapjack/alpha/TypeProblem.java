@@ -17,6 +17,18 @@ public class TypeProblem implements Problem {
         this.value = value;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
     public String explain() {
         return String.format("Expected field \"%s\" with value \"%s\" to be a \"%s\".",
                 id,
