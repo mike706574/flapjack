@@ -106,7 +106,7 @@ public class SerializationTest {
         TypeProblem problem = new TypeProblem("foo", "string", "bar");
 
         String serialized = mapper.writeValueAsString(problem);
-        System.out.println(serialized);
+        // System.out.println(serialized);
         assertEquals("{\"type\":\"type\",\"id\":\"foo\",\"type\":\"string\",\"value\":\"bar\"}",
                      serialized);
         TypeProblem deserialized = mapper.readValue(serialized, TypeProblem.class);
