@@ -36,12 +36,16 @@ public class DelimitedParserTest {
         Result result1 = results.get(0);
         assertTrue(result1.isOk());
         Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));;
         assertEquals("baz", record1.get("foo"));
         assertEquals("burp", record1.get("bar"));
 
         Result result2 = results.get(1);
         assertTrue(result2.isOk());
         Record record2 = result2.getRecord();
+        assertEquals(3, record2.size());
+        assertEquals(1L, record2.get("lineIndex"));
         assertEquals("bip", record2.get("foo"));
         assertEquals("bop", record2.get("bar"));
     }
@@ -66,14 +70,50 @@ public class DelimitedParserTest {
         Result result1 = results.get(0);
         assertTrue(result1.isOk());
         Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
         assertEquals("baz", record1.get("foo"));
         assertEquals("burp", record1.get("bar"));
 
         Result result2 = results.get(1);
         assertTrue(result2.isOk());
         Record record2 = result2.getRecord();
+        assertEquals(3, record2.size());
+        assertEquals(1L, record2.get("lineIndex"));
         assertEquals("bip", record2.get("foo"));
         assertEquals("bop", record2.get("bar"));
+    }
+
+    @Test
+    public void filler() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("filler", "filler"));
+
+        DelimitedFormat format = DelimitedFormat.framed("baz", "Baz", ",", "\"", columns);
+
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("\"baz\",\"burp\"",
+                "\"bip\",\"bop\"");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(2, results.size());
+
+        Result result1 = results.get(0);
+        assertTrue(result1.isOk());
+        Record record1 = result1.getRecord();
+        assertEquals(2, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
+        assertEquals("baz", record1.get("foo"));
+
+        Result result2 = results.get(1);
+        assertTrue(result2.isOk());
+        Record record2 = result2.getRecord();
+        assertEquals(2, record2.size());
+        assertEquals(1L, record2.get("lineIndex"));
+        assertEquals("bip", record2.get("foo"));
     }
 
     @Test

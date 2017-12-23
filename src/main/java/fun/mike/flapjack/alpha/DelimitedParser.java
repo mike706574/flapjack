@@ -127,12 +127,15 @@ public class DelimitedParser {
             String columnId = column.getId();
             String columnType = column.getType();
             Map<String, Object> props = column.getProps();
-            ValueOrProblem result = ValueParser.parse(columnId, columnType, props, value);
 
-            if (result.hasProblem()) {
-                problems.add(result.getProblem());
-            } else {
-                data.put(columnId, result.getValue());
+            if(!columnType.equals("filler")) {
+                ValueOrProblem result = ValueParser.parse(columnId, columnType, props, value);
+
+                if (result.hasProblem()) {
+                    problems.add(result.getProblem());
+                } else {
+                    data.put(columnId, result.getValue());
+                }
             }
             return true;
         }
