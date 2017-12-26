@@ -1,12 +1,13 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FixedWidthFormat implements Format {
+public class FixedWidthFormat implements Format, Serializable {
     private final String id;
     private final String description;
     private final List<Field> fields;

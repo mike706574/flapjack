@@ -1,6 +1,8 @@
 package fun.mike.flapjack.alpha;
 
-public class ValueOrProblem<T> {
+import java.io.Serializable;
+
+public class ValueOrProblem<T> implements Serializable {
     private T value;
     private Problem problem;
 

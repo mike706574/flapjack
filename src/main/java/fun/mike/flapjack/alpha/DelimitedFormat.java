@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +8,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DelimitedFormat implements Format {
+public class DelimitedFormat implements Format, Serializable {
     private final String id;
     private final String description;
     private final String delimiter;

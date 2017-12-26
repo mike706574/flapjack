@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,14 +10,11 @@ import java.util.stream.Stream;
 import com.codepoetics.protonpack.StreamUtils;
 import fun.mike.record.alpha.Record;
 
-public class DelimitedParser {
+public class DelimitedParser implements Serializable {
     private final DelimitedFormat format;
-    private final Function<String, Result> parseLine;
 
     public DelimitedParser(DelimitedFormat format) {
         this.format = format;
-
-        this.parseLine = format.isFramed() ? this::parseFramedLine : this::parseUnframedLine;
     }
 
     public Stream<Result> stream(Stream<String> lines) {
@@ -29,7 +27,7 @@ public class DelimitedParser {
     }
 
     public Result parse(String line) {
-        return parseLine.apply(line);
+        return format.isFramed() ? parseFramedLine(line) : parseUnframedLine(line);
     }
 
     public Result parseUnframedLine(String line) {

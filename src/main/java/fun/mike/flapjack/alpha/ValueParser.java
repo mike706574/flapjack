@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +11,7 @@ import java.util.function.Function;
 
 import static fun.mike.map.alpha.Get.requiredString;
 
-public class ValueParser {
+public class ValueParser implements Serializable{
     public static ValueOrProblem parse(String id,
                                        String type,
                                        Map<String, Object> props,

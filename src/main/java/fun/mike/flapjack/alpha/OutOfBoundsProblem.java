@@ -1,9 +1,11 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class OutOfBoundsProblem implements Problem {
+public class OutOfBoundsProblem implements Problem, Serializable {
     private final String id;
     private final Integer end;
     private final Integer length;

@@ -1,9 +1,11 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FramingProblem implements Problem {
+public class FramingProblem implements Problem, Serializable {
     private final Integer columnIndex;
     private final Integer charIndex;
 

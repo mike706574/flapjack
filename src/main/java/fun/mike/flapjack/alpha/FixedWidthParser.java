@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,7 @@ import java.util.stream.Stream;
 import com.codepoetics.protonpack.StreamUtils;
 import fun.mike.record.alpha.Record;
 
-public class FixedWidthParser {
+public class FixedWidthParser implements Serializable {
     private final FixedWidthFormat format;
 
     public FixedWidthParser(FixedWidthFormat format) {

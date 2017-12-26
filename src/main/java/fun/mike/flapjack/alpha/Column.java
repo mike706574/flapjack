@@ -1,5 +1,6 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 
-public class Column {
+public class Column implements Serializable {
     private final String id;
     private final String type;
     private final Map<String, Object> props;

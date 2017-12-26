@@ -1,6 +1,8 @@
 package fun.mike.flapjack.alpha;
 
-public class Parser {
+import java.io.Serializable;
+
+public class Parser implements Serializable {
     public Result parse(DelimitedFormat format, String line) {
         return new DelimitedParser(format).parse(line);
     }

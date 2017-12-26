@@ -1,12 +1,13 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Field {
+public class Field implements Serializable {
     private final String id;
     private final int length;
     private final String type;

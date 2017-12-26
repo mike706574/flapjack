@@ -1,9 +1,11 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class FormatProblem implements Problem {
+public class FormatProblem implements Problem, Serializable {
     private final String message;
 
     @JsonCreator
