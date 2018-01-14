@@ -70,7 +70,7 @@
     <dependency>
       <groupId>fun.mike</groupId>
       <artifactId>map-support-alpha</artifactId>
-      <version>0.0.4</version>
+      <version>0.0.6</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
