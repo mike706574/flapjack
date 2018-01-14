@@ -20,13 +20,13 @@ public class DelimitedParserTest {
     @Test
     public void unframed() {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
-                Column.with("bar", "string"));
+                                             Column.with("bar", "string"));
 
         DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ",", columns);
         DelimitedParser parser = new DelimitedParser(format);
 
         List<String> lines = Arrays.asList("baz,burp",
-                "bip,bop");
+                                           "bip,bop");
 
         List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
@@ -37,7 +37,8 @@ public class DelimitedParserTest {
         assertTrue(result1.isOk());
         Record record1 = result1.getRecord();
         assertEquals(3, record1.size());
-        assertEquals(0L, record1.get("lineIndex"));;
+        assertEquals(0L, record1.get("lineIndex"));
+
         assertEquals("baz", record1.get("foo"));
         assertEquals("burp", record1.get("bar"));
 
@@ -53,14 +54,14 @@ public class DelimitedParserTest {
     @Test
     public void framed() {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
-                Column.with("bar", "string"));
+                                             Column.with("bar", "string"));
 
         DelimitedFormat format = DelimitedFormat.framed("baz", "Baz", ",", "\"", columns);
 
         DelimitedParser parser = new DelimitedParser(format);
 
         List<String> lines = Arrays.asList("\"baz\",\"burp\"",
-                "\"bip\",\"bop\"");
+                                           "\"bip\",\"bop\"");
 
         List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
@@ -94,7 +95,7 @@ public class DelimitedParserTest {
         DelimitedParser parser = new DelimitedParser(format);
 
         List<String> lines = Arrays.asList("\"baz\",\"burp\"",
-                "\"bip\",\"bop\"");
+                                           "\"bip\",\"bop\"");
 
         List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
@@ -136,13 +137,13 @@ public class DelimitedParserTest {
         List<Problem> problems = result1.getProblems();
         assertEquals(1, problems.size());
         assertEquals("Column 1 was not properly framed (at character 1).",
-                problems.get(0).explain());
+                     problems.get(0).explain());
     }
 
     @Test
     public void badFrameAtDelimiter() {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
-                Column.with("bar", "string"));
+                                             Column.with("bar", "string"));
 
         DelimitedFormat format = DelimitedFormat.framed("baz", "Baz", ",", "\"", columns);
 
@@ -160,6 +161,62 @@ public class DelimitedParserTest {
         List<Problem> problems = result1.getProblems();
         assertEquals(1, problems.size());
         assertEquals("Column 2 was not properly framed (at character 6).",
-                problems.get(0).explain());
+                     problems.get(0).explain());
+    }
+
+    @Test
+    public void unframedMissingTwoColumns() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"),
+                                             Column.with("baz", "string"),
+                                             Column.with("burp", "integer"));
+
+        DelimitedFormat format = DelimitedFormat.unframed("bop", "Bop", ",", columns);
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("baz,burp");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(1, results.size());
+
+        Result result1 = results.get(0);
+        assertTrue(result1.hasProblems());
+
+        List<Problem> problems = result1.getProblems();
+        assertEquals(2, problems.size());
+        assertEquals("Missing value for field \"burp\" of type \"integer\".",
+                     problems.get(1).explain());
+        assertEquals("Missing value for field \"baz\" of type \"string\".",
+                     problems.get(0).explain());
+    }
+
+    @Test
+    public void framedMissingTwoColumns() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"),
+                                             Column.with("baz", "string"),
+                                             Column.with("burp", "integer"));
+
+        DelimitedFormat format = DelimitedFormat.framed("bop", "Bop", ",", "\"", columns);
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("\"baz\",\"burp\"");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(1, results.size());
+
+        Result result1 = results.get(0);
+        assertTrue(result1.hasProblems());
+
+        List<Problem> problems = result1.getProblems();
+        assertEquals(2, problems.size());
+        assertEquals("Missing value for field \"burp\" of type \"integer\".",
+                     problems.get(1).explain());
+        assertEquals("Missing value for field \"baz\" of type \"string\".",
+                     problems.get(0).explain());
     }
 }

@@ -20,14 +20,14 @@ public class FixedWidthParserTest {
     @Test
     public void valid() {
         List<Field> fields = Arrays.asList(Field.with("foo", 5, "string"),
-                Field.with("bar", 5, "string"));
+                                           Field.with("bar", 5, "string"));
 
         FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("1234567890",
-                "abcdefghij");
+                                           "abcdefghij");
 
         List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
@@ -54,14 +54,14 @@ public class FixedWidthParserTest {
     @Test
     public void filler() {
         List<Field> fields = Arrays.asList(Field.with("foo", 5, "string"),
-                Field.with("filler", 5, "filler"));
+                                           Field.with("filler", 5, "filler"));
 
         FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("1234567890",
-                "abcdefghij");
+                                           "abcdefghij");
 
         List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
@@ -86,14 +86,14 @@ public class FixedWidthParserTest {
     @Test
     public void validInteger() {
         List<Field> fields = Arrays.asList(Field.with("foo", 5, "integer"),
-                Field.with("bar", 5, "string"));
+                                           Field.with("bar", 5, "string"));
 
         FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         FixedWidthParser parser = new FixedWidthParser(format);
 
         List<String> lines = Arrays.asList("1234567890",
-                "54321fghij");
+                                           "54321fghij");
 
         List<Result> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
@@ -116,7 +116,7 @@ public class FixedWidthParserTest {
     @Test
     public void outOfBounds() {
         List<Field> fields = Arrays.asList(Field.with("foo", 2, "string"),
-                Field.with("bar", 2, "string"));
+                                           Field.with("bar", 2, "string"));
         FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
         FixedWidthParser parser = new FixedWidthParser(format);
 

@@ -31,8 +31,8 @@ public class FixedWidthParser implements Serializable {
 
             if (endIndex > lineLength) {
                 Problem outOfBounds = new OutOfBoundsProblem(id,
-                        endIndex,
-                        lineLength);
+                                                             endIndex,
+                                                             lineLength);
                 problems.add(outOfBounds);
                 return Result.withProblems(record, problems);
             }
@@ -41,7 +41,7 @@ public class FixedWidthParser implements Serializable {
             String type = field.getType();
             Map<String, Object> props = field.getProps();
 
-            if(!type.equals("filler")) {
+            if (!type.equals("filler")) {
                 ValueOrProblem result = ValueParser.parse(id, type, props, value);
 
                 if (result.hasProblem()) {

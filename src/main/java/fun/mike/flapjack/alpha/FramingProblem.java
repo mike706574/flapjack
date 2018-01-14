@@ -11,7 +11,7 @@ public class FramingProblem implements Problem, Serializable {
 
     @JsonCreator
     public FramingProblem(@JsonProperty("columnIndex") Integer columnIndex,
-                          @JsonProperty("charIndex") Integer charIndex) {
+            @JsonProperty("charIndex") Integer charIndex) {
         this.columnIndex = columnIndex;
         this.charIndex = charIndex;
     }
@@ -26,8 +26,8 @@ public class FramingProblem implements Problem, Serializable {
 
     public String explain() {
         return String.format("Column %d was not properly framed (at character %d).",
-                columnIndex + 1,
-                charIndex + 1);
+                             columnIndex + 1,
+                             charIndex + 1);
     }
 
     @Override

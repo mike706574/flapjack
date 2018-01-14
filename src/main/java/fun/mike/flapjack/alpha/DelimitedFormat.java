@@ -18,11 +18,11 @@ public class DelimitedFormat implements Format, Serializable {
 
     @JsonCreator
     public DelimitedFormat(@JsonProperty("id") String id,
-                           @JsonProperty("description") String description,
-                           @JsonProperty("delimiter") String delimiter,
-                           @JsonProperty("isFramed") Boolean framed,
-                           @JsonProperty("frameDelimiter") String frameDelimiter,
-                           @JsonProperty("columns") List<Column> columns) {
+            @JsonProperty("description") String description,
+            @JsonProperty("delimiter") String delimiter,
+            @JsonProperty("isFramed") Boolean framed,
+            @JsonProperty("frameDelimiter") String frameDelimiter,
+            @JsonProperty("columns") List<Column> columns) {
         this.id = id;
         this.description = description;
         this.delimiter = delimiter;
@@ -32,17 +32,17 @@ public class DelimitedFormat implements Format, Serializable {
     }
 
     public static DelimitedFormat unframed(String id,
-                                           String description,
-                                           String delimiter,
-                                           List<Column> columns) {
+            String description,
+            String delimiter,
+            List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, false, null, columns);
     }
 
     public static DelimitedFormat framed(String id,
-                                         String description,
-                                         String delimiter,
-                                         String frameDelimiter,
-                                         List<Column> columns) {
+            String description,
+            String delimiter,
+            String frameDelimiter,
+            List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, true, frameDelimiter, columns);
     }
 

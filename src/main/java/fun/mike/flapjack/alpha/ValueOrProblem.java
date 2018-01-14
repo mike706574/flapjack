@@ -1,6 +1,7 @@
 package fun.mike.flapjack.alpha;
 
 import java.io.Serializable;
+import java.util.function.Function;
 
 public class ValueOrProblem<T> implements Serializable {
     private T value;
@@ -11,14 +12,16 @@ public class ValueOrProblem<T> implements Serializable {
         this.problem = problem;
     }
 
-    @SuppressWarnings("unchecked")
-    public static ValueOrProblem problem(Problem problem) {
-        return new ValueOrProblem(null, problem);
+    public static <T> ValueOrProblem<T> problem(Problem problem) {
+        return new ValueOrProblem<T>(null, problem);
     }
 
-    @SuppressWarnings("unchecked")
-    public static ValueOrProblem value(Object value) {
-        return new ValueOrProblem(value, null);
+    public static <T> ValueOrProblem<T> value(T value) {
+        return new ValueOrProblem<T>(value, null);
+    }
+
+    public boolean isOk() {
+        return this.problem == null;
     }
 
     public boolean hasProblem() {
@@ -38,6 +41,14 @@ public class ValueOrProblem<T> implements Serializable {
             return this.problem.explain();
         }
         return "No problem.";
+    }
+
+    public ValueOrProblem<T> flatMap(Function<? super T, ValueOrProblem<T>> mapper) {
+        if (this.hasProblem()) {
+            return this;
+        }
+
+        return mapper.apply(this.getValue());
     }
 
     @Override

@@ -12,28 +12,59 @@ import fun.mike.record.alpha.Record;
 
 @JsonSerialize(as = IResult.class)
 public class Result implements IResult {
+    private final String line;
     private final Record record;
     private final List<Problem> problems;
 
     @JsonCreator
-    public Result(@JsonProperty("record") Record record,
-                  @JsonProperty("problems") List<Problem> problems) {
+    public Result(@JsonProperty("line") String line,
+            @JsonProperty("record") Record record,
+            @JsonProperty("problems") List<Problem> problems) {
+        this.line = line;
         this.record = record;
         this.problems = new LinkedList<>(problems);
     }
 
     public static Result ok(Record record) {
-        return new Result(record, new LinkedList<>());
+        return new Result(null, record, new LinkedList<>());
+    }
+
+    public static Result ok(String line) {
+        return new Result(line, null, new LinkedList<>());
+    }
+
+    public static Result ok(String line, Record record) {
+        return new Result(line, record, new LinkedList<>());
     }
 
     public static Result withProblem(Record record, Problem problem) {
         List<Problem> problems = new LinkedList<>();
         problems.add(problem);
-        return new Result(record, problems);
+        return new Result(null, record, problems);
+    }
+
+    public static Result withProblem(String line, Problem problem) {
+        List<Problem> problems = new LinkedList<>();
+        problems.add(problem);
+        return new Result(line, null, problems);
+    }
+
+    public static Result withProblem(String line, Record record, Problem problem) {
+        List<Problem> problems = new LinkedList<>();
+        problems.add(problem);
+        return new Result(line, record, problems);
     }
 
     public static Result withProblems(Record record, List<Problem> problems) {
-        return new Result(record, problems);
+        return new Result(null, record, problems);
+    }
+
+    public static Result withProblems(String line, List<Problem> problems) {
+        return new Result(line, null, problems);
+    }
+
+    public static Result withProblems(String line, Record record, List<Problem> problems) {
+        return new Result(line, record, problems);
     }
 
     public <E extends Throwable> Record orElseThrow(Function<List<Problem>, ? extends E> exceptionBuilder) throws E {
@@ -56,14 +87,33 @@ public class Result implements IResult {
         return record;
     }
 
+    public String getLine() {
+        return line;
+    }
+
     public List<Problem> getProblems() {
         return new LinkedList<Problem>(this.problems);
     }
 
     @Override
     public String toString() {
+        if (line == null) {
+            return "Result{" +
+                    "record=" + record +
+                    ", problems=" + problems +
+                    '}';
+        }
+
+        if (record == null) {
+            return "Result{" +
+                    "line=" + line +
+                    ", problems=" + problems +
+                    '}';
+        }
+
         return "Result{" +
-                "record=" + record +
+                "line=" + line +
+                ", record=" + record +
                 ", problems=" + problems +
                 '}';
     }
@@ -75,13 +125,15 @@ public class Result implements IResult {
 
         Result result = (Result) o;
 
+        if (line != null ? !line.equals(result.line) : result.line != null) return false;
         if (record != null ? !record.equals(result.record) : result.record != null) return false;
         return problems != null ? problems.equals(result.problems) : result.problems == null;
     }
 
     @Override
     public int hashCode() {
-        int result = record != null ? record.hashCode() : 0;
+        int result = line != null ? line.hashCode() : 0;
+        result = 31 * result + (record != null ? record.hashCode() : 0);
         result = 31 * result + (problems != null ? problems.hashCode() : 0);
         return result;
     }

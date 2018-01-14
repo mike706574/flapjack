@@ -11,11 +11,11 @@ import java.util.function.Function;
 
 import static fun.mike.map.alpha.Get.requiredString;
 
-public class ValueParser implements Serializable{
+public class ValueParser implements Serializable {
     public static ValueOrProblem parse(String id,
-                                       String type,
-                                       Map<String, Object> props,
-                                       String value) {
+            String type,
+            Map<String, Object> props,
+            String value) {
         switch (type) {
             case "string":
                 return ValueOrProblem.value(value);
@@ -36,16 +36,24 @@ public class ValueParser implements Serializable{
         return ValueOrProblem.problem(new NoSuchTypeProblem(id, type));
     }
 
+    // TODO: Move.
     private static boolean isBlank(String str) {
         return str == null || str.trim().equals("");
     }
 
-    private static <T> ValueOrProblem parseSomething(String id,
-                                                     String type,
-                                                     Map<String, Object> props,
-                                                     String value,
-                                                     Function<String, ValueOrProblem> parseValue) {
+    private static String aOrAn(String noun) {
+        return isVowel(noun.charAt(0)) ? "an" : "a";
+    }
 
+    private static boolean isVowel(char c) {
+        return "aeiou".indexOf(c) != -1;
+    }
+
+    private static <T> ValueOrProblem parseType(String id,
+            String type,
+            Map<String, Object> props,
+            String value,
+            Function<String, ValueOrProblem> parseValue) {
         if (isBlank(value)) {
             if (props.containsKey("default")) {
                 try {
@@ -53,7 +61,20 @@ public class ValueParser implements Serializable{
                     T defaultValue = (T) props.get("default");
                     return ValueOrProblem.value(defaultValue);
                 } catch (ClassCastException ex) {
-                    String message = String.format("Expected default value for field \"%s\" to be an %s.", id, type);
+                    String message = String.format("Expected default value for field \"%s\" to be %s %s.", id, aOrAn(type), type);
+                    return ValueOrProblem.problem(new FormatProblem(message));
+                }
+            }
+
+            if (props.containsKey("nullable")) {
+                try {
+                    boolean nullable = (boolean) props.get("nullable");
+
+                    if (nullable) {
+                        return ValueOrProblem.value(null);
+                    }
+                } catch (ClassCastException ex) {
+                    String message = "Expected nullable property to be a boolean.";
                     return ValueOrProblem.problem(new FormatProblem(message));
                 }
             }
@@ -63,6 +84,7 @@ public class ValueParser implements Serializable{
         return parseValue.apply(value);
     }
 
+    // TODO: Make this better.
     private static ValueOrProblem parseInt(String id, String type, Map<String, Object> props, String value) {
         Function<String, ValueOrProblem> parseValue = stringValue -> {
             try {
@@ -72,7 +94,7 @@ public class ValueParser implements Serializable{
             }
         };
 
-        return parseSomething(id, type, props, value, parseValue);
+        return parseType(id, type, props, value, parseValue);
     }
 
     private static ValueOrProblem parseBigDecimal(String id, String type, Map<String, Object> props, String value) {
@@ -84,7 +106,7 @@ public class ValueParser implements Serializable{
             }
         };
 
-        return parseSomething(id, type, props, value, parseValue);
+        return parseType(id, type, props, value, parseValue);
     }
 
     private static ValueOrProblem parseDouble(String id, String type, Map<String, Object> props, String value) {
@@ -96,7 +118,7 @@ public class ValueParser implements Serializable{
             }
         };
 
-        return parseSomething(id, type, props, value, parseValue);
+        return parseType(id, type, props, value, parseValue);
     }
 
     private static ValueOrProblem parseStringEnum(String id, String type, Map<String, Object> props, String value) {
@@ -111,14 +133,13 @@ public class ValueParser implements Serializable{
             return ValueOrProblem.problem(new StringEnumProblem(id, value, options));
         } catch (ClassCastException ex) {
             throw new IllegalArgumentException("Required property \"options\" must be a list of strings.", ex);
-
         }
     }
 
     private static ValueOrProblem parseDate(String id,
-                                            String type,
-                                            Map<String, Object> props,
-                                            String value) {
+            String type,
+            Map<String, Object> props,
+            String value) {
         try {
             ValueOrProblem optionalOrProblem = getOptionalFlag(id, props);
 

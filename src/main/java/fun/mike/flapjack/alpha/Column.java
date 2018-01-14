@@ -15,8 +15,8 @@ public class Column implements Serializable {
 
     @JsonCreator
     public Column(@JsonProperty("id") String id,
-                  @JsonProperty("type") String type,
-                  @JsonProperty("props") Map<String, Object> props) {
+            @JsonProperty("type") String type,
+            @JsonProperty("props") Map<String, Object> props) {
         this.id = id;
         this.type = type;
         this.props = props;

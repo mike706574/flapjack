@@ -13,8 +13,8 @@ public class StringEnumProblem implements Problem {
 
     @JsonCreator
     public StringEnumProblem(@JsonProperty("id") String id,
-                             @JsonProperty("value") String value,
-                             @JsonProperty("options") List<String> options) {
+            @JsonProperty("value") String value,
+            @JsonProperty("options") List<String> options) {
         this.id = id;
         this.value = value;
         this.options = options;
@@ -38,10 +38,10 @@ public class StringEnumProblem implements Problem {
                 .map(option -> String.format("\"%s\"", option))
                 .collect(Collectors.joining(", "));
         return String.format("Expected field \"%s\" with value \"%s\" must be one of the following %d string options: %s",
-                id,
-                value,
-                count,
-                optionsStr);
+                             id,
+                             value,
+                             count,
+                             optionsStr);
     }
 
     @Override

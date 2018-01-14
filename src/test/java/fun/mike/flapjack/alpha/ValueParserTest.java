@@ -33,9 +33,9 @@ public class ValueParserTest {
     @Test
     public void trimmedString() {
         ValueOrProblem alreadyTrimmedResult = ValueParser.parse("foo",
-                "trimmed-string",
-                mapOf(),
-                "bar");
+                                                                "trimmed-string",
+                                                                mapOf(),
+                                                                "bar");
         assertFalse(alreadyTrimmedResult.explain(), alreadyTrimmedResult.hasProblem());
         assertEquals("bar", alreadyTrimmedResult.getValue());
 
@@ -47,17 +47,17 @@ public class ValueParserTest {
     @Test
     public void integer() {
         ValueOrProblem validResult = ValueParser.parse("foo",
-                "integer",
-                mapOf(),
-                "5");
+                                                       "integer",
+                                                       mapOf(),
+                                                       "5");
         assertFalse(validResult.explain(),
-                validResult.hasProblem());
+                    validResult.hasProblem());
         assertEquals(5, validResult.getValue());
 
         ValueOrProblem invalidResult = ValueParser.parse("foo", "integer", mapOf(), "bar");
         assertTrue(invalidResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"integer\".",
-                invalidResult.getProblem().explain());
+                     invalidResult.getProblem().explain());
     }
 
     @Test
@@ -80,7 +80,7 @@ public class ValueParserTest {
         ValueOrProblem problemResult = ValueParser.parse("foo", "big-decimal", mapOf(), "bar");
         assertTrue(problemResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"big-decimal\".",
-                problemResult.getProblem().explain());
+                     problemResult.getProblem().explain());
     }
 
     @Test
@@ -95,15 +95,15 @@ public class ValueParserTest {
         ValueOrProblem problemResult = ValueParser.parse("foo", "double", mapOf(), "bar");
         assertTrue(problemResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"double\".",
-                problemResult.getProblem().explain());
+                     problemResult.getProblem().explain());
     }
 
     @Test
     public void untrimmedBigDecimal() {
         ValueOrProblem result = ValueParser.parse("foo",
-                "big-decimal",
-                mapOf(),
-                " 5.0");
+                                                  "big-decimal",
+                                                  mapOf(),
+                                                  " 5.0");
         assertFalse(result.explain(), result.hasProblem());
 
         BigDecimal expectedValue = new BigDecimal(5.0);
@@ -114,9 +114,9 @@ public class ValueParserTest {
     public void optionalBigDecimal() {
         Map<String, Object> props = mapOf("default", new BigDecimal(2.5));
         ValueOrProblem result = ValueParser.parse("foo",
-                "big-decimal",
-                props,
-                " ");
+                                                  "big-decimal",
+                                                  props,
+                                                  " ");
         assertFalse(result.explain(), result.hasProblem());
 
         BigDecimal expectedValue = new BigDecimal(2.5);
@@ -143,7 +143,7 @@ public class ValueParserTest {
         ValueOrProblem orangeResult = ValueParser.parse("foo", "string-enum", props, "orange");
         assertTrue(orangeResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"orange\" must be one of the following 3 string options: \"apple\", \"banana\", \"carrot\"",
-                orangeResult.getProblem().explain());
+                     orangeResult.getProblem().explain());
     }
 
     @Test
@@ -161,18 +161,25 @@ public class ValueParserTest {
         ValueOrProblem invalidResult = ValueParser.parse("foo", "date", props, "bar");
         assertTrue(invalidResult.hasProblem());
         assertEquals("Expected field \"foo\" with value \"bar\" to be a \"date\".",
-                invalidResult.getProblem().explain());
+                     invalidResult.getProblem().explain());
     }
 
     @Test
     public void optionalFormattedDate() {
         String format = "yyyyMMdd";
         Map<String, Object> props = mapOf("format", format,
-                "optional", true);
+                                          "optional", true);
 
         ValueOrProblem result = ValueParser.parse("foo", "date", props, "        ");
         assertFalse(result.hasProblem());
         assertNull(result.getValue());
+    }
+
+    @Test
+    public void noSuchType() {
+        ValueOrProblem result = ValueParser.parse("foo", "zoogaloo", mapOf(), "");
+        assertTrue(result.hasProblem());
+        assertEquals(new NoSuchTypeProblem("foo", "zoogaloo"), result.getProblem());
     }
 
     private Date parseDate(String format, String date) {

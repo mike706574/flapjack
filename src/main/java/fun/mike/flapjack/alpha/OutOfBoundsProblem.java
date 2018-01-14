@@ -12,8 +12,8 @@ public class OutOfBoundsProblem implements Problem, Serializable {
 
     @JsonCreator
     public OutOfBoundsProblem(@JsonProperty("id") String id,
-                              @JsonProperty("end") Integer end,
-                              @JsonProperty("length") Integer length) {
+            @JsonProperty("end") Integer end,
+            @JsonProperty("length") Integer length) {
         this.id = id;
         this.end = end;
         this.length = length;
@@ -21,9 +21,9 @@ public class OutOfBoundsProblem implements Problem, Serializable {
 
     public String explain() {
         return String.format("The field \"%s\" ends at character \"%d\", but the line was only %d characters long.",
-                id,
-                end,
-                length);
+                             id,
+                             end,
+                             length);
     }
 
     public String getFieldId() {

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import com.codepoetics.protonpack.StreamUtils;
@@ -59,6 +58,9 @@ public class DelimitedParser implements Serializable {
         }
 
         setColumn(record, problems, columnIndex, cell.toString());
+
+        checkForMissingColumns(columnIndex, problems);
+
         return Result.withProblems(record, problems);
     }
 
@@ -114,6 +116,8 @@ public class DelimitedParser implements Serializable {
             }
         }
 
+        checkForMissingColumns(columnIndex - 1, problems);
+
         return Result.withProblems(record, problems);
     }
 
@@ -126,7 +130,7 @@ public class DelimitedParser implements Serializable {
             String columnType = column.getType();
             Map<String, Object> props = column.getProps();
 
-            if(!columnType.equals("filler")) {
+            if (!columnType.equals("filler")) {
                 ValueOrProblem result = ValueParser.parse(columnId, columnType, props, value);
 
                 if (result.hasProblem()) {
@@ -139,5 +143,24 @@ public class DelimitedParser implements Serializable {
         }
 
         return false;
+    }
+
+    private boolean checkForMissingColumns(int columnIndex, List<Problem> problems) {
+        List<Column> columns = format.getColumns();
+
+        int columnCount = columns.size();
+
+        int nextColumnIndex = columnIndex + 1;
+
+        if (nextColumnIndex < columnCount) {
+            for (int i = nextColumnIndex; i < columnCount; i++) {
+                Column column = columns.get(i);
+                problems.add(new MissingValueProblem(column.getId(),
+                                                     column.getType()));
+            }
+            return false;
+        }
+
+        return true;
     }
 }

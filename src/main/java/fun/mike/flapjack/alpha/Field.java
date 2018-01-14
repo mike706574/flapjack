@@ -15,9 +15,9 @@ public class Field implements Serializable {
 
     @JsonCreator
     public Field(@JsonProperty("id") String id,
-                 @JsonProperty("length") int length,
-                 @JsonProperty("type") String type,
-                 @JsonProperty("props") Map<String, Object> props) {
+            @JsonProperty("length") int length,
+            @JsonProperty("type") String type,
+            @JsonProperty("props") Map<String, Object> props) {
         this.id = id;
         this.length = length;
         this.type = type;

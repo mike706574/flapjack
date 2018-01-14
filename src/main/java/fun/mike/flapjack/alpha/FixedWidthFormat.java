@@ -14,8 +14,8 @@ public class FixedWidthFormat implements Format, Serializable {
 
     @JsonCreator
     public FixedWidthFormat(@JsonProperty("id") String id,
-                            @JsonProperty("description") String description,
-                            @JsonProperty("fields") List<Field> fields) {
+            @JsonProperty("description") String description,
+            @JsonProperty("fields") List<Field> fields) {
         this.id = id;
         this.description = description;
         this.fields = Collections.unmodifiableList(fields);

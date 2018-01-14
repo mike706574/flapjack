@@ -11,6 +11,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @Type(value = NoSuchTypeProblem.class, name = "no-such-type"),
         @Type(value = StringEnumProblem.class, name = "string-enum"),
         @Type(value = FramingProblem.class, name = "framing"),
+        @Type(value = TruncationProblem.class, name = "truncation"),
+        @Type(value = FormatProblem.class, name = "format"),
+        @Type(value = MissingValueProblem.class, name = "missing-value")
 })
 public interface Problem {
     public String explain();

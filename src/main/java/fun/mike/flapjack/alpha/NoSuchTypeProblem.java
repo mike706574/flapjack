@@ -11,7 +11,7 @@ public class NoSuchTypeProblem implements Problem, Serializable {
 
     @JsonCreator
     public NoSuchTypeProblem(@JsonProperty("id") String id,
-                             @JsonProperty("type") String type) {
+            @JsonProperty("type") String type) {
         this.id = id;
         this.type = type;
     }
@@ -27,8 +27,8 @@ public class NoSuchTypeProblem implements Problem, Serializable {
 
     public String explain() {
         return String.format("Type \"%s\" specified for field \"%s\" does not exist.",
-                type,
-                id);
+                             type,
+                             id);
     }
 
     @Override
