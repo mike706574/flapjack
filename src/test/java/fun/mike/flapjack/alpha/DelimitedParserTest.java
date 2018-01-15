@@ -252,13 +252,8 @@ public class DelimitedParserTest {
     public void withOffset() {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"));
 
-        DelimitedFormat format = new DelimitedFormat("bop",
-                                                     "Bop",
-                                                     ",",
-                                                     Framing.OPTIONAL,
-                                                     "\"",
-                                                     1,
-                                                     columns);
+        DelimitedFormat format = DelimitedFormat.optionallyFramed("bop", "Bop", ",", "\"", columns)
+            .withOffset(1);
 
         DelimitedParser parser = new DelimitedParser(format);
 

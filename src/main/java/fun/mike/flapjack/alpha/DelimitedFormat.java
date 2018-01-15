@@ -2,6 +2,7 @@ package fun.mike.flapjack.alpha;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -57,6 +58,16 @@ public class DelimitedFormat implements Format, Serializable {
             String frameDelimiter,
             List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, Framing.OPTIONAL, frameDelimiter, 0, columns);
+    }
+
+    public DelimitedFormat withOffset(Integer offset) {
+        return new DelimitedFormat(id,
+                                   description,
+                                   delimiter,
+                                   framing,
+                                   frameDelimiter,
+                                   offset,
+                                   new LinkedList<>(columns));
     }
 
     public String getId() {
