@@ -70,8 +70,8 @@ public class DelimitedParser implements Serializable {
 
         StringBuffer cell = new StringBuffer();
         boolean inside = false;
-        boolean quoted = false;
-        boolean afterEndQuote = false;
+        boolean inFrame = false;
+        boolean afterEndFrame = false;
 
         char delimiter = format.getDelimiter();
 
@@ -81,39 +81,62 @@ public class DelimitedParser implements Serializable {
 
         for (int i = 0; i < line.length(); i++) {
             char ch = line.charAt(i);
+            // System.out.print("CHAR |" + ch + "|");
             if (inside) {
-                if (quoted && ch == frameDelimiter) {
+                // System.out.print(" INSIDE");
+                if (inFrame && ch == frameDelimiter) {
+                    // System.out.print(" END-FRAME");
                     inside = false;
-                    quoted = false;
-                    afterEndQuote = true;
+                    inFrame = false;
+                    afterEndFrame = true;
                     setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
                 } else if (ch == delimiter) {
+                    // System.out.print(" END-CELL");
                     inside = false;
-                    quoted = false;
+                    inFrame = false;
                     setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
                 } else {
+                    // System.out.print(" APPEND");
                     cell.append(ch);
                 }
-            } else if (afterEndQuote) {
+            } else if (afterEndFrame) {
+                // System.out.print(" AFTER-END-FRAME");
                 if (ch == delimiter) {
-                    afterEndQuote = false;
+                    // System.out.print(" END-CELL");
+                    afterEndFrame = false;
                 } else {
+                    // System.out.print(" FRAME-END-PROBLEM");
                     problems.add(new FramingProblem(columnIndex, i));
                     return Result.withProblems(record, problems);
                 }
             } else {
+                // System.out.print(" OUTSIDE");
                 inside = true;
                 if (ch == frameDelimiter) {
-                    quoted = true;
-                } else {
+                    // System.out.print(" START-FRAME");
+                    inFrame = true;
+                }
+                else if(format.framingRequired()) {
+                    // System.out.print(" NOT-FRAMED-PROBLEM");
                     problems.add(new FramingProblem(columnIndex, i));
                     return Result.withProblems(record, problems);
                 }
+                else {
+                    // System.out.print(" START-UNFRAMED");
+                    cell.append(ch);
+                }
             }
+
+            // System.out.print('\n');
+        }
+
+        if(cell.length() != 0) {
+            setColumn(record, problems, columnIndex, cell.toString());
+            columnIndex++;
         }
 
         checkForMissingColumns(columnIndex - 1, problems);
@@ -122,9 +145,14 @@ public class DelimitedParser implements Serializable {
     }
 
     private boolean setColumn(Map<String, Object> data, List<Problem> problems, int index, String value) {
-        boolean indexInRange = index < format.getColumns().size();
-        if (indexInRange) {
-            Column column = format.getColumns().get(index);
+        int offsetIndex = index - format.getOffset();
+
+        if(offsetIndex < 0) {
+            return false;
+        }
+
+        if (offsetIndex < format.getColumns().size()) {
+            Column column = format.getColumns().get(offsetIndex);
 
             String columnId = column.getId();
             String columnType = column.getType();

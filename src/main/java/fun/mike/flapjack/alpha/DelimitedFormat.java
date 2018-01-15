@@ -3,47 +3,60 @@ package fun.mike.flapjack.alpha;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DelimitedFormat implements Format, Serializable {
     private final String id;
     private final String description;
     private final String delimiter;
-    private final Boolean framed;
+    private final Framing framing;
     private final String frameDelimiter;
+    private final Integer offset;
     private final List<Column> columns;
 
     @JsonCreator
     public DelimitedFormat(@JsonProperty("id") String id,
             @JsonProperty("description") String description,
             @JsonProperty("delimiter") String delimiter,
-            @JsonProperty("isFramed") Boolean framed,
+            @JsonProperty("framing") Framing framing,
             @JsonProperty("frameDelimiter") String frameDelimiter,
+            @JsonProperty("offset") Integer offset,
             @JsonProperty("columns") List<Column> columns) {
         this.id = id;
         this.description = description;
         this.delimiter = delimiter;
-        this.framed = framed;
+        this.framing = framing;
         this.frameDelimiter = frameDelimiter;
         this.columns = Collections.unmodifiableList(columns);
+        this.offset = offset;
     }
 
     public static DelimitedFormat unframed(String id,
             String description,
             String delimiter,
             List<Column> columns) {
-        return new DelimitedFormat(id, description, delimiter, false, null, columns);
+        return new DelimitedFormat(id, description, delimiter, Framing.NONE, null, 0, columns);
     }
 
-    public static DelimitedFormat framed(String id,
+    public static DelimitedFormat alwaysFramed(String id,
             String description,
             String delimiter,
             String frameDelimiter,
             List<Column> columns) {
-        return new DelimitedFormat(id, description, delimiter, true, frameDelimiter, columns);
+        return new DelimitedFormat(id, description, delimiter, Framing.REQUIRED, frameDelimiter, 0, columns);
+    }
+
+    public static DelimitedFormat optionallyFramed(String id,
+            String description,
+            String delimiter,
+            String frameDelimiter,
+            List<Column> columns) {
+        return new DelimitedFormat(id, description, delimiter, Framing.OPTIONAL, frameDelimiter, 0, columns);
     }
 
     public String getId() {
@@ -58,8 +71,18 @@ public class DelimitedFormat implements Format, Serializable {
         return delimiter.charAt(0);
     }
 
+    public Framing getFraming() {
+        return framing;
+    }
+
+    @JsonIgnore
     public boolean isFramed() {
-        return framed;
+        return framing == Framing.OPTIONAL || framing == Framing.REQUIRED;
+    }
+
+    @JsonIgnore
+    public boolean framingRequired() {
+        return framing == Framing.REQUIRED;
     }
 
     public Optional<String> getFrameDelimiter() {
@@ -68,6 +91,10 @@ public class DelimitedFormat implements Format, Serializable {
         }
 
         return Optional.of(frameDelimiter);
+    }
+
+    public Integer getOffset() {
+        return offset;
     }
 
     public List<Column> getColumns() {
@@ -80,8 +107,9 @@ public class DelimitedFormat implements Format, Serializable {
                 "id='" + id + '\'' +
                 ", description='" + description + '\'' +
                 ", delimiter='" + delimiter + '\'' +
-                ", framed=" + framed +
+                ", framing=" + framing +
                 ", frameDelimiter='" + frameDelimiter + '\'' +
+                ", offset=" + offset +
                 ", columns=" + columns +
                 '}';
     }
@@ -90,26 +118,19 @@ public class DelimitedFormat implements Format, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         DelimitedFormat that = (DelimitedFormat) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (description != null ? !description.equals(that.description) : that.description != null) return false;
-        if (delimiter != null ? !delimiter.equals(that.delimiter) : that.delimiter != null) return false;
-        if (framed != null ? !framed.equals(that.framed) : that.framed != null) return false;
-        if (frameDelimiter != null ? !frameDelimiter.equals(that.frameDelimiter) : that.frameDelimiter != null)
-            return false;
-        return columns != null ? columns.equals(that.columns) : that.columns == null;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(delimiter, that.delimiter) &&
+                framing == that.framing &&
+                Objects.equals(frameDelimiter, that.frameDelimiter) &&
+                Objects.equals(offset, that.offset) &&
+                Objects.equals(columns, that.columns);
     }
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (delimiter != null ? delimiter.hashCode() : 0);
-        result = 31 * result + (framed != null ? framed.hashCode() : 0);
-        result = 31 * result + (frameDelimiter != null ? frameDelimiter.hashCode() : 0);
-        result = 31 * result + (columns != null ? columns.hashCode() : 0);
-        return result;
+
+        return Objects.hash(id, description, delimiter, framing, frameDelimiter, offset, columns);
     }
 }

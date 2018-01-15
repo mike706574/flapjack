@@ -73,7 +73,7 @@ public class JsonSerializationTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
-        DelimitedFormat format = DelimitedFormat.framed("baz", "Baz", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ",", "\"", columns);
 
         String serializedFormat = mapper.writeValueAsString(format);
         // System.out.println(serializedFormat);
@@ -161,7 +161,7 @@ public class JsonSerializationTest {
     }
 
     @Test
-    public void delimitedWidthViaInterface() throws IOException {
+    public void delimitedViaInterface() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 

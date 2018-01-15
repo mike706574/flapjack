@@ -37,7 +37,7 @@ public class DelimitedSerializerTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "integer"));
 
-        DelimitedFormat format = DelimitedFormat.framed("baz", "Baz", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ",", "\"", columns);
         DelimitedSerializer serializer = new DelimitedSerializer(format);
 
         Record record = Record.of("foo", "abcde", "bar", 23);
