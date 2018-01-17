@@ -22,7 +22,7 @@ public class DelimitedParserTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
-        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ",", columns);
+        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
         List<String> lines = Arrays.asList("baz,burp",
@@ -56,7 +56,7 @@ public class DelimitedParserTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
-        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
 
         DelimitedParser parser = new DelimitedParser(format);
 
@@ -91,7 +91,7 @@ public class DelimitedParserTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("filler", "filler"));
 
-        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
 
         DelimitedParser parser = new DelimitedParser(format);
 
@@ -122,7 +122,7 @@ public class DelimitedParserTest {
     public void badFrameAtStart() {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"));
 
-        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
 
         DelimitedParser parser = new DelimitedParser(format);
 
@@ -146,7 +146,7 @@ public class DelimitedParserTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
-        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
 
         DelimitedParser parser = new DelimitedParser(format);
 
@@ -172,7 +172,7 @@ public class DelimitedParserTest {
                                              Column.with("baz", "string"),
                                              Column.with("burp", "integer"));
 
-        DelimitedFormat format = DelimitedFormat.unframed("bop", "Bop", ",", columns);
+        DelimitedFormat format = DelimitedFormat.unframed("bop", "Bop", ',', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
         List<String> lines = Arrays.asList("baz,burp");
@@ -200,7 +200,7 @@ public class DelimitedParserTest {
                                              Column.with("baz", "string"),
                                              Column.with("burp", "integer"));
 
-        DelimitedFormat format = DelimitedFormat.alwaysFramed("bop", "Bop", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("bop", "Bop", ',', '"', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
         List<String> lines = Arrays.asList("\"baz\",\"burp\"");
@@ -226,7 +226,7 @@ public class DelimitedParserTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
-        DelimitedFormat format = DelimitedFormat.optionallyFramed("bop", "Bop", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.optionallyFramed("bop", "Bop", ',', '"', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
         List<String> lines = Arrays.asList("\"baz\",burp");
@@ -252,7 +252,7 @@ public class DelimitedParserTest {
     public void withOffset() {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"));
 
-        DelimitedFormat format = DelimitedFormat.optionallyFramed("bop", "Bop", ",", "\"", columns)
+        DelimitedFormat format = DelimitedFormat.optionallyFramed("bop", "Bop", ',', '"', columns)
             .withOffset(1);
 
         DelimitedParser parser = new DelimitedParser(format);

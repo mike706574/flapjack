@@ -53,7 +53,7 @@ public class DelimitedSerializer implements Serializable {
 
     private void appendValue(String value, StringBuilder builder) {
         if (format.isFramed()) {
-            String frameDelimiter = format.getFrameDelimiter().get();
+            Character frameDelimiter = format.getFrameDelimiter().get();
             builder.append(frameDelimiter);
             builder.append(value);
             builder.append(frameDelimiter);

@@ -14,18 +14,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DelimitedFormat implements Format, Serializable {
     private final String id;
     private final String description;
-    private final String delimiter;
+    private final Character delimiter;
     private final Framing framing;
-    private final String frameDelimiter;
+    private final Character frameDelimiter;
     private final Integer offset;
     private final List<Column> columns;
 
     @JsonCreator
     public DelimitedFormat(@JsonProperty("id") String id,
             @JsonProperty("description") String description,
-            @JsonProperty("delimiter") String delimiter,
+            @JsonProperty("delimiter") Character delimiter,
             @JsonProperty("framing") Framing framing,
-            @JsonProperty("frameDelimiter") String frameDelimiter,
+            @JsonProperty("frameDelimiter") Character frameDelimiter,
             @JsonProperty("offset") Integer offset,
             @JsonProperty("columns") List<Column> columns) {
         this.id = id;
@@ -39,23 +39,23 @@ public class DelimitedFormat implements Format, Serializable {
 
     public static DelimitedFormat unframed(String id,
             String description,
-            String delimiter,
+            Character delimiter,
             List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, Framing.NONE, null, 0, columns);
     }
 
     public static DelimitedFormat alwaysFramed(String id,
             String description,
-            String delimiter,
-            String frameDelimiter,
+            Character delimiter,
+            Character frameDelimiter,
             List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, Framing.REQUIRED, frameDelimiter, 0, columns);
     }
 
     public static DelimitedFormat optionallyFramed(String id,
             String description,
-            String delimiter,
-            String frameDelimiter,
+            Character delimiter,
+            Character frameDelimiter,
             List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, Framing.OPTIONAL, frameDelimiter, 0, columns);
     }
@@ -78,8 +78,8 @@ public class DelimitedFormat implements Format, Serializable {
         return description;
     }
 
-    public char getDelimiter() {
-        return delimiter.charAt(0);
+    public Character getDelimiter() {
+        return delimiter;
     }
 
     public Framing getFraming() {
@@ -96,7 +96,7 @@ public class DelimitedFormat implements Format, Serializable {
         return framing == Framing.REQUIRED;
     }
 
-    public Optional<String> getFrameDelimiter() {
+    public Optional<Character> getFrameDelimiter() {
         if (frameDelimiter == null) {
             return Optional.empty();
         }

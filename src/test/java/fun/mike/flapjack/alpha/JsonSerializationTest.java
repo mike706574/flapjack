@@ -56,7 +56,7 @@ public class JsonSerializationTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
-        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ",", columns);
+        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
         String serializedFormat = mapper.writeValueAsString(format);
         // System.out.println(serializedFormat);
@@ -73,7 +73,7 @@ public class JsonSerializationTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
-        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ",", "\"", columns);
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
 
         String serializedFormat = mapper.writeValueAsString(format);
         // System.out.println(serializedFormat);
@@ -89,7 +89,7 @@ public class JsonSerializationTest {
 
         List<Column> columns = Arrays.asList(new Column("foo", "string", null));
 
-        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ",", columns);
+        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
         String serializedFormat = mapper.writeValueAsString(format);
         // System.out.println(serializedFormat);
@@ -168,7 +168,7 @@ public class JsonSerializationTest {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
-        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ",", columns);
+        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
         String serializedFormat = mapper.writeValueAsString(format);
         // System.out.println(serializedFormat);

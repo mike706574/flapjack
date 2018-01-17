@@ -75,7 +75,7 @@ public class DelimitedParser implements Serializable {
 
         char delimiter = format.getDelimiter();
 
-        char frameDelimiter = format.getFrameDelimiter().get().charAt(0);
+        char frameDelimiter = format.getFrameDelimiter().get();
 
         int columnIndex = 0;
 
