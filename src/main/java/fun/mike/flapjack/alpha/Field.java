@@ -32,6 +32,12 @@ public class Field implements Serializable {
         return new Field(id, length, type, props);
     }
 
+    public static Field nullable(String id, int length, String type) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("nullable", true);
+        return Field.with(id, length, type, props);
+    }
+
     public String getId() {
         return this.id;
     }

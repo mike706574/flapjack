@@ -27,8 +27,13 @@ public class Column implements Serializable {
     }
 
     public static Column with(String id, String type) {
-
         return new Column(id, type, new HashMap<>());
+    }
+
+    public static Column nullable(String id, String type) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("nullable", true);
+        return Column.with(id, type, props);
     }
 
     public String getId() {
