@@ -15,6 +15,7 @@ public class DelimitedFormat implements Format, Serializable {
     private final String id;
     private final String description;
     private final Character delimiter;
+    private final Boolean endingDelimiter;
     private final Framing framing;
     private final Character frameDelimiter;
     private final Integer offset;
@@ -24,6 +25,7 @@ public class DelimitedFormat implements Format, Serializable {
     public DelimitedFormat(@JsonProperty("id") String id,
             @JsonProperty("description") String description,
             @JsonProperty("delimiter") Character delimiter,
+            @JsonProperty("endingDelimiter") Boolean endingDelimiter,
             @JsonProperty("framing") Framing framing,
             @JsonProperty("frameDelimiter") Character frameDelimiter,
             @JsonProperty("offset") Integer offset,
@@ -31,6 +33,7 @@ public class DelimitedFormat implements Format, Serializable {
         this.id = id;
         this.description = description;
         this.delimiter = delimiter;
+        this.endingDelimiter = endingDelimiter;
         this.framing = framing;
         this.frameDelimiter = frameDelimiter;
         this.columns = Collections.unmodifiableList(columns);
@@ -41,7 +44,7 @@ public class DelimitedFormat implements Format, Serializable {
             String description,
             Character delimiter,
             List<Column> columns) {
-        return new DelimitedFormat(id, description, delimiter, Framing.NONE, null, 0, columns);
+        return new DelimitedFormat(id, description, delimiter, false, Framing.NONE, null, 0, columns);
     }
 
     public static DelimitedFormat alwaysFramed(String id,
@@ -49,7 +52,7 @@ public class DelimitedFormat implements Format, Serializable {
             Character delimiter,
             Character frameDelimiter,
             List<Column> columns) {
-        return new DelimitedFormat(id, description, delimiter, Framing.REQUIRED, frameDelimiter, 0, columns);
+        return new DelimitedFormat(id, description, delimiter, false, Framing.REQUIRED, frameDelimiter, 0, columns);
     }
 
     public static DelimitedFormat optionallyFramed(String id,
@@ -57,13 +60,24 @@ public class DelimitedFormat implements Format, Serializable {
             Character delimiter,
             Character frameDelimiter,
             List<Column> columns) {
-        return new DelimitedFormat(id, description, delimiter, Framing.OPTIONAL, frameDelimiter, 0, columns);
+        return new DelimitedFormat(id, description, delimiter, false, Framing.OPTIONAL, frameDelimiter, 0, columns);
     }
 
     public DelimitedFormat withOffset(Integer offset) {
         return new DelimitedFormat(id,
                                    description,
                                    delimiter,
+                                   endingDelimiter, framing,
+                                   frameDelimiter,
+                                   offset,
+                                   new LinkedList<>(columns));
+    }
+
+    public DelimitedFormat withEndingDelimiter() {
+        return new DelimitedFormat(id,
+                                   description,
+                                   delimiter,
+                                   true,
                                    framing,
                                    frameDelimiter,
                                    offset,
@@ -80,6 +94,10 @@ public class DelimitedFormat implements Format, Serializable {
 
     public Character getDelimiter() {
         return delimiter;
+    }
+
+    public Boolean hasEndingDelimiter() {
+        return endingDelimiter;
     }
 
     public Framing getFraming() {
@@ -117,9 +135,10 @@ public class DelimitedFormat implements Format, Serializable {
         return "DelimitedFormat{" +
                 "id='" + id + '\'' +
                 ", description='" + description + '\'' +
-                ", delimiter='" + delimiter + '\'' +
+                ", delimiter=" + delimiter +
+                ", endingDelimiter=" + endingDelimiter +
                 ", framing=" + framing +
-                ", frameDelimiter='" + frameDelimiter + '\'' +
+                ", frameDelimiter=" + frameDelimiter +
                 ", offset=" + offset +
                 ", columns=" + columns +
                 '}';
@@ -133,6 +152,7 @@ public class DelimitedFormat implements Format, Serializable {
         return Objects.equals(id, that.id) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(delimiter, that.delimiter) &&
+                Objects.equals(endingDelimiter, that.endingDelimiter) &&
                 framing == that.framing &&
                 Objects.equals(frameDelimiter, that.frameDelimiter) &&
                 Objects.equals(offset, that.offset) &&
@@ -142,6 +162,6 @@ public class DelimitedFormat implements Format, Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, description, delimiter, framing, frameDelimiter, offset, columns);
+        return Objects.hash(id, description, delimiter, endingDelimiter, framing, frameDelimiter, offset, columns);
     }
 }

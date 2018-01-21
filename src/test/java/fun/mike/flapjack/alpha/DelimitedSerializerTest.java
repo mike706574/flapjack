@@ -48,4 +48,24 @@ public class DelimitedSerializerTest {
 
         assertEquals("\"abcde\",\"23\"", result.getLine());
     }
+
+    @Test
+    public void withEndingDelimiter() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "integer"));
+
+        DelimitedFormat format = DelimitedFormat
+                .alwaysFramed("baz", "Baz", ',', '"', columns)
+                .withEndingDelimiter();
+
+        DelimitedSerializer serializer = new DelimitedSerializer(format);
+
+        Record record = Record.of("foo", "abcde", "bar", 23);
+
+        Result result = serializer.serialize(record);
+
+        assertTrue(result.isOk());
+
+        assertEquals("\"abcde\",\"23\",", result.getLine());
+    }
 }

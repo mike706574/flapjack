@@ -34,7 +34,7 @@ public class DelimitedParser implements Serializable {
         List<Problem> problems = new LinkedList<>();
 
         StringBuffer cell = new StringBuffer();
-        boolean inside = false;
+        boolean inside = true;
 
         char delimiter = format.getDelimiter();
 
@@ -42,7 +42,9 @@ public class DelimitedParser implements Serializable {
 
         for (int i = 0; i < line.length(); i++) {
             char ch = line.charAt(i);
+            // System.out.print("CHAR |" + ch + "|");
             if (inside) {
+                // System.out.print(" INSIDE");
                 if (ch == delimiter) {
                     inside = false;
                     setColumn(record, problems, columnIndex, cell.toString());
@@ -52,9 +54,11 @@ public class DelimitedParser implements Serializable {
                     cell.append(ch);
                 }
             } else {
+                // System.out.print(" OUTSIDE");
                 inside = true;
                 cell.append(ch);
             }
+            // System.out.print('\n');
         }
 
         setColumn(record, problems, columnIndex, cell.toString());
@@ -69,9 +73,9 @@ public class DelimitedParser implements Serializable {
         List<Problem> problems = new LinkedList<>();
 
         StringBuffer cell = new StringBuffer();
-        boolean inside = false;
         boolean inFrame = false;
         boolean afterEndFrame = false;
+        boolean afterDelimiter = false;
 
         char delimiter = format.getDelimiter();
 
@@ -79,9 +83,19 @@ public class DelimitedParser implements Serializable {
 
         int columnIndex = 0;
 
+        // EDGE: If there's a delimiter at the start of the record and framing
+        // is not required, then we're starting inside of a cell
+        boolean framingRequired = format.framingRequired();
+        boolean delimiterAtStart = line.charAt(0) == delimiter;
+        boolean inside = false;
+        if(!framingRequired && delimiterAtStart) {
+            inside = true;
+        }
+
         for (int i = 0; i < line.length(); i++) {
             char ch = line.charAt(i);
             // System.out.print("CHAR |" + ch + "|");
+            afterDelimiter = false;
             if (inside) {
                 // System.out.print(" INSIDE");
                 if (inFrame && ch == frameDelimiter) {
@@ -96,6 +110,7 @@ public class DelimitedParser implements Serializable {
                     // System.out.print(" END-CELL");
                     inside = false;
                     inFrame = false;
+                    afterDelimiter = true;
                     setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
@@ -108,6 +123,7 @@ public class DelimitedParser implements Serializable {
                 if (ch == delimiter) {
                     // System.out.print(" END-CELL");
                     afterEndFrame = false;
+                    afterDelimiter = true;
                 } else {
                     // System.out.print(" FRAME-END-PROBLEM");
                     problems.add(new FramingProblem(columnIndex, i));
@@ -120,7 +136,7 @@ public class DelimitedParser implements Serializable {
                     // System.out.print(" START-FRAME");
                     inFrame = true;
                 }
-                else if(format.framingRequired()) {
+                else if(framingRequired) {
                     // System.out.print(" NOT-FRAMED-PROBLEM");
                     problems.add(new FramingProblem(columnIndex, i));
                     return Result.withProblems(record, problems);
@@ -130,12 +146,13 @@ public class DelimitedParser implements Serializable {
                     cell.append(ch);
                 }
             }
-
             // System.out.print('\n');
         }
 
-        if(cell.length() != 0) {
+        if(cell.length() > 0 || afterDelimiter) {
+            // System.out.print("END");
             setColumn(record, problems, columnIndex, cell.toString());
+            // System.out.print('\n');
             columnIndex++;
         }
 
@@ -145,6 +162,7 @@ public class DelimitedParser implements Serializable {
     }
 
     private boolean setColumn(Map<String, Object> data, List<Problem> problems, int index, String value) {
+        // System.out.print(" SET-COLUMN-" + index);
         int offsetIndex = index - format.getOffset();
 
         if(offsetIndex < 0) {

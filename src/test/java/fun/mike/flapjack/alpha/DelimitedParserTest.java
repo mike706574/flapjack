@@ -52,6 +52,56 @@ public class DelimitedParserTest {
     }
 
     @Test
+    public void emptyUnframed() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
+
+        DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList(",");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(1, results.size());
+
+        Result result1 = results.get(0);
+        assertTrue(result1.isOk());
+        Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
+        assertEquals("", record1.get("foo"));
+        assertEquals("", record1.get("bar"));
+    }
+
+    @Test
+    public void endingDelimiterUnframed() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
+
+        DelimitedFormat format = DelimitedFormat
+                .unframed("baz", "Baz", '|', columns)
+                .withEndingDelimiter();
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("baz|bip|");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(1, results.size());
+
+        Result result1 = results.get(0);
+
+        Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
+        assertEquals("baz", record1.get("foo"));
+        assertEquals("bip", record1.get("bar"));
+    }
+
+    @Test
     public void framed() {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
@@ -84,6 +134,153 @@ public class DelimitedParserTest {
         assertEquals(1L, record2.get("lineIndex"));
         assertEquals("bip", record2.get("foo"));
         assertEquals("bop", record2.get("bar"));
+    }
+
+    @Test
+    public void emptyFramed() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
+
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("\"\",\"\"");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(1, results.size());
+
+        Result result1 = results.get(0);
+        assertTrue(result1.isOk());
+        Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
+        assertEquals("", record1.get("foo"));
+        assertEquals("", record1.get("bar"));
+    }
+
+    @Test
+    public void endingDelimiterFramed() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
+
+        DelimitedFormat format = DelimitedFormat
+                .alwaysFramed("baz", "Baz", '|', '"', columns)
+                .withEndingDelimiter();
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("\"baz\"|\"bip\"|");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(1, results.size());
+
+        Result result1 = results.get(0);
+
+        Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
+        assertEquals("baz", record1.get("foo"));
+        assertEquals("bip", record1.get("bar"));
+    }
+
+    @Test
+    public void optionallyFramed() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
+
+        DelimitedFormat format = DelimitedFormat.optionallyFramed("baz", "Baz", ',', '"', columns);
+
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("\"baz\",burp",
+                                           "bip,\"bop\"");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(2, results.size());
+
+        Result result1 = results.get(0);
+
+        assertTrue(result1.isOk());
+        Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
+        assertEquals("baz", record1.get("foo"));
+        assertEquals("burp", record1.get("bar"));
+
+        Result result2 = results.get(1);
+        assertTrue(result2.isOk());
+        Record record2 = result2.getRecord();
+        assertEquals(3, record2.size());
+        assertEquals(1L, record2.get("lineIndex"));
+        assertEquals("bip", record2.get("foo"));
+        assertEquals("bop", record2.get("bar"));
+    }
+
+    @Test
+    public void endingDelimiterOptionallyFramed() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
+
+        DelimitedFormat format = DelimitedFormat
+                .optionallyFramed("baz", "Baz", '|', '"', columns)
+                .withEndingDelimiter();
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("baz|bip|");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(1, results.size());
+
+        Result result1 = results.get(0);
+
+        Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
+        assertEquals("baz", record1.get("foo"));
+        assertEquals("bip", record1.get("bar"));
+    }
+
+    @Test
+    public void emptyOptionallyFramed() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
+
+        DelimitedFormat format = DelimitedFormat.optionallyFramed("baz", "Baz", ',', '"', columns);
+
+        DelimitedParser parser = new DelimitedParser(format);
+
+        List<String> lines = Arrays.asList("\"\",",
+                                           ",\"\"");
+
+        List<Result> results = parser.stream(lines.stream())
+                .collect(Collectors.toList());
+
+        assertEquals(2, results.size());
+
+        Result result1 = results.get(0);
+
+        assertTrue(result1.isOk());
+        Record record1 = result1.getRecord();
+        assertEquals(3, record1.size());
+        assertEquals(0L, record1.get("lineIndex"));
+        assertEquals("", record1.get("foo"));
+        assertEquals("", record1.get("bar"));
+
+        Result result2 = results.get(1);
+
+        assertTrue(result2.isOk());
+        Record record2 = result2.getRecord();
+        assertEquals(3, record2.size());
+        assertEquals(1L, record2.get("lineIndex"));
+        assertEquals("", record2.get("foo"));
+        assertEquals("", record2.get("bar"));
     }
 
     @Test
@@ -219,33 +416,6 @@ public class DelimitedParserTest {
                      problems.get(1).explain());
         assertEquals("Missing value for field \"baz\" of type \"string\".",
                      problems.get(0).explain());
-    }
-
-    @Test
-    public void sometimesFramed() {
-        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
-                                             Column.with("bar", "string"));
-
-        DelimitedFormat format = DelimitedFormat.optionallyFramed("bop", "Bop", ',', '"', columns);
-        DelimitedParser parser = new DelimitedParser(format);
-
-        List<String> lines = Arrays.asList("\"baz\",burp");
-
-        List<Result> results = parser.stream(lines.stream())
-                .collect(Collectors.toList());
-
-        assertEquals(1, results.size());
-
-        Result result1 = results.get(0);
-
-        assertTrue(result1.isOk());
-
-        Record record1 = result1.getRecord();
-
-        assertEquals(3, record1.size());
-        assertEquals(0L, record1.get("lineIndex"));
-        assertEquals("baz", record1.get("foo"));
-        assertEquals("burp", record1.get("bar"));
     }
 
     @Test
