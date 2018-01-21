@@ -51,12 +51,20 @@ public class DelimitedParser implements Serializable {
                     cell = new StringBuffer();
                     columnIndex++;
                 } else {
+                    // System.out.print(" APPEND");
                     cell.append(ch);
                 }
             } else {
                 // System.out.print(" OUTSIDE");
                 inside = true;
-                cell.append(ch);
+                if(ch == delimiter) {
+                    setColumn(record, problems, columnIndex, cell.toString());
+                    cell = new StringBuffer();
+                    columnIndex++;
+                }
+                else {
+                    cell.append(ch);
+                }
             }
             // System.out.print('\n');
         }
@@ -131,8 +139,8 @@ public class DelimitedParser implements Serializable {
                 }
             } else {
                 // System.out.print(" OUTSIDE");
-                inside = true;
                 if (ch == frameDelimiter) {
+                    inside = true;
                     // System.out.print(" START-FRAME");
                     inFrame = true;
                 }
@@ -141,8 +149,14 @@ public class DelimitedParser implements Serializable {
                     problems.add(new FramingProblem(columnIndex, i));
                     return Result.withProblems(record, problems);
                 }
+                else if(ch == delimiter) {
+                    setColumn(record, problems, columnIndex, cell.toString());
+                    cell = new StringBuffer();
+                    columnIndex++;
+                }
                 else {
                     // System.out.print(" START-UNFRAMED");
+                    inside = true;
                     cell.append(ch);
                 }
             }
