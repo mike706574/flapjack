@@ -251,7 +251,7 @@ public class DelimitedParserTest {
 
         Result result1 = parser.parse("\"\",");
 
-        assertTrue(result1.isOk());
+        assertTrue(result1.explain(), result1.isOk());
         Record record1 = result1.getRecord();
         assertEquals(2, record1.size());
         assertEquals("", record1.get("foo"));

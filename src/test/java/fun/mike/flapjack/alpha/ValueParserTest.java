@@ -45,6 +45,55 @@ public class ValueParserTest {
     }
 
     @Test
+    public void nullableString() {
+        ValueOrProblem whitespaceResult = ValueParser.parse("foo",
+                                                            "string",
+                                                            mapOf("nullable", true),
+                                                            " ");
+        assertFalse(whitespaceResult.explain(), whitespaceResult.hasProblem());
+        assertNull(whitespaceResult.getValue());
+
+        ValueOrProblem blankResult = ValueParser.parse("foo",
+                                                       "string",
+                                                       mapOf("nullable", true),
+                                                       "");
+        assertFalse(blankResult.explain(), blankResult.hasProblem());
+        assertNull(blankResult.getValue());
+
+        ValueOrProblem populatedResult = ValueParser.parse("foo",
+                                                           "string",
+                                                           mapOf("nullable", true),
+                                                           " bar ");
+        assertFalse(populatedResult.explain(), populatedResult.hasProblem());
+        assertEquals(" bar ", populatedResult.getValue());
+    }
+
+    @Test
+    public void nullableTrimmedString() {
+        ValueOrProblem whitespaceResult = ValueParser.parse("foo",
+                                                            "trimmed-string",
+                                                            mapOf("nullable", true),
+                                                            " ");
+        assertFalse(whitespaceResult.explain(), whitespaceResult.hasProblem());
+        assertNull(whitespaceResult.getValue());
+
+        ValueOrProblem blankResult = ValueParser.parse("foo",
+                                                       "trimmed-string",
+                                                       mapOf("nullable", true),
+                                                       "");
+        assertFalse(blankResult.explain(), blankResult.hasProblem());
+        assertNull(blankResult.getValue());
+
+        ValueOrProblem populatedResult = ValueParser.parse("foo",
+                                                           "trimmed-string",
+                                                           mapOf("nullable", true),
+                                                           "bar");
+        assertFalse(populatedResult.explain(), populatedResult.hasProblem());
+        assertEquals("bar", populatedResult.getValue());
+    }
+
+
+    @Test
     public void integer() {
         ValueOrProblem validResult = ValueParser.parse("foo",
                                                        "integer",

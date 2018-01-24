@@ -3,6 +3,7 @@ package fun.mike.flapjack.alpha;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -93,6 +94,16 @@ public class Result implements IResult {
 
     public List<Problem> getProblems() {
         return new LinkedList<Problem>(this.problems);
+    }
+
+    public String explain() {
+        if(hasProblems()) {
+            String problemList = problems.stream()
+                .map(problem -> problem.explain())
+                .collect(Collectors.joining("\n"));
+            return "Problems:\n" + problemList;
+        }
+        return "No problems.";
     }
 
     @Override

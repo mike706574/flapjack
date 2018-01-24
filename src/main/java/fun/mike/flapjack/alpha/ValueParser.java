@@ -18,9 +18,9 @@ public class ValueParser implements Serializable {
             String value) {
         switch (type) {
             case "string":
-                return ValueOrProblem.value(value);
+                return parseString(id, type, props, value);
             case "trimmed-string":
-                return ValueOrProblem.value(value.trim());
+                return parseTrimmedString(id, type, props, value);
             case "integer":
                 return parseInt(id, type, props, value);
             case "date":
@@ -47,6 +47,40 @@ public class ValueParser implements Serializable {
 
     private static boolean isVowel(char c) {
         return "aeiou".indexOf(c) != -1;
+    }
+
+    private static <T> ValueOrProblem parseStringType(String id,
+            String type,
+            Map<String, Object> props,
+            String value,
+            Function<String, ValueOrProblem> parseValue) {
+        if (isBlank(value)) {
+            if (props.containsKey("default")) {
+                try {
+                    @SuppressWarnings("unchecked")
+                    T defaultValue = (T) props.get("default");
+                    return ValueOrProblem.value(defaultValue);
+                } catch (ClassCastException ex) {
+                    String message = String.format("Expected default value for field \"%s\" to be %s %s.", id, aOrAn(type), type);
+                    return ValueOrProblem.problem(new FormatProblem(message));
+                }
+            }
+
+            if (props.containsKey("nullable")) {
+                try {
+                    boolean nullable = (boolean) props.get("nullable");
+
+                    if (nullable) {
+                        return ValueOrProblem.value(null);
+                    }
+                } catch (ClassCastException ex) {
+                    String message = "Expected nullable property to be a boolean.";
+                    return ValueOrProblem.problem(new FormatProblem(message));
+                }
+            }
+        }
+
+        return parseValue.apply(value);
     }
 
     private static <T> ValueOrProblem parseType(String id,
@@ -82,6 +116,23 @@ public class ValueParser implements Serializable {
         }
 
         return parseValue.apply(value);
+    }
+
+    private static ValueOrProblem parseString(String id, String type, Map<String, Object> props, String value) {
+        Function<String, ValueOrProblem> parseValue = stringValue -> {
+            return ValueOrProblem.value(stringValue);
+        };
+
+        return parseStringType(id, type, props, value, parseValue);
+    }
+
+
+    private static ValueOrProblem parseTrimmedString(String id, String type, Map<String, Object> props, String value) {
+        Function<String, ValueOrProblem> parseValue = stringValue -> {
+            return ValueOrProblem.value(stringValue.trim());
+        };
+
+        return parseStringType(id, type, props, value, parseValue);
     }
 
     // TODO: Make this better.
