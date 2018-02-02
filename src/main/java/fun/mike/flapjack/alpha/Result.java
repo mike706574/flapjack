@@ -68,11 +68,19 @@ public class Result implements IResult {
         return new Result(line, record, problems);
     }
 
-    public <E extends Throwable> Record orElseThrow(Function<List<Problem>, ? extends E> exceptionBuilder) throws E {
+    public <E extends Throwable> Record recordOrElseThrow(Function<Result, ? extends E> exceptionBuilder) throws E {
         if (problems.isEmpty()) {
             return record;
         } else {
-            throw exceptionBuilder.apply(problems);
+            throw exceptionBuilder.apply(this);
+        }
+    }
+
+    public <E extends Throwable> String lineOrElseThrow(Function<Result, ? extends E> exceptionBuilder) throws E {
+        if (problems.isEmpty()) {
+            return line;
+        } else {
+            throw exceptionBuilder.apply(this);
         }
     }
 
