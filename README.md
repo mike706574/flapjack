@@ -6,6 +6,8 @@ Flat file parsing library for Java.
 
 ## Usage
 
+Here are a few examples. Look at the tests if you want more.
+
 ### Parsing a delimited record
 
 ```java
