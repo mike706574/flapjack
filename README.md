@@ -4,7 +4,84 @@
 
 Flat file parsing library for Java.
 
+## Usage
 
+### Parsing a delimited record
+
+```java
+List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                     Column.with("bar", "integer"));
+
+DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
+DelimitedParser parser = new DelimitedParser(format);
+
+Result result = parser.parse("bop,1");
+
+result.isOk();
+// => true
+
+result.recordOrElseThrow(result -> new IllegalArgumentException(result.explain()));
+// => {foo=bop, bar=1} (fun.mike.Record)
+```
+
+### Serializing a delimited record
+
+```java
+List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                     Column.with("bar", "integer"));
+
+DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
+DelimitedSerializer serializer = new DelimitedSerializer(format);
+
+Record record = Record.of("foo", "abcde", "bar", 23);
+
+Result result = serializer.serialize(record);
+
+result.isOk();
+// => true
+
+result.lineOrElseThrow(result -> new RuntimeException(result.explain()));
+// => "abcde,23" (String)
+```
+
+### Parsing a fixed-width record
+
+```java
+List<Field> fields = Arrays.asList(Field.with("foo", 3, "string"),
+                                   Field.with("bar", 2, "integer"));
+
+FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
+
+FixedWidthParser parser = new FixedWidthParser(format);
+
+Result result = parser.parse("bop 1");
+
+result.isOk();
+// => true
+
+result.recordOrElseThrow(result -> new RuntimeException(result.explain()));
+// => {foo=bop, bar=1} (fun.mike.Record)
+```
+
+### Serializing a fixed-width record
+
+```java
+List<Field> fields = Arrays.asList(Field.with("foo", 5, "string"),
+                                   Field.with("bar", 5, "integer"));
+
+FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
+FixedWidthSerializer serializer = new FixedWidthSerializer(format);
+
+Record record = Record.of("foo", "abcde", "bar", 23);
+
+Result result = serializer.serialize(record);
+
+result.isOk();
+// => true
+
+result.lineOrElseThrow(result -> new RuntimeException(result.explain()));
+// => "abcde23   " (String)
+```
 
 ## Copyright and License
 
