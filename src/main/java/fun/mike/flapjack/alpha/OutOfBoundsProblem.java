@@ -20,7 +20,7 @@ public class OutOfBoundsProblem implements Problem, Serializable {
     }
 
     public String explain() {
-        return String.format("The field \"%s\" ends at character \"%d\", but the line was only %d characters long.",
+        return String.format("The field \"%s\" ends at character %d, but the line was only %d characters long.",
                              id,
                              end,
                              length);
