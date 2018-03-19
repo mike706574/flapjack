@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import com.codepoetics.protonpack.StreamUtils;
 import fun.mike.record.alpha.Record;
 
-public class DelimitedParser implements Serializable {
+public class DelimitedParser implements Parser, Serializable {
     private final DelimitedFormat format;
 
     public DelimitedParser(DelimitedFormat format) {

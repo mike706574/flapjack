@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 import com.codepoetics.protonpack.StreamUtils;
 import fun.mike.record.alpha.Record;
 
-public class FixedWidthParser implements Serializable {
+public class FixedWidthParser implements Parser, Serializable {
     private final FixedWidthFormat format;
 
     public FixedWidthParser(FixedWidthFormat format) {
