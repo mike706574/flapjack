@@ -1,6 +1,7 @@
 package fun.mike.flapjack.alpha;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -310,7 +311,7 @@ public class DelimitedParserTest {
 
     @Test
     public void badFrameAtStart() {
-        List<Column> columns = Arrays.asList(Column.with("foo", "string"));
+        List<Column> columns = Collections.singletonList(Column.with("foo", "string"));
 
         DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
 
@@ -390,7 +391,7 @@ public class DelimitedParserTest {
 
     @Test
     public void withOffset() {
-        List<Column> columns = Arrays.asList(Column.with("foo", "string"));
+        List<Column> columns = Collections.singletonList(Column.with("foo", "string"));
 
         DelimitedFormat format = DelimitedFormat.optionallyFramed("bop", "Bop", ',', '"', columns)
             .withOffset(1);

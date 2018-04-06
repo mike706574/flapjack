@@ -16,5 +16,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @Type(value = MissingValueProblem.class, name = "missing-value")
 })
 public interface Problem {
-    public String explain();
+    String explain();
 }

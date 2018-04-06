@@ -2,6 +2,7 @@ package fun.mike.flapjack.alpha;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +39,7 @@ public class JsonSerializationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        List<Field> fields = Arrays.asList(new Field("foo", 5, "string", null));
+        List<Field> fields = Collections.singletonList(new Field("foo", 5, "string", null));
         FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
         String serializedFormat = mapper.writeValueAsString(format);
@@ -87,7 +88,7 @@ public class JsonSerializationTest {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        List<Column> columns = Arrays.asList(new Column("foo", "string", null));
+        List<Column> columns = Collections.singletonList(new Column("foo", "string", null));
 
         DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 

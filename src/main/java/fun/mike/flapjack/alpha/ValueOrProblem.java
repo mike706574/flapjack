@@ -13,11 +13,11 @@ public class ValueOrProblem<T> implements Serializable {
     }
 
     public static <T> ValueOrProblem<T> problem(Problem problem) {
-        return new ValueOrProblem<T>(null, problem);
+        return new ValueOrProblem<>(null, problem);
     }
 
     public static <T> ValueOrProblem<T> value(T value) {
-        return new ValueOrProblem<T>(value, null);
+        return new ValueOrProblem<>(value, null);
     }
 
     public boolean isOk() {

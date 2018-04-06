@@ -6,7 +6,7 @@ import fun.mike.record.alpha.Record;
 
 @FunctionalInterface
 public interface ValueSerializationFunction {
-    public ValueOrProblem<String> serialize(String id,
+    ValueOrProblem<String> serialize(String id,
             Map<String, Object> props,
             Record record);
 }

@@ -103,13 +103,13 @@ public class FixedWidthParserTest {
         Result result1 = results.get(0);
         assertTrue(result1.isOk());
         Record record1 = result1.getRecord();
-        assertEquals(new Integer(12345), record1.get("foo"));
+        assertEquals(12345, record1.get("foo"));
         assertEquals("67890", record1.get("bar"));
 
         Result result2 = results.get(1);
         assertTrue(result2.isOk());
         Record record2 = result2.getRecord();
-        assertEquals(new Integer(54321), record2.get("foo"));
+        assertEquals(54321, record2.get("foo"));
         assertEquals("fghij", record2.get("bar"));
     }
 

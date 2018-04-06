@@ -119,18 +119,14 @@ public class ValueParser implements Serializable {
     }
 
     private static ValueOrProblem parseString(String id, String type, Map<String, Object> props, String value) {
-        Function<String, ValueOrProblem> parseValue = stringValue -> {
-            return ValueOrProblem.value(stringValue);
-        };
+        Function<String, ValueOrProblem> parseValue = ValueOrProblem::value;
 
         return parseStringType(id, type, props, value, parseValue);
     }
 
 
     private static ValueOrProblem parseTrimmedString(String id, String type, Map<String, Object> props, String value) {
-        Function<String, ValueOrProblem> parseValue = stringValue -> {
-            return ValueOrProblem.value(stringValue.trim());
-        };
+        Function<String, ValueOrProblem> parseValue = stringValue -> ValueOrProblem.value(stringValue.trim());
 
         return parseStringType(id, type, props, value, parseValue);
     }
@@ -227,6 +223,6 @@ public class ValueParser implements Serializable {
             }
         }
 
-        return ValueOrProblem.value(new Boolean(false));
+        return ValueOrProblem.value(Boolean.FALSE);
     }
 }

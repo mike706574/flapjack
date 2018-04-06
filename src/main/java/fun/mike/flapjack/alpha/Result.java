@@ -113,13 +113,13 @@ public class Result implements IResult {
     }
 
     public List<Problem> getProblems() {
-        return new LinkedList<Problem>(this.problems);
+        return new LinkedList<>(this.problems);
     }
 
     public String explain() {
         if(hasProblems()) {
             String problemList = problems.stream()
-                .map(problem -> problem.explain())
+                .map(Problem::explain)
                 .collect(Collectors.joining("\n"));
             return "Problems:\n" + problemList;
         }

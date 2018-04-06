@@ -5,7 +5,7 @@ import java.util.List;
 import fun.mike.record.alpha.Record;
 
 public interface IResult {
-    public Record getRecord();
+    Record getRecord();
 
-    public List<Problem> getProblems();
+    List<Problem> getProblems();
 }
