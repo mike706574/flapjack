@@ -79,6 +79,20 @@ public class Column implements Serializable {
         return Column.with(id, type, props);
     }
 
+    public Column nullable() {
+        Map<String, Object> newProps = new HashMap<>();
+        newProps.put("nullable", true);
+        newProps.putAll(props);
+        return new Column(id, type, newProps);
+    }
+
+    public Column optional() {
+        Map<String, Object> newProps = new HashMap<>();
+        newProps.put("optional", true);
+        newProps.putAll(props);
+        return new Column(id, type, newProps);
+    }
+
     // Getters
     public String getId() {
         return this.id;

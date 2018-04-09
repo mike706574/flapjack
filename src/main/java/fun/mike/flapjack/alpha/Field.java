@@ -82,6 +82,20 @@ public class Field implements Serializable {
                                                    "optional", true));
     }
 
+    public Field nullable() {
+        Map<String, Object> newProps = new HashMap<>();
+        newProps.put("nullable", true);
+        newProps.putAll(props);
+        return new Field(id, length, type, newProps);
+    }
+
+    public Field optional() {
+        Map<String, Object> newProps = new HashMap<>();
+        newProps.put("optional", true);
+        newProps.putAll(props);
+        return new Field(id, length, type, newProps);
+    }
+
     // Getters
     public String getId() {
         return this.id;

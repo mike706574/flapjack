@@ -75,5 +75,20 @@ public class ColumnTest {
         assertEquals("date", col.getType());
         assertEquals(mapOf("format", "yyyyMMdd",
                            "optional", true), col.getProps());
+
+        col = Column.with("foo", "string");
+        assertEquals("foo", col.getId());
+        assertEquals("string", col.getType());
+        assertEquals(Collections.emptyMap(), col.getProps());
+        col = col.nullable();
+        assertEquals("foo", col.getId());
+        assertEquals("string", col.getType());
+        assertEquals(mapOf("nullable", true), col.getProps());
+        col = col.optional();
+        assertEquals("foo", col.getId());
+        assertEquals("string", col.getType());
+        assertEquals(mapOf("nullable", true,
+                           "optional", true), col.getProps());
+
     }
 }
