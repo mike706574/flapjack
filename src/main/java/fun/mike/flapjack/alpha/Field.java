@@ -7,6 +7,8 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static fun.mike.map.alpha.Factory.mapOf;
+
 public class Field implements Serializable {
     private final String id;
     private final int length;
@@ -24,6 +26,7 @@ public class Field implements Serializable {
         this.props = props;
     }
 
+    // Factory methods
     public static Field with(String id, int length, String type) {
         return new Field(id, length, type, new HashMap<>());
     }
@@ -38,6 +41,40 @@ public class Field implements Serializable {
         return Field.with(id, length, type, props);
     }
 
+    public static Field string(String id, int length) {
+        return new Field(id, length, "string", new HashMap<>());
+    }
+
+    public static Field string(String id, int length, Map<String, Object> props) {
+        return new Field(id, length, "string", props);
+    }
+
+    public static Field trimmedString(String id, int length) {
+        return new Field(id, length, "trimmed-string", new HashMap<>());
+    }
+
+    public static Field trimmedString(String id, int length, Map<String, Object> props) {
+        return new Field(id, length, "trimmed-string", props);
+    }
+
+    public static Field bigDecimal(String id, int length) {
+        return new Field(id, length, "big-decimal", new HashMap<>());
+    }
+
+    public static Field bigDecimal(String id, int length, Map<String, Object> props) {
+        return new Field(id, length, "big-decimal", props);
+    }
+
+    public static Field date(String id, int length, String format) {
+        return new Field(id, length, "date", mapOf("format", "yyyyMMdd"));
+    }
+
+    public static Field optionalDate(String id, int length, String format) {
+        return new Field(id, length, "date", mapOf("format", format,
+                                                   "optional", true));
+    }
+
+    // Getters
     public String getId() {
         return this.id;
     }

@@ -7,6 +7,7 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static fun.mike.map.alpha.Factory.mapOf;
 
 public class Column implements Serializable {
     private final String id;
@@ -22,12 +23,46 @@ public class Column implements Serializable {
         this.props = props;
     }
 
+    // Factory methods
+    public static Column with(String id, String type) {
+        return new Column(id, type, new HashMap<>());
+    }
+
     public static Column with(String id, String type, Map<String, Object> props) {
         return new Column(id, type, props);
     }
 
-    public static Column with(String id, String type) {
-        return new Column(id, type, new HashMap<>());
+    public static Column string(String id) {
+        return new Column(id, "string", new HashMap<>());
+    }
+
+    public static Column string(String id, Map<String, Object> props) {
+        return new Column(id, "string", props);
+    }
+
+    public static Column trimmedString(String id) {
+        return new Column(id, "trimmed-string", new HashMap<>());
+    }
+
+    public static Column trimmedString(String id, Map<String, Object> props) {
+        return new Column(id, "trimmed-string", props);
+    }
+
+    public static Column bigDecimal(String id) {
+        return new Column(id, "big-decimal", new HashMap<>());
+    }
+
+    public static Column bigDecimal(String id, Map<String, Object> props) {
+        return new Column(id, "big-decimal", props);
+    }
+
+    public static Column date(String id, String format) {
+        return new Column(id, "date", mapOf("format", format));
+    }
+
+    public static Column optionalDate(String id, String format) {
+        return new Column(id, "date", mapOf("format", format,
+                                            "optional", true));
     }
 
     public static Column nullable(String id, String type) {
@@ -36,6 +71,7 @@ public class Column implements Serializable {
         return Column.with(id, type, props);
     }
 
+    // Getters
     public String getId() {
         return this.id;
     }
