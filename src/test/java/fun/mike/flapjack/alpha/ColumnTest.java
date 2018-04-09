@@ -45,6 +45,16 @@ public class ColumnTest {
         assertEquals("trimmed-string", col.getType());
         assertEquals(mapOf("nullable", true), col.getProps());
 
+        col = Column.integer("foo");
+        assertEquals("foo", col.getId());
+        assertEquals("integer", col.getType());
+        assertEquals(Collections.emptyMap(), col.getProps());
+
+        col = Column.integer("foo", mapOf("nullable", true));
+        assertEquals("foo", col.getId());
+        assertEquals("integer", col.getType());
+        assertEquals(mapOf("nullable", true), col.getProps());
+
         col = Column.bigDecimal("foo");
         assertEquals("foo", col.getId());
         assertEquals("big-decimal", col.getType());

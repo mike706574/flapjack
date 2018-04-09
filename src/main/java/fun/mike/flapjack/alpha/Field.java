@@ -57,6 +57,14 @@ public class Field implements Serializable {
         return new Field(id, length, "trimmed-string", props);
     }
 
+    public static Field integer(String id, int length) {
+        return new Field(id, length, "integer", new HashMap<>());
+    }
+
+    public static Field integer(String id, int length, Map<String, Object> props) {
+        return new Field(id, length, "integer", props);
+    }
+
     public static Field bigDecimal(String id, int length) {
         return new Field(id, length, "big-decimal", new HashMap<>());
     }

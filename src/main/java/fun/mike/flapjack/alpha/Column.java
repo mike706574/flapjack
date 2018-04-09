@@ -48,6 +48,14 @@ public class Column implements Serializable {
         return new Column(id, "trimmed-string", props);
     }
 
+    public static Column integer(String id) {
+        return new Column(id, "integer", new HashMap<>());
+    }
+
+    public static Column integer(String id, Map<String, Object> props) {
+        return new Column(id, "integer", props);
+    }
+
     public static Column bigDecimal(String id) {
         return new Column(id, "big-decimal", new HashMap<>());
     }

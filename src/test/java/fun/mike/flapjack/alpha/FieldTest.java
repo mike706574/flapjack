@@ -51,6 +51,18 @@ public class FieldTest {
         assertEquals("trimmed-string", col.getType());
         assertEquals(mapOf("nullable", true), col.getProps());
 
+        col = Field.integer("foo", 5);
+        assertEquals("foo", col.getId());
+        assertEquals(5, col.getLength());
+        assertEquals("integer", col.getType());
+        assertEquals(Collections.emptyMap(), col.getProps());
+
+        col = Field.integer("foo", 5, mapOf("nullable", true));
+        assertEquals("foo", col.getId());
+        assertEquals(5, col.getLength());
+        assertEquals("integer", col.getType());
+        assertEquals(mapOf("nullable", true), col.getProps());
+
         col = Field.bigDecimal("foo", 5);
         assertEquals("foo", col.getId());
         assertEquals(5, col.getLength());
