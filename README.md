@@ -16,12 +16,12 @@ List<Column> columns = Arrays.asList(Column.string("foo"),
 
 DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
-Result result = format.parse("bop,1");
+Result<Record> result = format.parse("bop,1");
 
 result.isOk();
 // => true
 
-result.recordOrElseThrow(result -> new IllegalArgumentException(result.explain()));
+result.orElseThrow(result -> new IllegalArgumentException(result.explain()));
 // => {foo=bop, bar=1} (fun.mike.Record)
 ```
 
@@ -33,14 +33,14 @@ List<Column> columns = Arrays.asList(Column.string("foo"),
 
 DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
-Record record = Record.of("foo", "abcde", "bar", 23);
+Record<String> record = Record.of("foo", "abcde", "bar", 23);
 
 Result result = format.serialize(record);
 
 result.isOk();
 // => true
 
-result.lineOrElseThrow(result -> new RuntimeException(result.explain()));
+result.orElseThrow(result -> new RuntimeException(result.explain()));
 // => "abcde,23" (String)
 ```
 
@@ -52,12 +52,12 @@ List<Field> fields = Arrays.asList(Field.string("foo", 3),
 
 FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
-Result result = format.parse("bop 1");
+Result<Record> result = format.parse("bop 1");
 
 result.isOk();
 // => true
 
-result.recordOrElseThrow(result -> new RuntimeException(result.explain()));
+result.orElseThrow(result -> new RuntimeException(result.explain()));
 // => {foo=bop, bar=1} (fun.mike.Record)
 ```
 
@@ -71,12 +71,12 @@ FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
 Record record = Record.of("foo", "abcde", "bar", 23);
 
-Result result = format.serialize(record);
+Result<String> result = format.serialize(record);
 
 result.isOk();
 // => true
 
-result.lineOrElseThrow(result -> new RuntimeException(result.explain()));
+result.orElseThrow(result -> new RuntimeException(result.explain()));
 // => "abcde23   " (String)
 ```
 
