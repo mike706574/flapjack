@@ -29,22 +29,22 @@ public class FixedWidthParserTest {
         List<String> lines = Arrays.asList("1234567890",
                                            "abcdefghij");
 
-        List<Result> results = parser.stream(lines.stream())
+        List<Result<Record>> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
 
         assertEquals(2, results.size());
 
-        Result result1 = results.get(0);
+        Result<Record> result1 = results.get(0);
         assertTrue(result1.isOk());
-        Record record1 = result1.getRecord();
+        Record record1 = result1.getValue();
         assertEquals(3, record1.size());
         assertEquals(0L, record1.get("lineIndex"));
         assertEquals("12345", record1.get("foo"));
         assertEquals("67890", record1.get("bar"));
 
-        Result result2 = results.get(1);
+        Result<Record> result2 = results.get(1);
         assertTrue(result2.isOk());
-        Record record2 = result2.getRecord();
+        Record record2 = result2.getValue();
         assertEquals(3, record2.size());
         assertEquals(1L, record2.get("lineIndex"));
         assertEquals("abcde", record2.get("foo"));
@@ -63,21 +63,21 @@ public class FixedWidthParserTest {
         List<String> lines = Arrays.asList("1234567890",
                                            "abcdefghij");
 
-        List<Result> results = parser.stream(lines.stream())
+        List<Result<Record>> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
 
         assertEquals(2, results.size());
 
-        Result result1 = results.get(0);
+        Result<Record> result1 = results.get(0);
         assertTrue(result1.isOk());
-        Record record1 = result1.getRecord();
+        Record record1 = result1.getValue();
         assertEquals(2, record1.size());
         assertEquals(0L, record1.get("lineIndex"));
         assertEquals("12345", record1.get("foo"));
 
-        Result result2 = results.get(1);
+        Result<Record> result2 = results.get(1);
         assertTrue(result2.isOk());
-        Record record2 = result2.getRecord();
+        Record record2 = result2.getValue();
         assertEquals(2, record2.size());
         assertEquals(1L, record2.get("lineIndex"));
         assertEquals("abcde", record2.get("foo"));
@@ -95,20 +95,20 @@ public class FixedWidthParserTest {
         List<String> lines = Arrays.asList("1234567890",
                                            "54321fghij");
 
-        List<Result> results = parser.stream(lines.stream())
+        List<Result<Record>> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
 
         assertEquals(2, results.size());
 
-        Result result1 = results.get(0);
+        Result<Record> result1 = results.get(0);
         assertTrue(result1.isOk());
-        Record record1 = result1.getRecord();
+        Record record1 = result1.getValue();
         assertEquals(12345, record1.get("foo"));
         assertEquals("67890", record1.get("bar"));
 
-        Result result2 = results.get(1);
+        Result<Record> result2 = results.get(1);
         assertTrue(result2.isOk());
-        Record record2 = result2.getRecord();
+        Record record2 = result2.getValue();
         assertEquals(54321, record2.get("foo"));
         assertEquals("fghij", record2.get("bar"));
     }
@@ -120,10 +120,10 @@ public class FixedWidthParserTest {
         FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
         FixedWidthParser parser = new FixedWidthParser(format);
 
-        Result result = parser.parse("abc");
+        Result<Record> result = parser.parse("abc");
         assertTrue(result.hasProblems());
 
-        Record record = result.getRecord();
+        Record record = result.getValue();
         assertEquals("ab", record.get("foo"));
         assertFalse(record.containsKey("bar"));
 

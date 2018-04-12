@@ -16,7 +16,7 @@ public class FixedWidthParser implements Parser, Serializable {
         this.format = format;
     }
 
-    public Result parse(String line) {
+    public Result<Record> parse(String line) {
         Record record = new Record();
         List<Problem> problems = new LinkedList<>();
 
@@ -57,11 +57,11 @@ public class FixedWidthParser implements Parser, Serializable {
         return Result.withProblems(record, problems);
     }
 
-    public Stream<Result> stream(Stream<String> lines) {
+    public Stream<Result<Record>> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
                 .map(item -> {
-                    Result result = parse(item.getValue());
-                    result.getRecord().put("lineIndex", item.getIndex());
+                    Result<Record> result = parse(item.getValue());
+                    result.getValue().put("lineIndex", item.getIndex());
                     return result;
                 });
     }

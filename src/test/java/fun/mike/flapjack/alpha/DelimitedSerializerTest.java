@@ -25,11 +25,11 @@ public class DelimitedSerializerTest {
 
         Record record = Record.of("foo", "abcde", "bar", 23);
 
-        Result result = serializer.serialize(record);
+        Result<String> result = serializer.serialize(record);
 
         assertTrue(result.isOk());
 
-        assertEquals("abcde,23", result.getLine());
+        assertEquals("abcde,23", result.getValue());
     }
 
     @Test
@@ -42,11 +42,11 @@ public class DelimitedSerializerTest {
 
         Record record = Record.of("foo", "abcde", "bar", 23);
 
-        Result result = serializer.serialize(record);
+        Result<String> result = serializer.serialize(record);
 
         assertTrue(result.isOk());
 
-        assertEquals("\"abcde\",\"23\"", result.getLine());
+        assertEquals("\"abcde\",\"23\"", result.getValue() );
     }
 
     @Test
@@ -62,10 +62,10 @@ public class DelimitedSerializerTest {
 
         Record record = Record.of("foo", "abcde", "bar", 23);
 
-        Result result = serializer.serialize(record);
+        Result<String> result = serializer.serialize(record);
 
         assertTrue(result.isOk());
 
-        assertEquals("\"abcde\",\"23\",", result.getLine());
+        assertEquals("\"abcde\",\"23\",", result.getValue() );
     }
 }

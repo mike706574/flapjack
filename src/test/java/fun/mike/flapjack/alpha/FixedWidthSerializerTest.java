@@ -25,11 +25,11 @@ public class FixedWidthSerializerTest {
 
         Record record = Record.of("foo", "abcde", "bar", 23);
 
-        Result result = serializer.serialize(record);
+        Result<String> result = serializer.serialize(record);
 
         assertTrue(result.isOk());
 
-        assertEquals("abcde23   ", result.getLine());
+        assertEquals("abcde23   ", result.getValue());
     }
 
     @Test
@@ -42,12 +42,12 @@ public class FixedWidthSerializerTest {
 
         Record record = Record.of("foo", "abcdefghi", "bar", 123456);
 
-        Result result = serializer.serialize(record);
+        Result<String> result = serializer.serialize(record);
 
         assertTrue(result.hasProblems());
 
         List<Problem> problems = result.getProblems();
-        assertEquals("          ", result.getLine());
+        assertEquals("          ", result.getValue());
         assertEquals(2, problems.size());
         assertEquals(new TruncationProblem("foo", "string", "abcdefghi"), problems.get(0));
         assertEquals(new TruncationProblem("bar", "integer", "123456"), problems.get(1));

@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import fun.mike.record.alpha.Record;
 
 public class DelimitedFormat implements Format, Serializable {
     private final String id;
@@ -20,6 +22,9 @@ public class DelimitedFormat implements Format, Serializable {
     private final Character frameDelimiter;
     private final Integer offset;
     private final List<Column> columns;
+
+    private final DelimitedParser parser;
+    private final DelimitedSerializer serializer;
 
     @JsonCreator
     public DelimitedFormat(@JsonProperty("id") String id,
@@ -38,6 +43,9 @@ public class DelimitedFormat implements Format, Serializable {
         this.frameDelimiter = frameDelimiter;
         this.columns = Collections.unmodifiableList(columns);
         this.offset = offset;
+
+        this.parser = new DelimitedParser(this);
+        this.serializer = new DelimitedSerializer(this);
     }
 
     public static DelimitedFormat unframed(String id,
@@ -163,5 +171,20 @@ public class DelimitedFormat implements Format, Serializable {
     public int hashCode() {
 
         return Objects.hash(id, description, delimiter, endingDelimiter, framing, frameDelimiter, offset, columns);
+    }
+
+    @Override
+    public Result<Record> parse(String line) {
+        return parser.parse(line);
+    }
+
+    @Override
+    public Result<String> serialize(Map<String, Object> map) {
+        return serializer.serialize(map);
+    }
+
+    @Override
+    public Result<String> serialize(Record record) {
+        return serializer.serialize(record);
     }
 }

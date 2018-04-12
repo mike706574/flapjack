@@ -1,19 +1,16 @@
 package fun.mike.flapjack.alpha;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 import static fun.mike.map.alpha.Factory.mapOf;
+import static org.junit.Assert.assertEquals;
 
 public class ColumnTest {
     @Test
     public void building() {
-        Column col = null;
+        Column col;
 
         col = Column.with("foo", "string");
         assertEquals("foo", col.getId());

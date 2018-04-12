@@ -16,20 +16,20 @@ public class DelimitedParser implements Parser, Serializable {
         this.format = format;
     }
 
-    public Stream<Result> stream(Stream<String> lines) {
+    public Stream<Result<Record>> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
                 .map(item -> {
-                    Result result = parse(item.getValue());
-                    result.getRecord().put("lineIndex", item.getIndex());
+                    Result<Record> result = parse(item.getValue());
+                    result.getValue().put("lineIndex", item.getIndex());
                     return result;
                 });
     }
 
-    public Result parse(String line) {
+    public Result<Record> parse(String line) {
         return format.isFramed() ? parseFramedLine(line) : parseUnframedLine(line);
     }
 
-    public Result parseUnframedLine(String line) {
+    public Result<Record> parseUnframedLine(String line) {
         Record record = new Record();
         List<Problem> problems = new LinkedList<>();
 
@@ -76,7 +76,7 @@ public class DelimitedParser implements Parser, Serializable {
         return Result.withProblems(record, problems);
     }
 
-    public Result parseFramedLine(String line) {
+    public Result<Record> parseFramedLine(String line) {
         Record record = new Record();
         List<Problem> problems = new LinkedList<>();
 

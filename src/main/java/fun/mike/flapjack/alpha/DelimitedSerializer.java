@@ -14,7 +14,11 @@ public class DelimitedSerializer implements Serializable {
         this.format = format;
     }
 
-    public Result serialize(Record record) {
+    public Result<String> serialize(Map<String, Object> map) {
+        return serialize(new Record(map));
+    }
+
+    public Result<String> serialize(Record record) {
         StringBuilder builder = new StringBuilder();
         List<Problem> problems = new LinkedList<>();
 

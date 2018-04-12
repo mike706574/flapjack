@@ -3,6 +3,7 @@ package fun.mike.flapjack.alpha;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import fun.mike.record.alpha.Record;
 
@@ -13,7 +14,11 @@ public class FixedWidthSerializer implements Serializable {
         this.format = format;
     }
 
-    public Result serialize(Record record) {
+    public Result<String> serialize(Map<String, Object> map) {
+        return serialize(new Record(map));
+    }
+
+    public Result<String> serialize(Record record) {
         StringBuilder builder = new StringBuilder();
         List<Problem> problems = new LinkedList<>();
 

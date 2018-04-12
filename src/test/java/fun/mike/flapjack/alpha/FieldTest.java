@@ -1,19 +1,16 @@
 package fun.mike.flapjack.alpha;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 import static fun.mike.map.alpha.Factory.mapOf;
+import static org.junit.Assert.assertEquals;
 
 public class FieldTest {
     @Test
     public void building() {
-        Field field = null;
+        Field field;
 
         field = Field.with("foo", 5, "string");
         assertEquals("foo", field.getId());
