@@ -110,6 +110,17 @@ public class ValueParserTest {
     }
 
     @Test
+    public void integerWithCommas() {
+        ValueOrProblem result = ValueParser.parse("foo",
+                                                  "integer",
+                                                  mapOf(),
+                                                  "1,000,000");
+        assertFalse(result.explain(),
+                    result.hasProblem());
+        assertEquals(1000000, result.getValue());
+    }
+
+    @Test
     public void optionalInteger() {
         Map<String, Object> props = mapOf("default", 0);
         ValueOrProblem validResult = ValueParser.parse("foo", "integer", props, " ");
@@ -133,18 +144,14 @@ public class ValueParserTest {
     }
 
     @Test
-    public void parsingDoubles() {
-        String validValue = "5.20932021";
-        ValueOrProblem validResult = ValueParser.parse("foo", "double", mapOf(), validValue);
-        assertFalse(validResult.explain(), validResult.hasProblem());
-
-        Double expectedValue = new Double(validValue);
-        assertEquals(expectedValue, validResult.getValue());
-
-        ValueOrProblem problemResult = ValueParser.parse("foo", "double", mapOf(), "bar");
-        assertTrue(problemResult.hasProblem());
-        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"double\".",
-                     problemResult.getProblem().explain());
+    public void bigDecimalWithCommas() {
+        ValueOrProblem result = ValueParser.parse("foo",
+                                                  "big-decimal",
+                                                  mapOf(),
+                                                  "1,000,000.0");
+        assertFalse(result.explain(),
+                    result.hasProblem());
+        assertEquals(new BigDecimal("1000000.0"), result.getValue());
     }
 
     @Test
@@ -170,6 +177,32 @@ public class ValueParserTest {
 
         BigDecimal expectedValue = new BigDecimal(2.5);
         assertEquals(expectedValue, result.getValue());
+    }
+
+    @Test
+    public void parsingDoubles() {
+        String validValue = "5.20932021";
+        ValueOrProblem validResult = ValueParser.parse("foo", "double", mapOf(), validValue);
+        assertFalse(validResult.explain(), validResult.hasProblem());
+
+        Double expectedValue = new Double(validValue);
+        assertEquals(expectedValue, validResult.getValue());
+
+        ValueOrProblem problemResult = ValueParser.parse("foo", "double", mapOf(), "bar");
+        assertTrue(problemResult.hasProblem());
+        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"double\".",
+                     problemResult.getProblem().explain());
+    }
+
+    @Test
+    public void doubleWithCommas() {
+        ValueOrProblem result = ValueParser.parse("foo",
+                                                  "double",
+                                                  mapOf(),
+                                                  "1,000,000.0");
+        assertFalse(result.explain(),
+                    result.hasProblem());
+        assertEquals(new Double("1000000.0"), result.getValue());
     }
 
     @Test

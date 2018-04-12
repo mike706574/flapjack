@@ -80,15 +80,16 @@ public class Column implements Serializable {
     }
 
     public Column nullable() {
-        Map<String, Object> newProps = new HashMap<>();
-        newProps.put("nullable", true);
-        newProps.putAll(props);
-        return new Column(id, type, newProps);
+        return withProp("nullable", true);
     }
 
     public Column optional() {
+        return withProp("optional", true);
+    }
+
+    private Column withProp(String key, Object value) {
         Map<String, Object> newProps = new HashMap<>();
-        newProps.put("optional", true);
+        newProps.put(key, value);
         newProps.putAll(props);
         return new Column(id, type, newProps);
     }

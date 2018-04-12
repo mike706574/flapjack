@@ -394,7 +394,7 @@ public class DelimitedParserTest {
         List<Column> columns = Collections.singletonList(Column.with("foo", "string"));
 
         DelimitedFormat format = DelimitedFormat.optionallyFramed("bop", "Bop", ',', '"', columns)
-            .withOffset(1);
+                .withOffset(1);
 
         DelimitedParser parser = new DelimitedParser(format);
 
@@ -406,5 +406,41 @@ public class DelimitedParserTest {
 
         assertEquals(1, record.size());
         assertEquals("burp", record.get("foo"));
+    }
+
+    @Test
+    public void delimitersInFramedWhenFramingIsRequired() {
+        List<Column> columns = Arrays.asList(Column.bigDecimal("foo"),
+                                             Column.bigDecimal("bar"));
+
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("bop",
+                                                              "Bop.",
+                                                              ',',
+                                                              '"',
+                                                              columns);
+        DelimitedParser parser = new DelimitedParser(format);
+
+        Result<Record> result = format.parse("\"1,000\",\"1,000\"");
+
+        assertTrue(result.explain(), result.isOk());
+    }
+
+    @Test
+    public void delimitersInFramedWhenFramingIsOptional() {
+        List<Column> columns = Arrays.asList(Column.bigDecimal("foo"),
+                                             Column.bigDecimal("bar"));
+
+        DelimitedFormat format = DelimitedFormat.alwaysFramed("bop",
+                                                              "Bop.",
+                                                              ',',
+                                                              '"',
+                                                              columns);
+        DelimitedParser parser = new DelimitedParser(format);
+
+        Result<Record> result = format.parse("\"1,000\",\"1,000\"");
+
+        assertTrue(result.explain(), result.isOk());
+
+
     }
 }

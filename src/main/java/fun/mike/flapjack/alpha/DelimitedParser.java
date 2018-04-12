@@ -57,12 +57,11 @@ public class DelimitedParser implements Parser, Serializable {
             } else {
                 // System.out.print(" OUTSIDE");
                 inside = true;
-                if(ch == delimiter) {
+                if (ch == delimiter) {
                     setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
-                }
-                else {
+                } else {
                     cell.append(ch);
                 }
             }
@@ -96,7 +95,7 @@ public class DelimitedParser implements Parser, Serializable {
         boolean framingRequired = format.framingRequired();
         boolean delimiterAtStart = line.charAt(0) == delimiter;
         boolean inside = false;
-        if(!framingRequired && delimiterAtStart) {
+        if (!framingRequired && delimiterAtStart) {
             inside = true;
         }
 
@@ -114,7 +113,7 @@ public class DelimitedParser implements Parser, Serializable {
                     setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
-                } else if (ch == delimiter) {
+                } else if (!inFrame && ch == delimiter) {
                     // System.out.print(" END-CELL");
                     inside = false;
                     inFrame = false;
@@ -143,18 +142,15 @@ public class DelimitedParser implements Parser, Serializable {
                     inside = true;
                     // System.out.print(" START-FRAME");
                     inFrame = true;
-                }
-                else if(framingRequired) {
+                } else if (framingRequired) {
                     // System.out.print(" NOT-FRAMED-PROBLEM");
                     problems.add(new FramingProblem(columnIndex, i));
                     return Result.withProblems(record, problems);
-                }
-                else if(ch == delimiter) {
+                } else if (ch == delimiter) {
                     setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
                     columnIndex++;
-                }
-                else {
+                } else {
                     // System.out.print(" START-UNFRAMED");
                     inside = true;
                     cell.append(ch);
@@ -163,7 +159,7 @@ public class DelimitedParser implements Parser, Serializable {
             // System.out.print('\n');
         }
 
-        if(cell.length() > 0 || afterDelimiter) {
+        if (cell.length() > 0 || afterDelimiter) {
             // System.out.print("END");
             setColumn(record, problems, columnIndex, cell.toString());
             // System.out.print('\n');
@@ -179,7 +175,7 @@ public class DelimitedParser implements Parser, Serializable {
         // System.out.print(" SET-COLUMN-" + index);
         int offsetIndex = index - format.getOffset();
 
-        if(offsetIndex < 0) {
+        if (offsetIndex < 0) {
             return false;
         }
 

@@ -46,7 +46,7 @@ public class DelimitedSerializerTest {
 
         assertTrue(result.isOk());
 
-        assertEquals("\"abcde\",\"23\"", result.getValue() );
+        assertEquals("\"abcde\",\"23\"", result.getValue());
     }
 
     @Test
@@ -66,6 +66,6 @@ public class DelimitedSerializerTest {
 
         assertTrue(result.isOk());
 
-        assertEquals("\"abcde\",\"23\",", result.getValue() );
+        assertEquals("\"abcde\",\"23\",", result.getValue());
     }
 }

@@ -48,7 +48,7 @@ public class DelimitedSerializer implements Serializable {
 
         String line = builder.toString();
 
-        if(format.hasEndingDelimiter()) {
+        if (format.hasEndingDelimiter()) {
             line = line + format.getDelimiter();
         }
 

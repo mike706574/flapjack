@@ -135,7 +135,7 @@ public class ValueParser implements Serializable {
     private static ValueOrProblem parseInt(String id, String type, Map<String, Object> props, String value) {
         Function<String, ValueOrProblem> parseValue = stringValue -> {
             try {
-                return ValueOrProblem.value(Integer.parseInt(stringValue.trim()));
+                return ValueOrProblem.value(Integer.parseInt(stringValue.trim().replace(",", "")));
             } catch (NumberFormatException ex) {
                 return ValueOrProblem.problem(new TypeProblem(id, type, stringValue));
             }
@@ -147,7 +147,7 @@ public class ValueParser implements Serializable {
     private static ValueOrProblem parseBigDecimal(String id, String type, Map<String, Object> props, String value) {
         Function<String, ValueOrProblem> parseValue = stringValue -> {
             try {
-                return ValueOrProblem.value(new BigDecimal(stringValue.trim()));
+                return ValueOrProblem.value(new BigDecimal(stringValue.trim().replace(",", "")));
             } catch (NumberFormatException ex) {
                 return ValueOrProblem.problem(new TypeProblem(id, type, stringValue));
             }
@@ -159,7 +159,7 @@ public class ValueParser implements Serializable {
     private static ValueOrProblem parseDouble(String id, String type, Map<String, Object> props, String value) {
         Function<String, ValueOrProblem> parseValue = stringValue -> {
             try {
-                return ValueOrProblem.value(new Double(stringValue.trim()));
+                return ValueOrProblem.value(new Double(stringValue.trim().replace(",", "")));
             } catch (NumberFormatException ex) {
                 return ValueOrProblem.problem(new TypeProblem(id, type, stringValue));
             }
