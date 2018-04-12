@@ -11,8 +11,8 @@ Here are a few examples. Look at the tests if you want more.
 ### Parsing a delimited record
 
 ```java
-List<Column> columns = Arrays.asList(Column.with("foo", "string"),
-                                     Column.with("bar", "integer"));
+List<Column> columns = Arrays.asList(Column.string("foo"),
+                                     Column.integer("bar"));
 
 DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 DelimitedParser parser = new DelimitedParser(format);
@@ -29,8 +29,8 @@ result.recordOrElseThrow(result -> new IllegalArgumentException(result.explain()
 ### Serializing a delimited record
 
 ```java
-List<Column> columns = Arrays.asList(Column.with("foo", "string"),
-                                     Column.with("bar", "integer"));
+List<Column> columns = Arrays.asList(Column.string("foo"),
+                                     Column.integer("bar"));
 
 DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 DelimitedSerializer serializer = new DelimitedSerializer(format);
@@ -49,8 +49,8 @@ result.lineOrElseThrow(result -> new RuntimeException(result.explain()));
 ### Parsing a fixed-width record
 
 ```java
-List<Field> fields = Arrays.asList(Field.with("foo", 3, "string"),
-                                   Field.with("bar", 2, "integer"));
+List<Field> fields = Arrays.asList(Field.string("foo", 3),
+                                   Field.integer("bar", 2));
 
 FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
@@ -68,8 +68,8 @@ result.recordOrElseThrow(result -> new RuntimeException(result.explain()));
 ### Serializing a fixed-width record
 
 ```java
-List<Field> fields = Arrays.asList(Field.with("foo", 5, "string"),
-                                   Field.with("bar", 5, "integer"));
+List<Field> fields = Arrays.asList(Field.string("foo", 5),
+                                   Field.integer("bar", 5));
 
 FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 FixedWidthSerializer serializer = new FixedWidthSerializer(format);
