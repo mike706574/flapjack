@@ -15,9 +15,8 @@ List<Column> columns = Arrays.asList(Column.string("foo"),
                                      Column.integer("bar"));
 
 DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
-DelimitedParser parser = new DelimitedParser(format);
 
-Result result = parser.parse("bop,1");
+Result result = format.parse("bop,1");
 
 result.isOk();
 // => true
@@ -33,11 +32,10 @@ List<Column> columns = Arrays.asList(Column.string("foo"),
                                      Column.integer("bar"));
 
 DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
-DelimitedSerializer serializer = new DelimitedSerializer(format);
 
 Record record = Record.of("foo", "abcde", "bar", 23);
 
-Result result = serializer.serialize(record);
+Result result = format.serialize(record);
 
 result.isOk();
 // => true
@@ -54,9 +52,7 @@ List<Field> fields = Arrays.asList(Field.string("foo", 3),
 
 FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
-FixedWidthParser parser = new FixedWidthParser(format);
-
-Result result = parser.parse("bop 1");
+Result result = format.parse("bop 1");
 
 result.isOk();
 // => true
@@ -72,11 +68,10 @@ List<Field> fields = Arrays.asList(Field.string("foo", 5),
                                    Field.integer("bar", 5));
 
 FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
-FixedWidthSerializer serializer = new FixedWidthSerializer(format);
 
 Record record = Record.of("foo", "abcde", "bar", 23);
 
-Result result = serializer.serialize(record);
+Result result = format.serialize(record);
 
 result.isOk();
 // => true
