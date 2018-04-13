@@ -1,6 +1,6 @@
 # flapjack
 
-![Maven Central](https://img.shields.io/maven-central/v/fun.mike/flapjack-alpha.svg)
+[![Maven Central](https://img.shields.io/maven-central/v/fun.mike/flapjack-alpha.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22fun.mike%22%20AND%20a%3A%22flapjack-alpha%22)
 
 Flat file parsing and serialization library for Java.
 
