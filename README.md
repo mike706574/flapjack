@@ -4,6 +4,8 @@
 
 Flat file parsing and serialization library for Java.
 
+[API Docs](http://javadoc.io/doc/fun.mike/flapjack-alpha)
+
 ## Usage
 
 Here are a few examples. Look at the tests if you want more.
@@ -79,6 +81,10 @@ result.isOk();
 result.orElseThrow(result -> new RuntimeException(result.explain()));
 // => "abcde23   " (String)
 ```
+
+## Build
+
+[![CircleCI](https://circleci.com/gh/mike706574/flapjack.svg?style=svg)](https://circleci.com/gh/mike706574/flapjack)
 
 ## Copyright and License
 
