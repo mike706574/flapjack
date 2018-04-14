@@ -1,10 +1,9 @@
 # flapjack
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/fun.mike/flapjack-alpha/badge.svg)](https://maven-badges.herokuapp.com/maven-central/fun.mike/flapjack-alpha)
+[![Javadocs](https://www.javadoc.io/badge/fun.mike/flapjack-alpha.svg)](https://www.javadoc.io/doc/fun.mike/flapjack-alpha)
 
 Flat file parsing and serialization library for Java.
-
-[API Docs](http://javadoc.io/doc/fun.mike/flapjack-alpha)
 
 ## Usage
 
