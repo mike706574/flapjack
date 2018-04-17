@@ -73,6 +73,10 @@ public class Column implements Serializable {
                                             "optional", true));
     }
 
+    public static Column filler(String id) {
+        return new Column(id, "filler", new HashMap<>());
+    }
+
     public static Column nullable(String id, String type) {
         Map<String, Object> props = new HashMap<>();
         props.put("nullable", true);

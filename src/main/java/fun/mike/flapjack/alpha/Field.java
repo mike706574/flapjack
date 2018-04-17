@@ -82,6 +82,10 @@ public class Field implements Serializable {
                                                    "optional", true));
     }
 
+    public static Field filler(String id, int length) {
+        return new Field(id, length, "filler", new HashMap<>());
+    }
+
     public Field nullable() {
         return withProp("nullable", true);
     }
