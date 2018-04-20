@@ -18,7 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <jackson.version>2.9.3</jackson.version>
+    <jackson.version>2.9.5</jackson.version>
   </properties>
 
   <licenses>
@@ -59,7 +59,7 @@
     <dependency>
       <groupId>fun.mike</groupId>
       <artifactId>record-alpha</artifactId>
-      <version>0.0.6</version>
+      <version>0.0.17</version>
     </dependency>
     <dependency>
       <groupId>com.codepoetics</groupId>
@@ -69,7 +69,7 @@
     <dependency>
       <groupId>fun.mike</groupId>
       <artifactId>map-support-alpha</artifactId>
-      <version>0.0.6</version>
+      <version>0.0.16</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
