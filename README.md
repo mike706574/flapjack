@@ -34,9 +34,9 @@ List<Column> columns = Arrays.asList(Column.string("foo"),
 
 DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
-Record<String> record = Record.of("foo", "abcde", "bar", 23);
+Record record = Record.of("foo", "abcde", "bar", 23);
 
-Result result = format.serialize(record);
+Result<String> result = format.serialize(record);
 
 result.isOk();
 // => true
