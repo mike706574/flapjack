@@ -37,7 +37,7 @@ public class Result<T> implements IResult<T> {
         return new Result<>(value, problems);
     }
 
-    public <E extends Throwable> T orElseThrow() throws E {
+    public T orElseThrow() {
         return orElseThrow(result -> {
             throw new ResultException(result);
         });
