@@ -14,11 +14,11 @@ public class DelimitedSerializer implements Serializable {
         this.format = format;
     }
 
-    public Result<String> serialize(Map<String, Object> map) {
+    public SerializationResult serialize(Map<String, Object> map) {
         return serialize(new Record(map));
     }
 
-    public Result<String> serialize(Record record) {
+    public SerializationResult serialize(Record record) {
         StringBuilder builder = new StringBuilder();
         List<Problem> problems = new LinkedList<>();
 
@@ -53,10 +53,10 @@ public class DelimitedSerializer implements Serializable {
         }
 
         if (problems.isEmpty()) {
-            return Result.ok(line);
+            return SerializationResult.ok(line, record);
         }
 
-        return Result.withProblems(line, problems);
+        return SerializationResult.withProblems(line, record, problems);
     }
 
     private void appendValue(String value, StringBuilder builder) {

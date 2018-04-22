@@ -30,12 +30,12 @@ public class DelimitedParserTest {
         List<String> lines = Arrays.asList("\"baz\",\"burp\"",
                                            "\"bip\",\"bop\"");
 
-        List<Result<Record>> results = parser.stream(lines.stream())
+        List<ParseResult> results = parser.stream(lines.stream())
                 .collect(Collectors.toList());
 
         assertEquals(2, results.size());
 
-        Result<Record> result1 = results.get(0);
+        ParseResult result1 = results.get(0);
 
         assertTrue(result1.isOk());
         Record record1 = result1.getValue();
@@ -44,7 +44,7 @@ public class DelimitedParserTest {
         assertEquals("baz", record1.get("foo"));
         assertEquals("burp", record1.get("bar"));
 
-        Result<Record> result2 = results.get(1);
+        ParseResult result2 = results.get(1);
         assertTrue(result2.isOk());
         Record record2 = result2.getValue();
         assertEquals(3, record2.size());
@@ -61,7 +61,7 @@ public class DelimitedParserTest {
         DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("baz,burp");
+        ParseResult result = parser.parse("baz,burp");
 
         assertTrue(result.isOk());
         Record record = result.getValue();
@@ -78,7 +78,7 @@ public class DelimitedParserTest {
         DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse(",");
+        ParseResult result = parser.parse(",");
 
         assertTrue(result.isOk());
         Record record = result.getValue();
@@ -96,7 +96,7 @@ public class DelimitedParserTest {
         DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse(",,");
+        ParseResult result = parser.parse(",,");
 
         assertTrue(result.isOk());
         Record record = result.getValue();
@@ -116,7 +116,7 @@ public class DelimitedParserTest {
                 .withEndingDelimiter();
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("baz|bip|");
+        ParseResult result = parser.parse("baz|bip|");
 
         assertTrue(result.isOk());
         Record record = result.getValue();
@@ -134,7 +134,7 @@ public class DelimitedParserTest {
 
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("\"baz\",\"burp\"");
+        ParseResult result = parser.parse("\"baz\",\"burp\"");
 
         assertTrue(result.isOk());
         Record record = result.getValue();
@@ -151,7 +151,7 @@ public class DelimitedParserTest {
         DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("\"\",\"\"");
+        ParseResult result = parser.parse("\"\",\"\"");
 
         assertTrue(result.isOk());
         Record record = result.getValue();
@@ -170,7 +170,7 @@ public class DelimitedParserTest {
                 .withEndingDelimiter();
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("\"baz\"|\"bip\"|");
+        ParseResult result = parser.parse("\"baz\"|\"bip\"|");
 
         Record record = result.getValue();
         assertEquals(2, record.size());
@@ -187,7 +187,7 @@ public class DelimitedParserTest {
         DelimitedFormat format = DelimitedFormat.alwaysFramed("baz", "Baz", ',', '"', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("\"\",\"\",\"\"");
+        ParseResult result = parser.parse("\"\",\"\",\"\"");
 
         assertTrue(result.isOk());
         Record record = result.getValue();
@@ -206,7 +206,7 @@ public class DelimitedParserTest {
 
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result1 = parser.parse("\"baz\",burp");
+        ParseResult result1 = parser.parse("\"baz\",burp");
 
         assertTrue(result1.isOk());
         Record record1 = result1.getValue();
@@ -214,7 +214,7 @@ public class DelimitedParserTest {
         assertEquals("baz", record1.get("foo"));
         assertEquals("burp", record1.get("bar"));
 
-        Result<Record> result2 = parser.parse("bip,\"bop\"");
+        ParseResult result2 = parser.parse("bip,\"bop\"");
 
         assertTrue(result2.isOk());
         Record record2 = result2.getValue();
@@ -233,7 +233,7 @@ public class DelimitedParserTest {
                 .withEndingDelimiter();
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("baz|bip|");
+        ParseResult result = parser.parse("baz|bip|");
 
         Record record = result.getValue();
         assertEquals(2, record.size());
@@ -250,7 +250,7 @@ public class DelimitedParserTest {
 
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result1 = parser.parse("\"\",");
+        ParseResult result1 = parser.parse("\"\",");
 
         assertTrue(result1.explain(), result1.isOk());
         Record record1 = result1.getValue();
@@ -258,7 +258,7 @@ public class DelimitedParserTest {
         assertEquals("", record1.get("foo"));
         assertEquals("", record1.get("bar"));
 
-        Result<Record> result2 = parser.parse(",\"\"");
+        ParseResult result2 = parser.parse(",\"\"");
 
         assertTrue(result2.isOk());
         Record record2 = result2.getValue();
@@ -276,7 +276,7 @@ public class DelimitedParserTest {
         DelimitedFormat format = DelimitedFormat.optionallyFramed("baz", "Baz", ',', '"', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("\"\",,\"\"");
+        ParseResult result = parser.parse("\"\",,\"\"");
 
         assertTrue(result.isOk());
         Record record1 = result.getValue();
@@ -296,13 +296,13 @@ public class DelimitedParserTest {
 
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result1 = parser.parse("\"baz\",\"burp\"");
+        ParseResult result1 = parser.parse("\"baz\",\"burp\"");
         assertTrue(result1.isOk());
         Record record1 = result1.getValue();
         assertEquals(1, record1.size());
         assertEquals("baz", record1.get("foo"));
 
-        Result<Record> result2 = parser.parse("\"bip\",\"bop\"");
+        ParseResult result2 = parser.parse("\"bip\",\"bop\"");
         assertTrue(result2.isOk());
         Record record2 = result2.getValue();
         assertEquals(1, record2.size());
@@ -317,7 +317,7 @@ public class DelimitedParserTest {
 
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("baz");
+        ParseResult result = parser.parse("baz");
 
         assertTrue(result.hasProblems());
         List<Problem> problems = result.getProblems();
@@ -335,7 +335,7 @@ public class DelimitedParserTest {
 
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("\"baz\"\"bip\"");
+        ParseResult result = parser.parse("\"baz\"\"bip\"");
 
         assertTrue(result.hasProblems());
         List<Problem> problems = result.getProblems();
@@ -354,7 +354,7 @@ public class DelimitedParserTest {
         DelimitedFormat format = DelimitedFormat.unframed("bop", "Bop", ',', columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("baz,burp");
+        ParseResult result = parser.parse("baz,burp");
 
         assertTrue(result.hasProblems());
 
@@ -377,7 +377,7 @@ public class DelimitedParserTest {
         DelimitedParser parser = new DelimitedParser(format);
 
 
-        Result<Record> result = parser.parse("\"baz\",\"burp\"");
+        ParseResult result = parser.parse("\"baz\",\"burp\"");
 
         assertTrue(result.hasProblems());
 
@@ -398,7 +398,7 @@ public class DelimitedParserTest {
 
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = parser.parse("baz,burp");
+        ParseResult result = parser.parse("baz,burp");
 
         assertTrue(result.isOk());
 
@@ -420,7 +420,7 @@ public class DelimitedParserTest {
                                                               columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = format.parse("\"1,000\",\"1,000\"");
+        ParseResult result = format.parse("\"1,000\",\"1,000\"");
 
         assertTrue(result.explain(), result.isOk());
     }
@@ -437,7 +437,7 @@ public class DelimitedParserTest {
                                                               columns);
         DelimitedParser parser = new DelimitedParser(format);
 
-        Result<Record> result = format.parse("\"1,000\",\"1,000\"");
+        ParseResult result = format.parse("\"1,000\",\"1,000\"");
 
         assertTrue(result.explain(), result.isOk());
 

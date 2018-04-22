@@ -92,22 +92,23 @@ public class FixedWidthFormat implements Format, Serializable {
     /**
      * Parses a fixed-width string.
      * @param line a fixed-width string
-     * @return a Result containing a record if parsing was successful;
-     * otherwise, a Result containing parsing problems.
+     * @return a ParseResult containing a record if parsing was successful;
+     * otherwise, a ParseResult containing parsing problems.
      */
     @Override
-    public Result<Record> parse(String line) {
+    public ParseResult parse(String line) {
         return parser.parse(line);
     }
 
     /**
      * Serializes a map to a fixed-width string.
      * @param map a map
-     * @return a Result containing a fixed-width string if serialization was
-     * successful; otherwise, a Result containing serialization problems.
+     * @return a SerializationResult containing a fixed-width string if
+     * serialization was successful; otherwise, a SerializationResult
+     * containing serialization problems.
      */
     @Override
-    public Result<String> serialize(Map<String, Object> map) {
+    public SerializationResult serialize(Map<String, Object> map) {
         return serializer.serialize(map);
     }
 
@@ -118,7 +119,7 @@ public class FixedWidthFormat implements Format, Serializable {
      * successful; otherwise, a Result containing serialization problems.
      */
     @Override
-    public Result<String> serialize(Record record) {
+    public SerializationResult serialize(Record record) {
         return serializer.serialize(record);
     }
 }

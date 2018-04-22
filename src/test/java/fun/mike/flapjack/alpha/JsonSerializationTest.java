@@ -116,30 +116,65 @@ public class JsonSerializationTest {
     }
 
     @Test
-    public void result() throws IOException {
+    public void parseResult() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        Result result = Result.ok(Record.of("foo", "bar"));
+        ParseResult result = ParseResult.ok(Record.of("foo", "bar"), "foobar");
         String serialized = mapper.writeValueAsString(result);
         // System.out.println(serialized);
-        Result deserialized = mapper.readValue(serialized, Result.class);
+        ParseResult deserialized = mapper.readValue(serialized, ParseResult.class);
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
     }
 
     @Test
-    public void resultWithProblem() throws IOException {
+    public void parseResultWithProblem() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
-        TypeProblem problem = new TypeProblem("foo", "string", "bar");
+        TypeProblem problem = new TypeProblem("foo", "integer", "bar");
 
-        Result result = Result.withProblem(Record.of("foo", "bar"), problem);
+        ParseResult result = ParseResult.withProblem(Record.of("foo", "bar"),
+                                                     "foobar",
+                                                     problem);
 
         String serialized = mapper.writeValueAsString(result);
         // System.out.println(serialized);
-        Result deserialized = mapper.readValue(serialized, Result.class);
+        ParseResult deserialized = mapper.readValue(serialized, ParseResult.class);
+        String reserialized = mapper.writeValueAsString(deserialized);
+        assertEquals(serialized, reserialized);
+    }
+
+    @Test
+    public void serializationResult() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+
+        SerializationResult result = SerializationResult.ok("foobar",
+                                                            Record.of("foo", "bar"));
+        String serialized = mapper.writeValueAsString(result);
+        // System.out.println(serialized);
+        SerializationResult deserialized = mapper.readValue(serialized, SerializationResult.class);
+        String reserialized = mapper.writeValueAsString(deserialized);
+        assertEquals(serialized, reserialized);
+    }
+
+    @Test
+    public void SerializationResultWithProblem() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new Jdk8Module());
+
+        TypeProblem problem = new TypeProblem("foo", "integer", "bar");
+
+        SerializationResult result = SerializationResult
+            .withProblem("foobar",
+                         Record.of("foo", "bar"),
+                         problem);
+
+        String serialized = mapper.writeValueAsString(result);
+        // System.out.println(serialized);
+        SerializationResult deserialized = mapper.readValue(serialized, SerializationResult.class);
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
     }

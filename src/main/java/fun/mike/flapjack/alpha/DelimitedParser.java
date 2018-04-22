@@ -16,20 +16,20 @@ public class DelimitedParser implements Parser, Serializable {
         this.format = format;
     }
 
-    public Stream<Result<Record>> stream(Stream<String> lines) {
+    public Stream<ParseResult> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
                 .map(item -> {
-                    Result<Record> result = parse(item.getValue());
+                    ParseResult result = parse(item.getValue());
                     result.getValue().put("lineIndex", item.getIndex());
                     return result;
                 });
     }
 
-    public Result<Record> parse(String line) {
+    public ParseResult parse(String line) {
         return format.isFramed() ? parseFramedLine(line) : parseUnframedLine(line);
     }
 
-    public Result<Record> parseUnframedLine(String line) {
+    public ParseResult parseUnframedLine(String line) {
         Record record = new Record();
         List<Problem> problems = new LinkedList<>();
 
@@ -72,10 +72,10 @@ public class DelimitedParser implements Parser, Serializable {
 
         checkForMissingColumns(columnIndex, problems);
 
-        return Result.withProblems(record, problems);
+        return ParseResult.withProblems(record, line, problems);
     }
 
-    public Result<Record> parseFramedLine(String line) {
+    public ParseResult parseFramedLine(String line) {
         Record record = new Record();
         List<Problem> problems = new LinkedList<>();
 
@@ -134,7 +134,7 @@ public class DelimitedParser implements Parser, Serializable {
                 } else {
                     // System.out.print(" FRAME-END-PROBLEM");
                     problems.add(new FramingProblem(columnIndex, i));
-                    return Result.withProblems(record, problems);
+                    return ParseResult.withProblems(record, line, problems);
                 }
             } else {
                 // System.out.print(" OUTSIDE");
@@ -145,7 +145,7 @@ public class DelimitedParser implements Parser, Serializable {
                 } else if (framingRequired) {
                     // System.out.print(" NOT-FRAMED-PROBLEM");
                     problems.add(new FramingProblem(columnIndex, i));
-                    return Result.withProblems(record, problems);
+                    return ParseResult.withProblems(record, line, problems);
                 } else if (ch == delimiter) {
                     setColumn(record, problems, columnIndex, cell.toString());
                     cell = new StringBuffer();
@@ -168,7 +168,7 @@ public class DelimitedParser implements Parser, Serializable {
 
         checkForMissingColumns(columnIndex - 1, problems);
 
-        return Result.withProblems(record, problems);
+        return ParseResult.withProblems(record, line, problems);
     }
 
     private boolean setColumn(Map<String, Object> data, List<Problem> problems, int index, String value) {

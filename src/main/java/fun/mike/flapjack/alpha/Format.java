@@ -12,11 +12,10 @@ import fun.mike.record.alpha.Record;
         @Type(value = FixedWidthFormat.class, name = "fixed-width"),
         @Type(value = DelimitedFormat.class, name = "delimited"),
 })
-
 public interface Format {
-    Result<Record> parse(String line);
+    ParseResult parse(String line);
 
-    Result<String> serialize(Map<String, Object> map);
+    SerializationResult serialize(Map<String, Object> map);
 
-    Result<String> serialize(Record record);
+    SerializationResult serialize(Record record);
 }

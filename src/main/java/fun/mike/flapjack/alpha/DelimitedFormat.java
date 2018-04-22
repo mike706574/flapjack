@@ -256,22 +256,23 @@ public class DelimitedFormat implements Format, Serializable {
     /**
      * Parses a delimited string.
      * @param line a delimited string
-     * @return a Result containing a record if parsing was successful;
-     * otherwise, a Result containing parsing problems.
+     * @return a ParseResult containing a record if parsing was successful;
+     * otherwise, a ParseResult containing parsing problems.
      */
     @Override
-    public Result<Record> parse(String line) {
+    public ParseResult parse(String line) {
         return parser.parse(line);
     }
 
     /**
      * Serializes a map to a delimited string.
      * @param map a map
-     * @return a Result containing a delimited string if serialization was
-     * successful; otherwise, a Result containing serialization problems.
+     * @return a SerializationResult containing a delimited string if
+     * serialization was successful; otherwise, a SerializationResult
+     * containing serialization problems.
      */
     @Override
-    public Result<String> serialize(Map<String, Object> map) {
+    public SerializationResult serialize(Map<String, Object> map) {
         return serializer.serialize(map);
     }
 
@@ -282,7 +283,7 @@ public class DelimitedFormat implements Format, Serializable {
      * successful; otherwise, a Result containing serialization problems.
      */
     @Override
-    public Result<String> serialize(Record record) {
+    public SerializationResult serialize(Record record) {
         return serializer.serialize(record);
     }
 }

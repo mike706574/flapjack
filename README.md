@@ -17,7 +17,7 @@ List<Column> columns = Arrays.asList(Column.string("foo"),
 
 DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
-Result<Record> result = format.parse("bop,1");
+ParseResult result = format.parse("bop,1");
 
 result.isOk();
 // => true
@@ -36,7 +36,7 @@ DelimitedFormat format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
 Record record = Record.of("foo", "abcde", "bar", 23);
 
-Result<String> result = format.serialize(record);
+SerializationResult result = format.serialize(record);
 
 result.isOk();
 // => true
@@ -53,7 +53,7 @@ List<Field> fields = Arrays.asList(Field.string("foo", 3),
 
 FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
-Result<Record> result = format.parse("bop 1");
+ParseResult result = format.parse("bop 1");
 
 result.isOk();
 // => true
@@ -72,7 +72,7 @@ FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
 
 Record record = Record.of("foo", "abcde", "bar", 23);
 
-Result<String> result = format.serialize(record);
+SerializationResult result = format.serialize(record);
 
 result.isOk();
 // => true

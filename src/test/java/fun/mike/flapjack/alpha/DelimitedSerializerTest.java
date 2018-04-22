@@ -25,7 +25,7 @@ public class DelimitedSerializerTest {
 
         Record record = Record.of("foo", "abcde", "bar", 23);
 
-        Result<String> result = serializer.serialize(record);
+        SerializationResult result = serializer.serialize(record);
 
         assertTrue(result.isOk());
 
@@ -42,7 +42,7 @@ public class DelimitedSerializerTest {
 
         Record record = Record.of("foo", "abcde", "bar", 23);
 
-        Result<String> result = serializer.serialize(record);
+        SerializationResult result = serializer.serialize(record);
 
         assertTrue(result.isOk());
 
@@ -62,7 +62,7 @@ public class DelimitedSerializerTest {
 
         Record record = Record.of("foo", "abcde", "bar", 23);
 
-        Result<String> result = serializer.serialize(record);
+        SerializationResult result = serializer.serialize(record);
 
         assertTrue(result.isOk());
 
