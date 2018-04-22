@@ -10,7 +10,12 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-
+/**
+ * A container object that can contain a resulting value from a successful
+ * operation or a collection of problems resulting from an unsuccessful
+ * operation.
+ * @param <T> the type of resulting value
+ */
 @JsonSerialize(as = IResult.class)
 public class Result<T> implements IResult<T> {
     private final T value;
