@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import static fun.mike.map.alpha.Factory.mapOf;
 
 /**
- * Represents a column in a delimited record.
+ * A column in a delimited format.
  */
 public class Column implements Serializable {
     private final String id;

@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import static fun.mike.map.alpha.Factory.mapOf;
 
+/**
+ * A field in a fixed-width format.
+ */
 public class Field implements Serializable {
     private final String id;
     private final int length;

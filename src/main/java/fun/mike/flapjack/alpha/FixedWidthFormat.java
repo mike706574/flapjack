@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fun.mike.record.alpha.Record;
 
+/**
+ * A fixed-width format used to parse and serialize fixed-width records.
+ */
 public class FixedWidthFormat implements Format, Serializable {
     private final String id;
     private final String description;
@@ -17,6 +20,12 @@ public class FixedWidthFormat implements Format, Serializable {
     private final FixedWidthParser parser;
     private final FixedWidthSerializer serializer;
 
+    /**
+     * Builds a fixed-width format
+     * @param id an identifier for the format
+     * @param description a description of the format
+     * @param fields the fields
+     */
     @JsonCreator
     public FixedWidthFormat(@JsonProperty("id") String id,
             @JsonProperty("description") String description,
@@ -29,14 +38,24 @@ public class FixedWidthFormat implements Format, Serializable {
         this.serializer = new FixedWidthSerializer(this);
     }
 
+    /**
+     * @return an identifier for the format
+     */
     public String getId() {
         return this.id;
     }
 
+    /**
+     * @return a description of the format
+     */
     public String getDescription() {
         return this.description;
     }
 
+    /**
+     *
+     * @return the fields
+     */
     public List<Field> getFields() {
         return this.fields;
     }
@@ -70,16 +89,34 @@ public class FixedWidthFormat implements Format, Serializable {
         return result;
     }
 
+    /**
+     * Parses a fixed-width string.
+     * @param line a fixed-width string
+     * @return a Result containing a record if parsing was successful;
+     * otherwise, a Result containing parsing problems.
+     */
     @Override
     public Result<Record> parse(String line) {
         return parser.parse(line);
     }
 
+    /**
+     * Serializes a map to a fixed-width string.
+     * @param map a map
+     * @return a Result containing a fixed-width string if serialization was
+     * successful; otherwise, a Result containing serialization problems.
+     */
     @Override
     public Result<String> serialize(Map<String, Object> map) {
         return serializer.serialize(map);
     }
 
+    /**
+     * Serializes a record to a fixed-width string.
+     * @param record a record
+     * @return a Result containing a fixed-width string if serialization was
+     * successful; otherwise, a Result containing serialization problems.
+     */
     @Override
     public Result<String> serialize(Record record) {
         return serializer.serialize(record);
