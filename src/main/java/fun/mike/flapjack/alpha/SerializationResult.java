@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fun.mike.record.alpha.Record;
@@ -15,8 +16,7 @@ import fun.mike.record.alpha.Record;
  * A container object that can contain a serialized record or a collection of
  * problems from serialization.
  */
-@JsonSerialize(as = ISerializationResult.class)
-public class SerializationResult implements ISerializationResult {
+public class SerializationResult implements Result<String> {
     private final String value;
     private final Record record;
     private final List<Problem> problems;
@@ -31,7 +31,7 @@ public class SerializationResult implements ISerializationResult {
     }
 
     public static SerializationResult ok(String value, Record record) {
-        return new SerializationResult(value, null, new LinkedList<>());
+        return new SerializationResult(value, record, new LinkedList<>());
     }
 
     public static SerializationResult withProblem(String value,
@@ -48,6 +48,14 @@ public class SerializationResult implements ISerializationResult {
         return new SerializationResult(value, record, problems);
     }
 
+    public String orElse(String defaultValue) {
+        if (problems.isEmpty()) {
+            return value;
+        } else {
+            return defaultValue;
+        }
+    }
+
     public String orElseThrow() {
         return orElseThrow(result -> {
             throw new SerializationException(result);
@@ -62,6 +70,7 @@ public class SerializationResult implements ISerializationResult {
         }
     }
 
+    @JsonIgnore
     public boolean isOk() {
         return problems.isEmpty();
     }
@@ -70,12 +79,10 @@ public class SerializationResult implements ISerializationResult {
         return !problems.isEmpty();
     }
 
-    @Override
     public String getValue() {
         return value;
     }
 
-    @Override
     public Record getRecord() {
         return record;
     }

@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import fun.mike.record.alpha.Record;
@@ -15,8 +16,7 @@ import fun.mike.record.alpha.Record;
  * A container object that can contain a parsed record or a collection of
  * problems when parsing.
  */
-@JsonSerialize(as = IParseResult.class)
-public class ParseResult implements IParseResult {
+public class ParseResult implements Result<Record> {
     private final Record value;
     private final String line;
     private final List<Problem> problems;
@@ -48,6 +48,14 @@ public class ParseResult implements IParseResult {
         return new ParseResult(value, line, problems);
     }
 
+    public Record orElse(Record defaultValue) {
+        if (problems.isEmpty()) {
+            return value;
+        } else {
+            return defaultValue;
+        }
+    }
+
     public Record orElseThrow() {
         return orElseThrow(result -> {
             throw new ParseException(result);
@@ -62,6 +70,7 @@ public class ParseResult implements IParseResult {
         }
     }
 
+    @JsonIgnore
     public boolean isOk() {
         return problems.isEmpty();
     }
@@ -75,7 +84,6 @@ public class ParseResult implements IParseResult {
         return value;
     }
 
-    @Override
     public String getLine() {
         return line;
     }

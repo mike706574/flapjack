@@ -122,7 +122,8 @@ public class JsonSerializationTest {
 
         ParseResult result = ParseResult.ok(Record.of("foo", "bar"), "foobar");
         String serialized = mapper.writeValueAsString(result);
-        // System.out.println(serialized);
+        assertEquals("{\"value\":{\"foo\":\"bar\"},\"line\":\"foobar\",\"problems\":[]}",
+                     serialized);
         ParseResult deserialized = mapper.readValue(serialized, ParseResult.class);
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
@@ -154,14 +155,15 @@ public class JsonSerializationTest {
         SerializationResult result = SerializationResult.ok("foobar",
                                                             Record.of("foo", "bar"));
         String serialized = mapper.writeValueAsString(result);
-        // System.out.println(serialized);
+        assertEquals("{\"value\":\"foobar\",\"record\":{\"foo\":\"bar\"},\"problems\":[]}",
+                     serialized);
         SerializationResult deserialized = mapper.readValue(serialized, SerializationResult.class);
         String reserialized = mapper.writeValueAsString(deserialized);
         assertEquals(serialized, reserialized);
     }
 
     @Test
-    public void SerializationResultWithProblem() throws IOException {
+    public void serializationResultWithProblem() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new Jdk8Module());
 
