@@ -14,7 +14,7 @@ import fun.mike.record.alpha.TypeMismatchException;
 import static fun.mike.map.alpha.Get.requiredString;
 
 public class ValueSerializer implements Serializable {
-    private static Map<String, ValueSerializationFunction> typeSerializers;
+    private static final Map<String, ValueSerializationFunction> typeSerializers;
 
     static {
         typeSerializers = new HashMap<>();

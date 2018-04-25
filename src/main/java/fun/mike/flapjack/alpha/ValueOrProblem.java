@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.function.Function;
 
 public class ValueOrProblem<T> implements Serializable {
-    private T value;
-    private Problem problem;
+    private final T value;
+    private final Problem problem;
 
     public ValueOrProblem(T value, Problem problem) {
         this.value = value;
