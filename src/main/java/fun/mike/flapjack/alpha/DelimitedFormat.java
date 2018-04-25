@@ -265,6 +265,17 @@ public class DelimitedFormat implements Format, Serializable {
     }
 
     /**
+     * Parses a delimited string. Throws a ParseException if parsing is
+     * unsuccessful.
+     * @param line a delimited string
+     * @return the parsed record
+     */
+    @Override
+    public Record parseAndThrow(String line) {
+        return parser.parse(line).orElseThrow();
+    }
+
+    /**
      * Serializes a map to a delimited string.
      * @param map a map
      * @return a SerializationResult containing a delimited string if
@@ -285,5 +296,16 @@ public class DelimitedFormat implements Format, Serializable {
     @Override
     public SerializationResult serialize(Record record) {
         return serializer.serialize(record);
+    }
+
+    /**
+     * Serializes a record to a delimited string. Throws a
+     * SerializationException if serialization is unsuccessful.
+     * @param record a record
+     * @return a delimited string
+     */
+    @Override
+    public String serializeAndThrow(Record record) {
+        return serializer.serialize(record).orElseThrow();
     }
 }

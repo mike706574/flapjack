@@ -15,7 +15,11 @@ import fun.mike.record.alpha.Record;
 public interface Format {
     ParseResult parse(String line);
 
+    Record parseAndThrow(String line);
+
     SerializationResult serialize(Map<String, Object> map);
 
     SerializationResult serialize(Record record);
+
+    String serializeAndThrow(Record record);
 }
