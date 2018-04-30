@@ -322,7 +322,7 @@ public class DelimitedParserTest {
         assertTrue(result.hasProblems());
         List<Problem> problems = result.getProblems();
         assertEquals(1, problems.size());
-        assertEquals("Column 1 was not properly alwaysFramed (at character 1).",
+        assertEquals("Column 1 was not properly framed (at character 1).",
                      problems.get(0).explain());
     }
 
@@ -340,7 +340,7 @@ public class DelimitedParserTest {
         assertTrue(result.hasProblems());
         List<Problem> problems = result.getProblems();
         assertEquals(1, problems.size());
-        assertEquals("Column 2 was not properly alwaysFramed (at character 6).",
+        assertEquals("Column 2 was not properly framed (at character 6).",
                      problems.get(0).explain());
     }
 

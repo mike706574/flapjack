@@ -25,7 +25,7 @@ public class FramingProblem implements Problem, Serializable {
     }
 
     public String explain() {
-        return String.format("Column %d was not properly alwaysFramed (at character %d).",
+        return String.format("Column %d was not properly framed (at character %d).",
                              columnIndex + 1,
                              charIndex + 1);
     }
