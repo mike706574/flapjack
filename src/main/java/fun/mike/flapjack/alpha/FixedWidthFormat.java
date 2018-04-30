@@ -38,6 +38,10 @@ public class FixedWidthFormat implements Format, Serializable {
         this.serializer = new FixedWidthSerializer(this);
     }
 
+    public static FixedWidthFormat basic(String id, String description, List<Field> fields) {
+        return new FixedWidthFormat(id, description, fields);
+    }
+
     /**
      * @return an identifier for the format
      */
