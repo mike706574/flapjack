@@ -59,7 +59,7 @@
     <dependency>
       <groupId>fun.mike</groupId>
       <artifactId>record-alpha</artifactId>
-      <version>0.0.22</version>
+      <version>0.0.24</version>
     </dependency>
     <dependency>
       <groupId>com.codepoetics</groupId>
@@ -93,12 +93,6 @@
       <version>4.12</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-core</artifactId>
-      <version>${jackson.version}</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -121,6 +115,22 @@
             <arg>-Xlint:all,-options,-path</arg>
           </compilerArgs>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.0.2</version>
+        <executions>
+          <execution>
+            <id>analyze</id>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <failOnWarning>false</failOnWarning>
+              <outputXML>true</outputXML>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
