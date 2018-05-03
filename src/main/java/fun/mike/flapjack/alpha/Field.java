@@ -163,18 +163,6 @@ public class Field implements Serializable {
     }
 
     /**
-     * Builds an optional date field with the given format.
-     * @param id an identifier
-     * @param length field length
-     * @param format a date format
-     * @return an optional date field with the given format
-     */
-    public static Field optionalDate(String id, int length, String format) {
-        return new Field(id, length, "date", mapOf("format", format,
-                                                   "optional", true));
-    }
-
-    /**
      * Builds a filler field.
      * @param id an identifier
      * @param length field length
@@ -190,14 +178,6 @@ public class Field implements Serializable {
      */
     public Field nullable() {
         return withProp("nullable", true);
-    }
-
-    /**
-     * Returns an optional version of a field.
-     * @return an optional version of a field
-     */
-    public Field optional() {
-        return withProp("optional", true);
     }
 
     private Field withProp(String key, Object value) {

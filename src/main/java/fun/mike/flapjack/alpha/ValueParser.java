@@ -227,14 +227,6 @@ public class ValueParser implements Serializable {
         String format = (String) rawFormat;
 
         if (isBlank(value)) {
-            ValueOrProblem<Boolean> optionalOrProblem = getOptionalFlag(id, props);
-
-            if (optionalOrProblem.hasProblem()) {
-                return ValueOrProblem.problem(optionalOrProblem.getProblem());
-            }
-
-            Boolean optional = (Boolean) optionalOrProblem.getValue();
-
             ValueOrProblem nullableOrProblem = getNullableFlag(id, props);
 
             if (nullableOrProblem.hasProblem()) {
@@ -243,7 +235,7 @@ public class ValueParser implements Serializable {
 
             Boolean nullable = (Boolean) nullableOrProblem.getValue();
 
-            if (nullable || optional) {
+            if (nullable) {
                 return ValueOrProblem.value(null);
             }
 
@@ -257,10 +249,6 @@ public class ValueParser implements Serializable {
         } catch (ParseException ex) {
             return ValueOrProblem.problem(new TypeProblem(id, type, value));
         }
-    }
-
-    private static ValueOrProblem<Boolean> getOptionalFlag(String id, Map<String, Object> props) {
-        return getBooleanFlag("optional", id, props);
     }
 
     private static ValueOrProblem<Boolean> getNullableFlag(String id, Map<String, Object> props) {

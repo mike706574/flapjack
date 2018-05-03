@@ -79,13 +79,6 @@ public class FieldTest {
         assertEquals("date", field.getType());
         assertEquals(mapOf("format", "yyyyMMdd"), field.getProps());
 
-        field = Field.optionalDate("foo", 5, "yyyyMMdd");
-        assertEquals("foo", field.getId());
-        assertEquals(5, field.getLength());
-        assertEquals("date", field.getType());
-        assertEquals(mapOf("format", "yyyyMMdd",
-                           "optional", true), field.getProps());
-
         field = Field.string("foo", 5);
         assertEquals("foo", field.getId());
         assertEquals(5, field.getLength());
@@ -96,12 +89,5 @@ public class FieldTest {
         assertEquals(5, field.getLength());
         assertEquals("string", field.getType());
         assertEquals(mapOf("nullable", true), field.getProps());
-        field = field.optional();
-        assertEquals("foo", field.getId());
-        assertEquals(5, field.getLength());
-        assertEquals("string", field.getType());
-        assertEquals(mapOf("nullable", true,
-                           "optional", true),
-                     field.getProps());
     }
 }

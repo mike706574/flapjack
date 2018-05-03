@@ -247,17 +247,6 @@ public class ValueParserTest {
     }
 
     @Test
-    public void optionalFormattedDate() {
-        String format = "yyyyMMdd";
-        Map<String, Object> props = mapOf("format", format,
-                                          "optional", true);
-
-        ValueOrProblem result = ValueParser.parse("foo", "date", props, "        ");
-        assertFalse(result.hasProblem());
-        assertNull(result.getValue());
-    }
-
-    @Test
     public void nullableFormattedDate() {
         String format = "yyyyMMdd";
         Map<String, Object> props = mapOf("format", format,

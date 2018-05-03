@@ -136,17 +136,6 @@ public class Column implements Serializable {
     }
 
     /**
-     * Builds an optional date column with the given format.
-     * @param id an identifier
-     * @param format a date format
-     * @return an optional date column with the given format
-     */
-    public static Column optionalDate(String id, String format) {
-        return new Column(id, "date", mapOf("format", format,
-                                            "optional", true));
-    }
-
-    /**
      * Builds a filler column.
      * @param id an identifier
      * @return a filler column
@@ -173,14 +162,6 @@ public class Column implements Serializable {
      */
     public Column nullable() {
         return withProp("nullable", true);
-    }
-
-    /**
-     * Returns an optional version of a column.
-     * @return an optional version of a column
-     */
-    public Column optional() {
-        return withProp("optional", true);
     }
 
     private Column withProp(String key, Object value) {
