@@ -45,6 +45,38 @@ public class ValueParserTest {
     }
 
     @Test
+    public void nullableInteger() {
+        ValueOrProblem result = ValueParser.parse("foo",
+                                                            "integer",
+                                                            mapOf("nullable", true),
+                                                            "");
+        assertFalse(result.explain(), result.hasProblem());
+        assertNull(result.getValue());
+    }
+
+
+    @Test
+    public void integerNullableIsFalse() {
+        ValueOrProblem result = ValueParser.parse("foo",
+                                                  "integer",
+                                                  mapOf("nullable", false),
+                                                  "");
+        assertTrue(result.hasProblem());
+        assertEquals(new MissingValueProblem("foo", "integer"),
+                     result.getProblem());
+    }
+
+    @Test
+    public void stringNullableIsFalse() {
+        ValueOrProblem result = ValueParser.parse("foo",
+                                                  "string",
+                                                  mapOf("nullable", false),
+                                                  "");
+        assertFalse(result.hasProblem());
+        assertEquals("", result.getValue());
+    }
+
+    @Test
     public void nullableString() {
         ValueOrProblem whitespaceResult = ValueParser.parse("foo",
                                                             "string",
@@ -107,6 +139,18 @@ public class ValueParserTest {
         assertTrue(invalidResult.hasProblem());
         assertEquals(new TypeProblem("foo", "integer", "bar"),
                      invalidResult.getProblem());
+    }
+
+    @Test
+    public void missingInteger() {
+        ValueOrProblem result = ValueParser.parse("foo",
+                                                       "integer",
+                                                       mapOf(),
+                                                       "");
+
+        assertTrue(result.hasProblem());
+        assertEquals(new MissingValueProblem("foo", "integer"),
+                     result.getProblem());
     }
 
     @Test

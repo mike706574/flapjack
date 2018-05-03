@@ -109,7 +109,7 @@ public class ValueParser implements Serializable {
                 }
             }
 
-            Object nullable = props.containsKey("nullable");
+            Object nullable = props.get("nullable");
             if (nullable != null) {
                 if (nullable instanceof Boolean) {
                     if ((Boolean) nullable) {
@@ -123,7 +123,7 @@ public class ValueParser implements Serializable {
                     return ValueOrProblem.problem(new FormatProblem(message));
                 }
             }
-            return ValueOrProblem.problem(new TypeProblem(id, type, value));
+            return ValueOrProblem.problem(new MissingValueProblem(id, type));
         }
 
         return parseValue.apply(value);
