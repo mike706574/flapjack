@@ -13,9 +13,9 @@ public class TruncationProblem implements Problem {
 
     @JsonCreator
     public TruncationProblem(@JsonProperty("id") String id,
-            @JsonProperty("type") String type,
-            @JsonProperty("length") Integer length,
-            @JsonProperty("value") String value) {
+                             @JsonProperty("type") String type,
+                             @JsonProperty("length") Integer length,
+                             @JsonProperty("value") String value) {
         this.id = id;
         this.type = type;
         this.length = length;

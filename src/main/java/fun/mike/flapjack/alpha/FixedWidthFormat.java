@@ -22,14 +22,15 @@ public class FixedWidthFormat implements Format, Serializable {
 
     /**
      * Builds a fixed-width format
-     * @param id an identifier for the format
+     *
+     * @param id          an identifier for the format
      * @param description a description of the format
-     * @param fields the fields
+     * @param fields      the fields
      */
     @JsonCreator
     public FixedWidthFormat(@JsonProperty("id") String id,
-            @JsonProperty("description") String description,
-            @JsonProperty("fields") List<Field> fields) {
+                            @JsonProperty("description") String description,
+                            @JsonProperty("fields") List<Field> fields) {
         this.id = id;
         this.description = description;
         this.fields = Collections.unmodifiableList(fields);
@@ -57,7 +58,6 @@ public class FixedWidthFormat implements Format, Serializable {
     }
 
     /**
-     *
      * @return the fields
      */
     public List<Field> getFields() {
@@ -95,6 +95,7 @@ public class FixedWidthFormat implements Format, Serializable {
 
     /**
      * Parses a fixed-width string.
+     *
      * @param line a fixed-width string
      * @return a ParseResult containing a record if parsing was successful;
      * otherwise, a ParseResult containing parsing problems.
@@ -107,6 +108,7 @@ public class FixedWidthFormat implements Format, Serializable {
     /**
      * Parses a fixed-width string. Throws a parse exception if parsing is
      * unsuccessful.
+     *
      * @param line a fixed-width string
      * @return the parsed record
      */
@@ -117,6 +119,7 @@ public class FixedWidthFormat implements Format, Serializable {
 
     /**
      * Serializes a map to a fixed-width string.
+     *
      * @param map a map
      * @return a SerializationResult containing a fixed-width string if
      * serialization was successful; otherwise, a SerializationResult
@@ -129,6 +132,7 @@ public class FixedWidthFormat implements Format, Serializable {
 
     /**
      * Serializes a record to a fixed-width string.
+     *
      * @param record a record
      * @return a Result containing a fixed-width string if serialization was
      * successful; otherwise, a Result containing serialization problems.
@@ -141,6 +145,7 @@ public class FixedWidthFormat implements Format, Serializable {
     /**
      * Serializes a record to a fixed-width string. Throws a
      * SerializationException if parsing is unsuccessful.
+     *
      * @param record a record
      * @return a Result containing a fixed-width string if serialization was
      * successful; otherwise, a Result containing serialization problems.

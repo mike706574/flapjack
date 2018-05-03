@@ -37,10 +37,10 @@ public class ValueSerializer implements Serializable {
     }
 
     public static ValueOrProblem<String> serializeType(String id,
-            String type,
-            Map<String, Object> props,
-            Record record,
-            ValueSerializationFunction serialize) {
+                                                       String type,
+                                                       Map<String, Object> props,
+                                                       Record record,
+                                                       ValueSerializationFunction serialize) {
         if (!record.containsKey(id) || record.get(id) == null) {
             if (props.containsKey("nullable")) {
                 try {
@@ -67,15 +67,15 @@ public class ValueSerializer implements Serializable {
     }
 
     public static ValueOrProblem<String> serializeInteger(String id,
-            Map<String, Object> props,
-            Record record) {
+                                                          Map<String, Object> props,
+                                                          Record record) {
         Integer value = record.getInteger(id);
         return ValueOrProblem.value(Integer.toString(value));
     }
 
     public static ValueOrProblem<String> serializeDate(String id,
-            Map<String, Object> props,
-            Record record) {
+                                                       Map<String, Object> props,
+                                                       Record record) {
         Date value = record.getDate(id);
         String format = requiredString(props, "format");
         SimpleDateFormat formatter = new SimpleDateFormat(format);
@@ -84,8 +84,8 @@ public class ValueSerializer implements Serializable {
     }
 
     public static ValueOrProblem<String> serializeBigDecimal(String id,
-            Map<String, Object> props,
-            Record record) {
+                                                             Map<String, Object> props,
+                                                             Record record) {
         BigDecimal value = record.getBigDecimal(id);
         DecimalFormat formatter = new DecimalFormat("#.0000");
         String serializedValue = formatter.format(value);
@@ -93,8 +93,8 @@ public class ValueSerializer implements Serializable {
     }
 
     public static ValueOrProblem<String> serializeDouble(String id,
-            Map<String, Object> props,
-            Record record) {
+                                                         Map<String, Object> props,
+                                                         Record record) {
         Double value = record.getDouble(id);
         DecimalFormat formatter = new DecimalFormat("#.0000");
         String serializedValue = formatter.format(value);
@@ -102,8 +102,8 @@ public class ValueSerializer implements Serializable {
     }
 
     public static ValueOrProblem<String> serializeString(String id,
-            Map<String, Object> props,
-            Record record) {
+                                                         Map<String, Object> props,
+                                                         Record record) {
         String value = record.getString(id);
         return ValueOrProblem.value(value);
     }

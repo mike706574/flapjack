@@ -19,8 +19,8 @@ public class Column implements Serializable {
 
     @JsonCreator
     public Column(@JsonProperty("id") String id,
-            @JsonProperty("type") String type,
-            @JsonProperty("props") Map<String, Object> props) {
+                  @JsonProperty("type") String type,
+                  @JsonProperty("props") Map<String, Object> props) {
         this.id = id;
         this.type = type;
         this.props = props;
@@ -30,7 +30,8 @@ public class Column implements Serializable {
 
     /**
      * Builds a column with the given identifier and type.
-     * @param id an identifier
+     *
+     * @param id   an identifier
      * @param type column type
      * @return a column with the given identifier and type
      */
@@ -40,8 +41,9 @@ public class Column implements Serializable {
 
     /**
      * Builds a column with the given identifier, type, and properties.
-     * @param id an identifier
-     * @param type a type
+     *
+     * @param id    an identifier
+     * @param type  a type
      * @param props properties
      * @return a column with the given identifier, type, and properties
      */
@@ -51,6 +53,7 @@ public class Column implements Serializable {
 
     /**
      * Builds a string column.
+     *
      * @param id an identifier
      * @return a string column
      */
@@ -60,7 +63,8 @@ public class Column implements Serializable {
 
     /**
      * Builds a string column with the given properties.
-     * @param id an identifier
+     *
+     * @param id    an identifier
      * @param props properties
      * @return a string column with the given properties
      */
@@ -70,6 +74,7 @@ public class Column implements Serializable {
 
     /**
      * Builds a trimmed string column.
+     *
      * @param id an identifier
      * @return a trimmed string column
      */
@@ -79,7 +84,8 @@ public class Column implements Serializable {
 
     /**
      * Builds a trimmed string column with the given properties.
-     * @param id an identifier
+     *
+     * @param id    an identifier
      * @param props properties
      * @return a trimmed string column with the given properties
      */
@@ -89,6 +95,7 @@ public class Column implements Serializable {
 
     /**
      * Builds an integer column.
+     *
      * @param id an identifier
      * @return an integer column
      */
@@ -98,7 +105,8 @@ public class Column implements Serializable {
 
     /**
      * Builds an integer column with the given properties.
-     * @param id an identifier
+     *
+     * @param id    an identifier
      * @param props properties
      * @return an integer with the given properties
      */
@@ -108,6 +116,7 @@ public class Column implements Serializable {
 
     /**
      * Builds a BigDecimal column.
+     *
      * @param id an identifier
      * @return a BigDecimal column
      */
@@ -117,7 +126,8 @@ public class Column implements Serializable {
 
     /**
      * Builds a BigDecimal column with the given properties.
-     * @param id an identifier
+     *
+     * @param id    an identifier
      * @param props properties
      * @return a BigDecimal column
      */
@@ -127,7 +137,8 @@ public class Column implements Serializable {
 
     /**
      * Builds a date column with the given format.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param format a date format
      * @return a date column with the given format
      */
@@ -137,6 +148,7 @@ public class Column implements Serializable {
 
     /**
      * Builds a filler column.
+     *
      * @param id an identifier
      * @return a filler column
      */
@@ -146,7 +158,8 @@ public class Column implements Serializable {
 
     /**
      * Builds a nullable column of the given type.
-     * @param id an identifier
+     *
+     * @param id   an identifier
      * @param type a column type
      * @return a nullable column of the given type
      */
@@ -158,6 +171,7 @@ public class Column implements Serializable {
 
     /**
      * Returns a nullable version of a column.
+     *
      * @return a nullable version of a column
      */
     public Column nullable() {

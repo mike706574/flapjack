@@ -22,8 +22,8 @@ public class SerializationResult implements Result<String> {
 
     @JsonCreator
     public SerializationResult(@JsonProperty("value") String value,
-            @JsonProperty("record") Record record,
-            @JsonProperty("problems") List<Problem> problems) {
+                               @JsonProperty("record") Record record,
+                               @JsonProperty("problems") List<Problem> problems) {
         this.value = value;
         this.record = record;
         this.problems = new LinkedList<>(problems);

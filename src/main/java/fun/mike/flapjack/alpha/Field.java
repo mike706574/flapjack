@@ -20,9 +20,9 @@ public class Field implements Serializable {
 
     @JsonCreator
     public Field(@JsonProperty("id") String id,
-            @JsonProperty("length") int length,
-            @JsonProperty("type") String type,
-            @JsonProperty("props") Map<String, Object> props) {
+                 @JsonProperty("length") int length,
+                 @JsonProperty("type") String type,
+                 @JsonProperty("props") Map<String, Object> props) {
         this.id = id;
         this.length = length;
         this.type = type;
@@ -33,9 +33,10 @@ public class Field implements Serializable {
 
     /**
      * Builds a field with the given identifier, length, and type.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
-     * @param type field type
+     * @param type   field type
      * @return a field with the given identifier and type
      */
     public static Field with(String id, int length, String type) {
@@ -44,10 +45,11 @@ public class Field implements Serializable {
 
     /**
      * Builds a field with the given identifier, length, type, and properties.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
-     * @param type field type
-     * @param props properties
+     * @param type   field type
+     * @param props  properties
      * @return a field with the given identifier, type, and properties
      */
     public static Field with(String id, int length, String type, Map<String, Object> props) {
@@ -56,9 +58,10 @@ public class Field implements Serializable {
 
     /**
      * Builds a nullable field of the given type.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
-     * @param type field type
+     * @param type   field type
      * @return a nullable field of the given type
      */
     public static Field nullable(String id, int length, String type) {
@@ -69,7 +72,8 @@ public class Field implements Serializable {
 
     /**
      * Builds a string field.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
      * @return a string field
      */
@@ -79,9 +83,10 @@ public class Field implements Serializable {
 
     /**
      * Builds a string field with the given properties.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
-     * @param props properties
+     * @param props  properties
      * @return a string field with the given properties
      */
     public static Field string(String id, int length, Map<String, Object> props) {
@@ -90,7 +95,8 @@ public class Field implements Serializable {
 
     /**
      * Builds a trimmed string field.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
      * @return a trimmed string field
      */
@@ -100,9 +106,10 @@ public class Field implements Serializable {
 
     /**
      * Builds a trimmed string field with the given properties.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
-     * @param props properties
+     * @param props  properties
      * @return a trimmed string field with the given properties
      */
     public static Field trimmedString(String id, int length, Map<String, Object> props) {
@@ -111,7 +118,8 @@ public class Field implements Serializable {
 
     /**
      * Builds an integer field.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
      * @return an integer field
      */
@@ -121,9 +129,10 @@ public class Field implements Serializable {
 
     /**
      * Builds an integer field with the given properties.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
-     * @param props properties
+     * @param props  properties
      * @return an integer field with the given properties
      */
     public static Field integer(String id, int length, Map<String, Object> props) {
@@ -132,7 +141,8 @@ public class Field implements Serializable {
 
     /**
      * Builds an BigDecimal field.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
      * @return a BigDecimal field
      */
@@ -142,9 +152,10 @@ public class Field implements Serializable {
 
     /**
      * Builds a BigDecimal field with the given properties.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
-     * @param props properties
+     * @param props  properties
      * @return an BigDecimal field with the given properties
      */
     public static Field bigDecimal(String id, int length, Map<String, Object> props) {
@@ -153,7 +164,8 @@ public class Field implements Serializable {
 
     /**
      * Builds a date field with the given format.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
      * @param format a date format
      * @return a date field with the given format
@@ -164,7 +176,8 @@ public class Field implements Serializable {
 
     /**
      * Builds a filler field.
-     * @param id an identifier
+     *
+     * @param id     an identifier
      * @param length field length
      * @return a filler field
      */
@@ -174,6 +187,7 @@ public class Field implements Serializable {
 
     /**
      * Returns a nullable version of a field.
+     *
      * @return a nullable version of a field
      */
     public Field nullable() {

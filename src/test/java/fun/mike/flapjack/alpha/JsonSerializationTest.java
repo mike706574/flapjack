@@ -170,9 +170,9 @@ public class JsonSerializationTest {
         TypeProblem problem = new TypeProblem("foo", "integer", "bar");
 
         SerializationResult result = SerializationResult
-            .withProblem("foobar",
-                         Record.of("foo", "bar"),
-                         problem);
+                .withProblem("foobar",
+                             Record.of("foo", "bar"),
+                             problem);
 
         String serialized = mapper.writeValueAsString(result);
         // System.out.println(serialized);

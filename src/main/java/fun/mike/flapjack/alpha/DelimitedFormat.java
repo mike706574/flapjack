@@ -31,24 +31,25 @@ public class DelimitedFormat implements Format, Serializable {
 
     /**
      * Builds a delimited format.
-     * @param id an identifier for the format
-     * @param description a description of the format
-     * @param delimiter a delimiter
+     *
+     * @param id              an identifier for the format
+     * @param description     a description of the format
+     * @param delimiter       a delimiter
      * @param endingDelimiter an ending delimiter
-     * @param framing a framing type
-     * @param frameDelimiter a frame delimiter
-     * @param offset an offset
-     * @param columns the columns
+     * @param framing         a framing type
+     * @param frameDelimiter  a frame delimiter
+     * @param offset          an offset
+     * @param columns         the columns
      */
     @JsonCreator
     public DelimitedFormat(@JsonProperty("id") String id,
-            @JsonProperty("description") String description,
-            @JsonProperty("delimiter") Character delimiter,
-            @JsonProperty("endingDelimiter") Boolean endingDelimiter,
-            @JsonProperty("framing") Framing framing,
-            @JsonProperty("frameDelimiter") Character frameDelimiter,
-            @JsonProperty("offset") Integer offset,
-            @JsonProperty("columns") List<Column> columns) {
+                           @JsonProperty("description") String description,
+                           @JsonProperty("delimiter") Character delimiter,
+                           @JsonProperty("endingDelimiter") Boolean endingDelimiter,
+                           @JsonProperty("framing") Framing framing,
+                           @JsonProperty("frameDelimiter") Character frameDelimiter,
+                           @JsonProperty("offset") Integer offset,
+                           @JsonProperty("columns") List<Column> columns) {
         this.id = id;
         this.description = description;
         this.delimiter = delimiter;
@@ -64,55 +65,59 @@ public class DelimitedFormat implements Format, Serializable {
 
     /**
      * Returns an unframed delimited format.
-     * @param id an identifier for the format
+     *
+     * @param id          an identifier for the format
      * @param description a description of th eformat
-     * @param delimiter a delimiter
-     * @param columns the columns
+     * @param delimiter   a delimiter
+     * @param columns     the columns
      * @return an unframed delimited format
      */
     public static DelimitedFormat unframed(String id,
-            String description,
-            Character delimiter,
-            List<Column> columns) {
+                                           String description,
+                                           Character delimiter,
+                                           List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, false, Framing.NONE, null, 0, columns);
     }
 
     /**
      * Returns a delimited format with required framing.
-     * @param id an identifier for the format
-     * @param description a description of the format
-     * @param delimiter a delimiter
+     *
+     * @param id             an identifier for the format
+     * @param description    a description of the format
+     * @param delimiter      a delimiter
      * @param frameDelimiter a frame delimiter
-     * @param columns the columns
+     * @param columns        the columns
      * @return a delimited format with required framing
      */
     public static DelimitedFormat alwaysFramed(String id,
-            String description,
-            Character delimiter,
-            Character frameDelimiter,
-            List<Column> columns) {
+                                               String description,
+                                               Character delimiter,
+                                               Character frameDelimiter,
+                                               List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, false, Framing.REQUIRED, frameDelimiter, 0, columns);
     }
 
     /**
      * Returns a delimited format with optional framing.
-     * @param id an identifier for the format
-     * @param description a description of the format
-     * @param delimiter a delimiter
+     *
+     * @param id             an identifier for the format
+     * @param description    a description of the format
+     * @param delimiter      a delimiter
      * @param frameDelimiter a frame delimiter
-     * @param columns the columns
+     * @param columns        the columns
      * @return a delimited format with optional framing
      */
     public static DelimitedFormat optionallyFramed(String id,
-            String description,
-            Character delimiter,
-            Character frameDelimiter,
-            List<Column> columns) {
+                                                   String description,
+                                                   Character delimiter,
+                                                   Character frameDelimiter,
+                                                   List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, false, Framing.OPTIONAL, frameDelimiter, 0, columns);
     }
 
     /**
      * Returns a version of the format with the given offset.
+     *
      * @param offset an offset
      * @return a version of the format with the given offset
      */
@@ -128,6 +133,7 @@ public class DelimitedFormat implements Format, Serializable {
 
     /**
      * Builds a version of the format with an ending delimiter.
+     *
      * @return a version of the format with an ending delimiter
      */
     public DelimitedFormat withEndingDelimiter() {
@@ -255,6 +261,7 @@ public class DelimitedFormat implements Format, Serializable {
 
     /**
      * Parses a delimited string.
+     *
      * @param line a delimited string
      * @return a ParseResult containing a record if parsing was successful;
      * otherwise, a ParseResult containing parsing problems.
@@ -267,6 +274,7 @@ public class DelimitedFormat implements Format, Serializable {
     /**
      * Parses a delimited string. Throws a ParseException if parsing is
      * unsuccessful.
+     *
      * @param line a delimited string
      * @return the parsed record
      */
@@ -277,6 +285,7 @@ public class DelimitedFormat implements Format, Serializable {
 
     /**
      * Serializes a map to a delimited string.
+     *
      * @param map a map
      * @return a SerializationResult containing a delimited string if
      * serialization was successful; otherwise, a SerializationResult
@@ -289,6 +298,7 @@ public class DelimitedFormat implements Format, Serializable {
 
     /**
      * Serializes a record to a delimited string.
+     *
      * @param record a record
      * @return a Result containing a delimited string if serialization was
      * successful; otherwise, a Result containing serialization problems.
@@ -301,6 +311,7 @@ public class DelimitedFormat implements Format, Serializable {
     /**
      * Serializes a record to a delimited string. Throws a
      * SerializationException if serialization is unsuccessful.
+     *
      * @param record a record
      * @return a delimited string
      */

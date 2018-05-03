@@ -181,7 +181,7 @@ public class ValueParser implements Serializable {
 
     private static ValueOrProblem<String> parseStringEnum(String id, String type, Map<String, Object> props, String value) {
         Object rawOptions = props.get("options");
-        if(rawOptions == null) {
+        if (rawOptions == null) {
             String message = String.format("Property \"options\" is required for string enumeration field \"%s\".",
                                            id);
             return ValueOrProblem.problem(new FormatProblem(message));
@@ -189,7 +189,7 @@ public class ValueParser implements Serializable {
 
         try {
             @SuppressWarnings("unchecked")
-            List<String> options = (List<String>)rawOptions;
+            List<String> options = (List<String>) rawOptions;
 
             if (options.contains(value)) {
                 return ValueOrProblem.value(value);

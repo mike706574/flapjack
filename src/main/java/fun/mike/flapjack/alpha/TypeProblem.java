@@ -10,8 +10,8 @@ public class TypeProblem implements Problem {
 
     @JsonCreator
     public TypeProblem(@JsonProperty("id") String id,
-            @JsonProperty("type") String type,
-            @JsonProperty("value") String value) {
+                       @JsonProperty("type") String type,
+                       @JsonProperty("value") String value) {
         this.id = id;
         this.type = type;
         this.value = value;

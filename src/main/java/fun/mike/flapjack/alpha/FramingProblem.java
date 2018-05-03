@@ -11,7 +11,7 @@ public class FramingProblem implements Problem, Serializable {
 
     @JsonCreator
     public FramingProblem(@JsonProperty("columnIndex") Integer columnIndex,
-            @JsonProperty("charIndex") Integer charIndex) {
+                          @JsonProperty("charIndex") Integer charIndex) {
         this.columnIndex = columnIndex;
         this.charIndex = charIndex;
     }

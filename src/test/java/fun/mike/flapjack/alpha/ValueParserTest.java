@@ -47,9 +47,9 @@ public class ValueParserTest {
     @Test
     public void nullableInteger() {
         ValueOrProblem result = ValueParser.parse("foo",
-                                                            "integer",
-                                                            mapOf("nullable", true),
-                                                            "");
+                                                  "integer",
+                                                  mapOf("nullable", true),
+                                                  "");
         assertFalse(result.explain(), result.hasProblem());
         assertNull(result.getValue());
     }
@@ -144,9 +144,9 @@ public class ValueParserTest {
     @Test
     public void missingInteger() {
         ValueOrProblem result = ValueParser.parse("foo",
-                                                       "integer",
-                                                       mapOf(),
-                                                       "");
+                                                  "integer",
+                                                  mapOf(),
+                                                  "");
 
         assertTrue(result.hasProblem());
         assertEquals(new MissingValueProblem("foo", "integer"),

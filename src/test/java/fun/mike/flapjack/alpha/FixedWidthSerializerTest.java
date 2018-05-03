@@ -68,9 +68,9 @@ public class FixedWidthSerializerTest {
                                              Record.of("foo", "fghij", "bar", 24));
 
         List<String> lines = records.stream()
-            .map(format::serialize)
-            .map(Result::orElseThrow)
-            .collect(Collectors.toList());
+                .map(format::serialize)
+                .map(Result::orElseThrow)
+                .collect(Collectors.toList());
 
         assertEquals(2, lines.size());
         assertEquals("abcde23   ", lines.get(0));

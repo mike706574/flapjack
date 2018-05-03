@@ -13,8 +13,8 @@ public class StringEnumProblem implements Problem {
 
     @JsonCreator
     public StringEnumProblem(@JsonProperty("id") String id,
-            @JsonProperty("value") String value,
-            @JsonProperty("options") List<String> options) {
+                             @JsonProperty("value") String value,
+                             @JsonProperty("options") List<String> options) {
         this.id = id;
         this.value = value;
         this.options = options;

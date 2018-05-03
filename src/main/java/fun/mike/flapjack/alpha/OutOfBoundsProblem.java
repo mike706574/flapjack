@@ -12,8 +12,8 @@ public class OutOfBoundsProblem implements Problem, Serializable {
 
     @JsonCreator
     public OutOfBoundsProblem(@JsonProperty("id") String id,
-            @JsonProperty("end") Integer end,
-            @JsonProperty("length") Integer length) {
+                              @JsonProperty("end") Integer end,
+                              @JsonProperty("length") Integer length) {
         this.id = id;
         this.end = end;
         this.length = length;

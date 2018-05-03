@@ -11,7 +11,7 @@ public class NoSuchTypeProblem implements Problem, Serializable {
 
     @JsonCreator
     public NoSuchTypeProblem(@JsonProperty("id") String id,
-            @JsonProperty("type") String type) {
+                             @JsonProperty("type") String type) {
         this.id = id;
         this.type = type;
     }

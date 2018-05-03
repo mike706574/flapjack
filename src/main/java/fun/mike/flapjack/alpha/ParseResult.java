@@ -22,8 +22,8 @@ public class ParseResult implements Result<Record> {
 
     @JsonCreator
     public ParseResult(@JsonProperty("value") Record value,
-            @JsonProperty("line") String line,
-            @JsonProperty("problems") List<Problem> problems) {
+                       @JsonProperty("line") String line,
+                       @JsonProperty("problems") List<Problem> problems) {
         this.value = value;
         this.line = line;
         this.problems = new LinkedList<>(problems);
