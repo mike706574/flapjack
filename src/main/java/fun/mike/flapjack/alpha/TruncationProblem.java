@@ -41,9 +41,9 @@ public class TruncationProblem implements Problem {
     public String explain() {
         return String.format("Field \"%s\" of type \"%s\" with serialized value \"%s\" must be %d characters or less.",
                              id,
+                             type,
                              value,
-                             length,
-                             type);
+                             length);
     }
 
     @Override
