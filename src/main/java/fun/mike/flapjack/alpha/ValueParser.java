@@ -242,7 +242,7 @@ public class ValueParser implements Serializable {
             return ValueOrProblem.problem(new TypeProblem(id, type, value));
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat((String) format);
+        SimpleDateFormat formatter = new SimpleDateFormat(format);
         try {
             Date date = formatter.parse(value);
             return ValueOrProblem.value(date);
