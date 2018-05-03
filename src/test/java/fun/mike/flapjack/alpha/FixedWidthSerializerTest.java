@@ -50,8 +50,8 @@ public class FixedWidthSerializerTest {
         List<Problem> problems = result.getProblems();
         assertEquals("          ", result.getValue());
         assertEquals(2, problems.size());
-        assertEquals(new TruncationProblem("foo", "string", "abcdefghi"), problems.get(0));
-        assertEquals(new TruncationProblem("bar", "integer", "123456"), problems.get(1));
+        assertEquals(new TruncationProblem("foo", "string", 5, "abcdefghi"), problems.get(0));
+        assertEquals(new TruncationProblem("bar", "integer", 5, "123456"), problems.get(1));
     }
 
     @Test

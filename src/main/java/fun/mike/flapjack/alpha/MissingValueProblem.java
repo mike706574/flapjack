@@ -52,7 +52,7 @@ public class MissingValueProblem implements Problem, Serializable {
 
     @Override
     public String explain() {
-        return String.format("Missing value for field \"%s\" of type \"%s\".",
+        return String.format("Missing required value for field \"%s\" of type \"%s\".",
                              id,
                              type);
     }

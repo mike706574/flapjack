@@ -360,9 +360,9 @@ public class DelimitedParserTest {
 
         List<Problem> problems = result.getProblems();
         assertEquals(2, problems.size());
-        assertEquals("Missing value for field \"burp\" of type \"integer\".",
+        assertEquals("Missing required value for field \"burp\" of type \"integer\".",
                      problems.get(1).explain());
-        assertEquals("Missing value for field \"baz\" of type \"string\".",
+        assertEquals("Missing required value for field \"baz\" of type \"string\".",
                      problems.get(0).explain());
     }
 
@@ -383,9 +383,9 @@ public class DelimitedParserTest {
 
         List<Problem> problems = result.getProblems();
         assertEquals(2, problems.size());
-        assertEquals("Missing value for field \"burp\" of type \"integer\".",
+        assertEquals("Missing required value for field \"burp\" of type \"integer\".",
                      problems.get(1).explain());
-        assertEquals("Missing value for field \"baz\" of type \"string\".",
+        assertEquals("Missing required value for field \"baz\" of type \"string\".",
                      problems.get(0).explain());
     }
 
@@ -440,7 +440,5 @@ public class DelimitedParserTest {
         ParseResult result = format.parse("\"1,000\",\"1,000\"");
 
         assertTrue(result.explain(), result.isOk());
-
-
     }
 }

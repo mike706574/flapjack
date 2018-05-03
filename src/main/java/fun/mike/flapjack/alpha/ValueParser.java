@@ -9,13 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import static fun.mike.map.alpha.Get.requiredString;
-
 public class ValueParser implements Serializable {
-    public static ValueOrProblem parse(String id,
-            String type,
-            Map<String, Object> props,
-            String value) {
+    public static ValueOrProblem<?> parse(String id,
+                                          String type,
+                                          Map<String, Object> props,
+                                          String value) {
         switch (type) {
             case "string":
                 return parseString(id, type, props, value);
@@ -49,32 +47,38 @@ public class ValueParser implements Serializable {
         return "aeiou".indexOf(c) != -1;
     }
 
-    private static <T> ValueOrProblem parseStringType(String id,
-            String type,
-            Map<String, Object> props,
-            String value,
-            Function<String, ValueOrProblem> parseValue) {
+    private static ValueOrProblem<String> parseStringType(String id,
+                                                          String type,
+                                                          Map<String, Object> props,
+                                                          String value,
+                                                          Function<String, ValueOrProblem<String>> parseValue) {
         if (isBlank(value)) {
-            if (props.containsKey("default")) {
-                try {
-                    @SuppressWarnings("unchecked")
-                    T defaultValue = (T) props.get("default");
-                    return ValueOrProblem.value(defaultValue);
-                } catch (ClassCastException ex) {
-                    String message = String.format("Expected default value for field \"%s\" to be %s %s.", id, aOrAn(type), type);
+            Object defaultValue = props.get("default");
+            if (defaultValue != null) {
+                if (defaultValue instanceof String) {
+                    return ValueOrProblem.value((String) defaultValue);
+                } else {
+                    String message = String.format("Default value for field \"%s\" must be %s %s - got value \"%s\" of type \"%s\".",
+                                                   id,
+                                                   aOrAn(type),
+                                                   type,
+                                                   defaultValue,
+                                                   defaultValue.getClass().getName());
                     return ValueOrProblem.problem(new FormatProblem(message));
                 }
             }
 
-            if (props.containsKey("nullable")) {
-                try {
-                    boolean nullable = (boolean) props.get("nullable");
-
-                    if (nullable) {
+            Object nullable = props.get("nullable");
+            if (nullable != null) {
+                if (nullable instanceof Boolean) {
+                    if ((Boolean) nullable) {
                         return ValueOrProblem.value(null);
                     }
-                } catch (ClassCastException ex) {
-                    String message = "Expected nullable property to be a boolean.";
+                } else {
+                    String message = String.format("Property \"nullable\" for field \"%s\" must be a boolean - got value \"%s\" of type \"%s\".",
+                                                   id,
+                                                   nullable,
+                                                   nullable.getClass());
                     return ValueOrProblem.problem(new FormatProblem(message));
                 }
             }
@@ -83,32 +87,39 @@ public class ValueParser implements Serializable {
         return parseValue.apply(value);
     }
 
-    private static <T> ValueOrProblem parseType(String id,
-            String type,
-            Map<String, Object> props,
-            String value,
-            Function<String, ValueOrProblem> parseValue) {
+    private static <T> ValueOrProblem<T> parseType(String id,
+                                                   String type,
+                                                   Map<String, Object> props,
+                                                   String value,
+                                                   Class<T> typeClass,
+                                                   Function<String, ValueOrProblem<T>> parseValue) {
         if (isBlank(value)) {
-            if (props.containsKey("default")) {
-                try {
-                    @SuppressWarnings("unchecked")
-                    T defaultValue = (T) props.get("default");
-                    return ValueOrProblem.value(defaultValue);
-                } catch (ClassCastException ex) {
-                    String message = String.format("Expected default value for field \"%s\" to be %s %s.", id, aOrAn(type), type);
+            Object defaultValue = props.get("default");
+            if (defaultValue != null) {
+                if (typeClass.isInstance(defaultValue)) {
+                    return ValueOrProblem.value(typeClass.cast(defaultValue));
+                } else {
+                    String message = String.format("Default value for field \"%s\" must be %s %s - got value \"%s\" of type \"%s\".",
+                                                   id,
+                                                   aOrAn(type),
+                                                   type,
+                                                   defaultValue,
+                                                   defaultValue.getClass().getName());
                     return ValueOrProblem.problem(new FormatProblem(message));
                 }
             }
 
-            if (props.containsKey("nullable")) {
-                try {
-                    boolean nullable = (boolean) props.get("nullable");
-
-                    if (nullable) {
+            Object nullable = props.containsKey("nullable");
+            if (nullable != null) {
+                if (nullable instanceof Boolean) {
+                    if ((Boolean) nullable) {
                         return ValueOrProblem.value(null);
                     }
-                } catch (ClassCastException ex) {
-                    String message = "Expected nullable property to be a boolean.";
+                } else {
+                    String message = String.format("Property \"nullable\" for field \"%s\" must be a boolean - got value \"%s\" of type \"%s\"",
+                                                   id,
+                                                   nullable,
+                                                   nullable.getClass());
                     return ValueOrProblem.problem(new FormatProblem(message));
                 }
             }
@@ -118,22 +129,22 @@ public class ValueParser implements Serializable {
         return parseValue.apply(value);
     }
 
-    private static ValueOrProblem parseString(String id, String type, Map<String, Object> props, String value) {
-        Function<String, ValueOrProblem> parseValue = ValueOrProblem::value;
+    private static ValueOrProblem<String> parseString(String id, String type, Map<String, Object> props, String value) {
+        Function<String, ValueOrProblem<String>> parseValue = ValueOrProblem::value;
 
         return parseStringType(id, type, props, value, parseValue);
     }
 
 
-    private static ValueOrProblem parseTrimmedString(String id, String type, Map<String, Object> props, String value) {
-        Function<String, ValueOrProblem> parseValue = stringValue -> ValueOrProblem.value(stringValue.trim());
+    private static ValueOrProblem<String> parseTrimmedString(String id, String type, Map<String, Object> props, String value) {
+        Function<String, ValueOrProblem<String>> parseValue = stringValue -> ValueOrProblem.value(stringValue.trim());
 
         return parseStringType(id, type, props, value, parseValue);
     }
 
     // TODO: Make this better.
-    private static ValueOrProblem parseInt(String id, String type, Map<String, Object> props, String value) {
-        Function<String, ValueOrProblem> parseValue = stringValue -> {
+    private static ValueOrProblem<Integer> parseInt(String id, String type, Map<String, Object> props, String value) {
+        Function<String, ValueOrProblem<Integer>> parseValue = stringValue -> {
             try {
                 return ValueOrProblem.value(Integer.parseInt(stringValue.trim().replace(",", "")));
             } catch (NumberFormatException ex) {
@@ -141,11 +152,11 @@ public class ValueParser implements Serializable {
             }
         };
 
-        return parseType(id, type, props, value, parseValue);
+        return parseType(id, type, props, value, Integer.class, parseValue);
     }
 
-    private static ValueOrProblem parseBigDecimal(String id, String type, Map<String, Object> props, String value) {
-        Function<String, ValueOrProblem> parseValue = stringValue -> {
+    private static ValueOrProblem<BigDecimal> parseBigDecimal(String id, String type, Map<String, Object> props, String value) {
+        Function<String, ValueOrProblem<BigDecimal>> parseValue = stringValue -> {
             try {
                 return ValueOrProblem.value(new BigDecimal(stringValue.trim().replace(",", "")));
             } catch (NumberFormatException ex) {
@@ -153,11 +164,11 @@ public class ValueParser implements Serializable {
             }
         };
 
-        return parseType(id, type, props, value, parseValue);
+        return parseType(id, type, props, value, BigDecimal.class, parseValue);
     }
 
-    private static ValueOrProblem parseDouble(String id, String type, Map<String, Object> props, String value) {
-        Function<String, ValueOrProblem> parseValue = stringValue -> {
+    private static ValueOrProblem<Double> parseDouble(String id, String type, Map<String, Object> props, String value) {
+        Function<String, ValueOrProblem<Double>> parseValue = stringValue -> {
             try {
                 return ValueOrProblem.value(new Double(stringValue.trim().replace(",", "")));
             } catch (NumberFormatException ex) {
@@ -165,13 +176,20 @@ public class ValueParser implements Serializable {
             }
         };
 
-        return parseType(id, type, props, value, parseValue);
+        return parseType(id, type, props, value, Double.class, parseValue);
     }
 
-    private static ValueOrProblem parseStringEnum(String id, String type, Map<String, Object> props, String value) {
+    private static ValueOrProblem<String> parseStringEnum(String id, String type, Map<String, Object> props, String value) {
+        Object rawOptions = props.get("options");
+        if(rawOptions == null) {
+            String message = String.format("Property \"options\" is required for string enumeration field \"%s\".",
+                                           id);
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
         try {
             @SuppressWarnings("unchecked")
-            List<String> options = (List<String>) props.get("options");
+            List<String> options = (List<String>)rawOptions;
 
             if (options.contains(value)) {
                 return ValueOrProblem.value(value);
@@ -179,33 +197,61 @@ public class ValueParser implements Serializable {
 
             return ValueOrProblem.problem(new StringEnumProblem(id, value, options));
         } catch (ClassCastException ex) {
-            throw new IllegalArgumentException("Required property \"options\" must be a list of strings.", ex);
+            String message = String.format("Property \"options\" for string enumeration field \"%s\" must be a list of strings - got value \"%s\" of type \"%s\".",
+                                           id,
+                                           rawOptions,
+                                           rawOptions.getClass().getName());
+            return ValueOrProblem.problem(new FormatProblem(message));
         }
     }
 
-    private static ValueOrProblem parseDate(String id,
-            String type,
-            Map<String, Object> props,
-            String value) {
-        try {
-            ValueOrProblem optionalOrProblem = getOptionalFlag(id, props);
+    private static ValueOrProblem<Date> parseDate(String id,
+                                                  String type,
+                                                  Map<String, Object> props,
+                                                  String value) {
+        Object rawFormat = props.get("format");
+
+        if (rawFormat == null) {
+            String message = String.format("Property \"format\" is required for date field \"%s\".", id);
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
+        if (!(rawFormat instanceof String)) {
+            String message = String.format("Property \"format\" for date field \"%s\" must be a string - got value \"%s\" of type \"%s\".",
+                                           id,
+                                           rawFormat,
+                                           rawFormat.getClass().getName());
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
+        String format = (String) rawFormat;
+
+        if (isBlank(value)) {
+            ValueOrProblem<Boolean> optionalOrProblem = getOptionalFlag(id, props);
 
             if (optionalOrProblem.hasProblem()) {
-                return optionalOrProblem;
+                return ValueOrProblem.problem(optionalOrProblem.getProblem());
             }
 
             Boolean optional = (Boolean) optionalOrProblem.getValue();
 
-            if (isBlank(value)) {
-                if (optional) {
-                    return ValueOrProblem.value(null);
-                }
+            ValueOrProblem nullableOrProblem = getNullableFlag(id, props);
 
-                return ValueOrProblem.problem(new TypeProblem(id, type, value));
+            if (nullableOrProblem.hasProblem()) {
+                return ValueOrProblem.problem(nullableOrProblem.getProblem());
             }
 
-            String format = requiredString(props, "format");
-            SimpleDateFormat formatter = new SimpleDateFormat(format);
+            Boolean nullable = (Boolean) nullableOrProblem.getValue();
+
+            if (nullable || optional) {
+                return ValueOrProblem.value(null);
+            }
+
+            return ValueOrProblem.problem(new TypeProblem(id, type, value));
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat((String) format);
+        try {
             Date date = formatter.parse(value);
             return ValueOrProblem.value(date);
         } catch (ParseException ex) {
@@ -213,12 +259,22 @@ public class ValueParser implements Serializable {
         }
     }
 
-    private static ValueOrProblem getOptionalFlag(String id, Map<String, Object> props) {
-        if (props.containsKey("optional")) {
-            try {
-                return ValueOrProblem.value((Boolean) props.get("optional"));
-            } catch (ClassCastException ex) {
-                String message = String.format("Expected optional flag for field \"%s\" to be a boolean.", id);
+    private static ValueOrProblem<Boolean> getOptionalFlag(String id, Map<String, Object> props) {
+        return getBooleanFlag("optional", id, props);
+    }
+
+    private static ValueOrProblem<Boolean> getNullableFlag(String id, Map<String, Object> props) {
+        return getBooleanFlag("nullable", id, props);
+    }
+
+    private static ValueOrProblem<Boolean> getBooleanFlag(String key, String id, Map<String, Object> props) {
+        if (props.containsKey(key)) {
+            Object value = props.get(key);
+
+            if (value instanceof Boolean) {
+                return ValueOrProblem.value((Boolean) value);
+            } else {
+                String message = String.format("Property \"%s\" for field \"%s\" must be a boolean.", key, id);
                 return ValueOrProblem.problem(new FormatProblem(message));
             }
         }

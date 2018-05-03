@@ -15,7 +15,7 @@ public class FixedWidthValueSerializer implements Serializable {
         return ValueSerializer.serializeValue(id, type, props, record)
                 .flatMap(line -> {
                     if (line.length() > length) {
-                        Problem problem = new TruncationProblem(id, type, line);
+                        Problem problem = new TruncationProblem(id, type, length, line);
                         return ValueOrProblem.problem(problem);
                     }
                     return ValueOrProblem.value(padRight(line, length));

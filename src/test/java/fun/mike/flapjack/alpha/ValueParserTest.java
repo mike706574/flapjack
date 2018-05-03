@@ -105,8 +105,8 @@ public class ValueParserTest {
 
         ValueOrProblem invalidResult = ValueParser.parse("foo", "integer", mapOf(), "bar");
         assertTrue(invalidResult.hasProblem());
-        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"integer\".",
-                     invalidResult.getProblem().explain());
+        assertEquals(new TypeProblem("foo", "integer", "bar"),
+                     invalidResult.getProblem());
     }
 
     @Test
@@ -139,8 +139,8 @@ public class ValueParserTest {
 
         ValueOrProblem problemResult = ValueParser.parse("foo", "big-decimal", mapOf(), "bar");
         assertTrue(problemResult.hasProblem());
-        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"big-decimal\".",
-                     problemResult.getProblem().explain());
+        assertEquals(new TypeProblem("foo", "big-decimal", "bar"),
+                     problemResult.getProblem());
     }
 
     @Test
@@ -190,8 +190,8 @@ public class ValueParserTest {
 
         ValueOrProblem problemResult = ValueParser.parse("foo", "double", mapOf(), "bar");
         assertTrue(problemResult.hasProblem());
-        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"double\".",
-                     problemResult.getProblem().explain());
+        assertEquals(new TypeProblem("foo", "double", "bar"),
+                     problemResult.getProblem());
     }
 
     @Test
@@ -224,8 +224,8 @@ public class ValueParserTest {
 
         ValueOrProblem orangeResult = ValueParser.parse("foo", "string-enum", props, "orange");
         assertTrue(orangeResult.hasProblem());
-        assertEquals("Expected field \"foo\" with value \"orange\" must be one of the following 3 string options: \"apple\", \"banana\", \"carrot\"",
-                     orangeResult.getProblem().explain());
+        assertEquals(new StringEnumProblem("foo", "orange", options),
+                     orangeResult.getProblem());
     }
 
     @Test
@@ -242,8 +242,8 @@ public class ValueParserTest {
 
         ValueOrProblem invalidResult = ValueParser.parse("foo", "date", props, "bar");
         assertTrue(invalidResult.hasProblem());
-        assertEquals("Expected field \"foo\" with value \"bar\" to be a \"date\".",
-                     invalidResult.getProblem().explain());
+        assertEquals(new TypeProblem("foo", "date", "bar"),
+                     invalidResult.getProblem());
     }
 
     @Test
@@ -255,6 +255,74 @@ public class ValueParserTest {
         ValueOrProblem result = ValueParser.parse("foo", "date", props, "        ");
         assertFalse(result.hasProblem());
         assertNull(result.getValue());
+    }
+
+    @Test
+    public void nullableFormattedDate() {
+        String format = "yyyyMMdd";
+        Map<String, Object> props = mapOf("format", format,
+                                          "nullable", true);
+
+        ValueOrProblem result = ValueParser.parse("foo", "date", props, "        ");
+        assertFalse(result.hasProblem());
+        assertNull(result.getValue());
+    }
+
+    @Test
+    public void missingDateFormat() {
+        Map<String, Object> props = mapOf();
+
+        ValueOrProblem result = ValueParser.parse("foo", "date", props, "01012025");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" is required for date field \"foo\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void wrongDateFormatType() {
+        Map<String, Object> props = mapOf("format", 5);
+
+        ValueOrProblem result = ValueParser.parse("foo", "date", props, "01012025");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" for date field \"foo\" must be a string - got value \"5\" of type \"java.lang.Integer\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void wrongNullableType() {
+        Map<String, Object> props = mapOf("nullable", 5);
+        ValueOrProblem result = ValueParser.parse("foo", "string", props, "");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"nullable\" for field \"foo\" must be a boolean - got value \"5\" of type \"class java.lang.Integer\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void wrongDefaultType() {
+        Map<String, Object> props = mapOf("default", "5",
+                                          "nullable", true);
+        ValueOrProblem result = ValueParser.parse("foo", "integer", props, "");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Default value for field \"foo\" must be an integer - got value \"5\" of type \"java.lang.String\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void stringEnumNoOptions() {
+        Map<String, Object> props = mapOf();
+        ValueOrProblem result = ValueParser.parse("foo", "string-enum", props, "X");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"options\" is required for string enumeration field \"foo\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void stringEnumWrongOptionsType() {
+        Map<String, Object> props = mapOf("options", 5);
+        ValueOrProblem result = ValueParser.parse("foo", "string-enum", props, "X");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"options\" for string enumeration field \"foo\" must be a list of strings - got value \"5\" of type \"java.lang.Integer\"."),
+                     result.getProblem());
     }
 
     @Test

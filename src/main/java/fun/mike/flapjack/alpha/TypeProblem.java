@@ -30,9 +30,9 @@ public class TypeProblem implements Problem {
     }
 
     public String explain() {
-        return String.format("Expected field \"%s\" with value \"%s\" to be a \"%s\".",
-                             id,
+        return String.format("Value \"%s\" for field \"%s\" must be a \"%s\".",
                              value,
+                             id,
                              type);
     }
 
