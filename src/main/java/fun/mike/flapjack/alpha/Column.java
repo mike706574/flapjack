@@ -62,6 +62,16 @@ public class Column implements Serializable {
     }
 
     /**
+     * Builds a nullable string column.
+     *
+     * @param id an identifier
+     * @return a nullable string column
+     */
+    public static Column nullableString(String id) {
+        return string(id).nullable();
+    }
+
+    /**
      * Builds a string column with the given properties.
      *
      * @param id    an identifier
@@ -80,6 +90,16 @@ public class Column implements Serializable {
      */
     public static Column trimmedString(String id) {
         return new Column(id, "trimmed-string", new HashMap<>());
+    }
+
+    /**
+     * Builds a nullable trimmed string column.
+     *
+     * @param id an identifier
+     * @return a nullable trimmed string column
+     */
+    public static Column nullableTrimmedString(String id) {
+        return trimmedString(id).nullable();
     }
 
     /**
@@ -104,6 +124,16 @@ public class Column implements Serializable {
     }
 
     /**
+     * Builds a nullable integer column.
+     *
+     * @param id an identifier
+     * @return a nullable integer column
+     */
+    public static Column nullableInteger(String id) {
+        return integer(id).nullable();
+    }
+
+    /**
      * Builds an integer column with the given properties.
      *
      * @param id    an identifier
@@ -121,6 +151,16 @@ public class Column implements Serializable {
      * @return a BigDecimal column
      */
     public static Column bigDecimal(String id) {
+        return new Column(id, "big-decimal", new HashMap<>());
+    }
+
+    /**
+     * Builds a nullable BigDecimal column.
+     *
+     * @param id an identifier
+     * @return a nullable BigDecimal column
+     */
+    public static Column nullableBigDecimal(String id) {
         return new Column(id, "big-decimal", new HashMap<>());
     }
 
@@ -144,6 +184,17 @@ public class Column implements Serializable {
      */
     public static Column date(String id, String format) {
         return new Column(id, "date", mapOf("format", format));
+    }
+
+    /**
+     * Builds a nullable date column with the given format.
+     *
+     * @param id     an identifier
+     * @param format a date format
+     * @return a nullable date column with the given format
+     */
+    public static Column nullableDate(String id, String format) {
+        return date(id, format).nullable();
     }
 
     /**

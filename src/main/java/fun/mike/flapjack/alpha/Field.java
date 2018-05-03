@@ -71,6 +71,17 @@ public class Field implements Serializable {
     }
 
     /**
+     * Builds a nullable string field.
+     *
+     * @param id     an identifier
+     * @param length field length
+     * @return a nullable string field
+     */
+    public static Field nullableString(String id, int length) {
+        return string(id, length).nullable();
+    }
+
+    /**
      * Builds a string field.
      *
      * @param id     an identifier
@@ -105,6 +116,17 @@ public class Field implements Serializable {
     }
 
     /**
+     * Builds a nullable trimmed string field.
+     *
+     * @param id     an identifier
+     * @param length field length
+     * @return a nullable trimmed string field
+     */
+    public static Field nullableTrimmedString(String id, int length) {
+        return trimmedString(id, length).nullable();
+    }
+
+    /**
      * Builds a trimmed string field with the given properties.
      *
      * @param id     an identifier
@@ -125,6 +147,17 @@ public class Field implements Serializable {
      */
     public static Field integer(String id, int length) {
         return new Field(id, length, "integer", new HashMap<>());
+    }
+
+    /**
+     * Builds a nullable integer field.
+     *
+     * @param id     an identifier
+     * @param length field length
+     * @return a nullable integer field
+     */
+    public static Field nullableInteger(String id, int length) {
+        return integer(id, length).nullable();
     }
 
     /**
@@ -151,6 +184,17 @@ public class Field implements Serializable {
     }
 
     /**
+     * Builds a nullable BigDecimal field.
+     *
+     * @param id     an identifier
+     * @param length field length
+     * @return a nullable BigDecimal field
+     */
+    public static Field nullableBigDecimal(String id, int length) {
+        return bigDecimal(id, length).nullable();
+    }
+
+    /**
      * Builds a BigDecimal field with the given properties.
      *
      * @param id     an identifier
@@ -172,6 +216,18 @@ public class Field implements Serializable {
      */
     public static Field date(String id, int length, String format) {
         return new Field(id, length, "date", mapOf("format", "yyyyMMdd"));
+    }
+
+    /**
+     * Builds a nullable date field with the given format.
+     *
+     * @param id     an identifier
+     * @param length field length
+     * @param format a date format
+     * @return a nullable date field with the given format
+     */
+    public static Field nullableDate(String id, int length, String format) {
+        return date(id, length, format).nullable();
     }
 
     /**
