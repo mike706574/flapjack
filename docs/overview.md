@@ -105,7 +105,7 @@ For more examples of building fixed-width formats, please see the [Fixed-width g
 
 ## Parsing
 
-To parse a delimited record, use `parse` on your format, passing the raw text in as the only argument:
+To parse a record, use `parse` on your format, passing the raw text in as the only argument:
 
 ```java
 ParseResult result = format.parse("bop,1");
