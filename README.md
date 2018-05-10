@@ -26,8 +26,8 @@ String text = format.serialize(record);
 
 ## Resources
 
-- [Overview](overview.md)
-- [Examples](examples.md)
+- [Overview](docs/overview.md)
+- [Examples](docs/examples.md)
 - [API Docs](https://www.javadoc.io/doc/fun.mike/flapjack-alpha)
 
 ## Build

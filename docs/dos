@@ -1,16 +1,16 @@
-# Tutorial
+# Overview
 
-`flapjack` is a library for parsing and serializing fixed-width or delimited records to and from maps with appropriate types. This is a brief overview of its functionality.
+`flapjack` is a library for parsing and serializing fixed-width or delimited records to and from maps. This is a brief overview of its functionality.
 
 ## Building formats
 
-In order to do anything, you'll need to define a format. A format defines how to parse and serialize a record or set of records. At the moment, there are 2 types of formats: fixed-width and delimited.
+In order to do any parsing or serialization, you'll need to define a format. A format defines how to parse and serialize a record or set of records. At the moment, there are 2 types of formats: fixed-width and delimited.
 
 In Java, this means building a `Format` object. `Format` is an interface, and the corresponding implementations for delimited and fixed-width are `DelimitedFormat` and `FixedWidthFormat`, respectfully. Each of these implementations has a number of factory methods that can be used to create a build an instance. Alternatively, these objects can be parsed from JSON.
 
 ### Building delimited formats
 
-Delimited records are made up of columns. The format specifies the names and types of each column as how the record is structured, including how columns are delimited and frames.
+A delimited format specifies how a record is delimited and framed as well as how to parse and serialize each column.
 
 Here's an example of building a delimited format called `baz` for the record "bop,1", which contains 2 columns - `foo`, a string, and `bar`, an integer:
 
@@ -65,9 +65,9 @@ List<Field> fields = Arrays.asList(Field.string("foo", 3),
                                    Field.integer("bar", 2));
 
 ```java
-import fun.mike.flapjack.alpha.DelimitedFormat
+import fun.mike.flapjack.alpha.FixedWidthFormat;˘
 import fun.mike.flapjack.alpha.Format;
-import fun.mike.flapjack.alpha.
+import fun.mike.flapjack.alpha.Field;
 
 Field foo = Field.string("foo", 3);
 Field bar = Field.string("bar", 2);
