@@ -105,7 +105,7 @@ For more examples of building fixed-width formats, please see the [Fixed-width g
 
 ## Parsing
 
-To parse a record, call `parse` on your format with the record as the argument, which returns a `ParseResult`:
+To parse a delimited record, use `parse` on your format, passing the raw text in as the only argument:
 
 ```java
 ParseResult result = format.parse("bop,1");
@@ -114,14 +114,14 @@ Record record = result.getValue();
 // => Record.of("foo", "bop", "bar", 1);
 ```
 
-You can check if the record was parsed successfully by called `isOk`:
+`parse` returns a `ParseResult` object. You can check if the record was parsed successfully by calling `isOk` on the result:
 
 ```java
 result.isOk();
 // => true
 ```
 
-If parsing was successful, the result will contain a parsed value, which you can access directly via `getValue`:
+If parsing was successful, the result will contain the parsed value, which you can access directly via `getValue`:
 
 ```java
 Record record = result.getValue();
@@ -156,18 +156,25 @@ Record record = result.orElseThrow(result -> throw new RuntimeException("Failed 
 
 ## Serialization
 
-To serialize a record, call `serialize` on your format with a record or map  as the argument, which returns a `SerializationResult`:
+To serialize a record, call `serialize` on your format with a record or map as the argument:
 
 ```java
 Record record = Record.of("foo", "bop", "bar", 1);
 SerializationResult result = format.serialize(record);
 ```
 
-`SerializationResult` has h
+`serialize` returns a `SerializationResult`. You can check if the record was serialized successfully by calling `isOk` on the result:
 
-If parsing was successful, the result will contain a parsed value, which you can access directly via `getValue`:
+```java
+result.isOk();
+// => true
+```
+
+If serialization was successful, the result will contain a parsed value, which you can access directly via `getValue`:
 
 ```java
 String line = result.getValue();
 // => "bop,1"
 ```
+
+`SerializationResult` has the same API as `ParseResult`, so you can use `orElse` and `orElseThrow` just like above.
