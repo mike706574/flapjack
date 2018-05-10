@@ -19,7 +19,7 @@ public class DelimitedParserTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void stream() {
+    public void alwaysFramed() {
         List<Column> columns = Arrays.asList(Column.with("foo", "string"),
                                              Column.with("bar", "string"));
 
@@ -27,30 +27,13 @@ public class DelimitedParserTest {
 
         DelimitedParser parser = new DelimitedParser(format);
 
-        List<String> lines = Arrays.asList("\"baz\",\"burp\"",
-                                           "\"bip\",\"bop\"");
+        ParseResult result = parser.parse("\"baz\",\"burp\"");
 
-        List<ParseResult> results = parser.stream(lines.stream())
-                .collect(Collectors.toList());
-
-        assertEquals(2, results.size());
-
-        ParseResult result1 = results.get(0);
-
-        assertTrue(result1.isOk());
-        Record record1 = result1.getValue();
-        assertEquals(3, record1.size());
-        assertEquals(0L, record1.get("lineIndex"));
+        assertTrue(result.isOk());
+        Record record1 = result.getValue();
+        assertEquals(2, record1.size());
         assertEquals("baz", record1.get("foo"));
         assertEquals("burp", record1.get("bar"));
-
-        ParseResult result2 = results.get(1);
-        assertTrue(result2.isOk());
-        Record record2 = result2.getValue();
-        assertEquals(3, record2.size());
-        assertEquals(1L, record2.get("lineIndex"));
-        assertEquals("bip", record2.get("foo"));
-        assertEquals("bop", record2.get("bar"));
     }
 
     @Test

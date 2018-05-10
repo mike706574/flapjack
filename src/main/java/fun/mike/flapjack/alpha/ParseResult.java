@@ -29,6 +29,7 @@ public class ParseResult implements Result<Record> {
         this.problems = new LinkedList<>(problems);
     }
 
+    // Factory methods
     public static ParseResult ok(Record value, String line) {
         return new ParseResult(value, line, new LinkedList<>());
     }
@@ -74,6 +75,7 @@ public class ParseResult implements Result<Record> {
         return problems.isEmpty();
     }
 
+    @JsonIgnore
     public boolean hasProblems() {
         return !problems.isEmpty();
     }
@@ -122,7 +124,6 @@ public class ParseResult implements Result<Record> {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(value, line, problems);
     }
 }

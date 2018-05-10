@@ -29,6 +29,7 @@ public class SerializationResult implements Result<String> {
         this.problems = new LinkedList<>(problems);
     }
 
+    // Factory methods
     public static SerializationResult ok(String value, Record record) {
         return new SerializationResult(value, record, new LinkedList<>());
     }
@@ -74,6 +75,7 @@ public class SerializationResult implements Result<String> {
         return problems.isEmpty();
     }
 
+    @JsonIgnore
     public boolean hasProblems() {
         return !problems.isEmpty();
     }
