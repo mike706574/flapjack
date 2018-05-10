@@ -2,13 +2,13 @@
 
 `flapjack` is a library for parsing and serializing fixed-width or delimited records to and from maps. This is a brief overview of its functionality.
 
-## Building formats
+## Formats
 
 In order to do any parsing or serialization, you'll need to define a format. A format defines how to parse and serialize a record or set of records. At the moment, there are 2 types of formats: fixed-width and delimited.
 
 In Java, this means building a `Format` object. `Format` is an interface, and the corresponding implementations for delimited and fixed-width are `DelimitedFormat` and `FixedWidthFormat`, respectfully. Each of these implementations has a number of factory methods that can be used to create a build an instance. Alternatively, these objects can be parsed from JSON.
 
-### Building delimited formats
+### Delimited formats
 
 A delimited format specifies how a record is delimited and framed as well as how to parse and serialize each column.
 
@@ -55,7 +55,7 @@ Here's what it looks like as JSON:
 
 For more examples of building delimited formats, please see the [Delimited guide](delimited.md).
 
-### Building fixed-width formats
+### Fixed-width formats
 
 A fixed-width record is made up of fields. The format specifies the name, type, and length of each column.
 
