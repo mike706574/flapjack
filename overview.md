@@ -1,6 +1,6 @@
-# Tutorial
+# Overview
 
-`flapjack` is a library for parsing and serializing fixed-width or delimited records to and from maps with appropriate types. This is a brief overview of its functionality.
+`flapjack` is a library for parsing and serializing fixed-width or delimited records to and from maps. This is a brief overview of its functionality.
 
 ## Building formats
 
