@@ -7,6 +7,8 @@ Flat file parsing and serialization library for Java.
 
 ## Quick Example
 
+This simple example shows how to parse and serialize a delimited record.
+
 ```java
 Column foo = Column.string("foo");
 Column bar = Column.integer("bar");
