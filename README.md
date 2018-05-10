@@ -5,9 +5,30 @@
 
 Flat file parsing and serialization library for Java.
 
-[Overview](overview.md)
-[Examples](examples.md)
-[API Docs](https://www.javadoc.io/doc/fun.mike/flapjack-alpha)
+## Quick Example
+
+```java
+Column foo = Column.string("foo");
+Column bar = Column.integer("bar");
+List<Column> columns = Arrays.asList(foo, bar);
+Format format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
+
+ParseResult result = format.parse("bop,1");
+
+Record record = result.getValue();
+// => {foo=bop, bar=1}
+
+SerializationResult result = format.serialize(record);
+
+String text = format.serialize(record);
+// => "bop,1"
+```
+
+## Resources
+
+- [Overview](overview.md)
+- [Examples](examples.md)
+- [API Docs](https://www.javadoc.io/doc/fun.mike/flapjack-alpha)
 
 ## Build
 
