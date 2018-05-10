@@ -16,24 +16,47 @@ public class FixedWidthFormat implements Format, Serializable {
     private final String id;
     private final String description;
     private final List<Field> fields;
+    private final int skipFirst;
+    private final int skipLast;
 
     private final FixedWidthParser parser;
     private final FixedWidthSerializer serializer;
 
     /**
-     * Builds a fixed-width format
+     * Builds a fixed-width format.
      *
      * @param id          an identifier for the format
      * @param description a description of the format
      * @param fields      the fields
      */
+    public FixedWidthFormat(String id,
+                            String description,
+                            List<Field> fields) {
+        this(id, description, fields, 0, 0);
+    }
+
+    /**
+     * Builds a fixed-width format.
+     *
+     * @param id          an identifier for the format
+     * @param description a description of the format
+     * @param fields      the fields
+     * @param skipFirst   the number of records to skip when parsing a set
+     *                    of records
+     * @param skipLast    the number of ending records to skip when parsing
+     *                    a set of records
+     */
     @JsonCreator
     public FixedWidthFormat(@JsonProperty("id") String id,
                             @JsonProperty("description") String description,
-                            @JsonProperty("fields") List<Field> fields) {
+                            @JsonProperty("fields") List<Field> fields,
+                            @JsonProperty("skipFirst") int skipFirst,
+                            @JsonProperty("skipLast") int skipLast) {
         this.id = id;
         this.description = description;
         this.fields = Collections.unmodifiableList(fields);
+        this.skipFirst = skipFirst;
+        this.skipLast = skipLast;
 
         this.parser = new FixedWidthParser(this);
         this.serializer = new FixedWidthSerializer(this);
@@ -41,6 +64,31 @@ public class FixedWidthFormat implements Format, Serializable {
 
     public static FixedWidthFormat basic(String id, String description, List<Field> fields) {
         return new FixedWidthFormat(id, description, fields);
+    }
+
+    /**
+     * Returns a version of the format with the given number of records skipped
+     * when parsing a set of records.
+     *
+     * @param count the number of records to skip when parsing a set of records
+     * @return a fixed-width format with the given number of records skipped
+     * skipped
+     */
+    public FixedWidthFormat skipFirst(int count) {
+        return new FixedWidthFormat(id, description, fields, count, skipLast);
+    }
+
+    /**
+     * Returns a version of the format with the given number of ending records skipped
+     * when parsing a set of records.
+     *
+     * @param count the number of ending records to skip when parsing a set
+     *              of records
+     * @return a fixed-width format with the given number of ending records
+     * skipped
+     */
+    public FixedWidthFormat skipLast(int count) {
+        return new FixedWidthFormat(id, description, fields, skipFirst, count);
     }
 
     /**
@@ -62,6 +110,23 @@ public class FixedWidthFormat implements Format, Serializable {
      */
     public List<Field> getFields() {
         return this.fields;
+    }
+
+
+    /**
+     * @return the number of records to skip when parsing
+     * a set of records
+     */
+    public int getSkipFirst() {
+        return skipFirst;
+    }
+
+    /**
+     * @return the number of ending records to skip when parsing
+     * a set of records
+     */
+    public int getSkipLast() {
+        return skipLast;
     }
 
     @Override
@@ -153,5 +218,10 @@ public class FixedWidthFormat implements Format, Serializable {
     @Override
     public String serializeAndThrow(Record record) {
         return serializer.serialize(record).orElseThrow();
+    }
+
+    @Override
+    public void visit(FormatVisitor visitor) {
+        visitor.accept(this);
     }
 }

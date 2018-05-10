@@ -25,6 +25,9 @@ public class DelimitedFormat implements Format, Serializable {
     private final Character frameDelimiter;
     private final Integer offset;
     private final List<Column> columns;
+    private final Boolean hasHeader;
+    private final Integer skipFirst;
+    private final Integer skipLast;
 
     private final DelimitedParser parser;
     private final DelimitedSerializer serializer;
@@ -41,6 +44,35 @@ public class DelimitedFormat implements Format, Serializable {
      * @param offset          an offset
      * @param columns         the columns
      */
+    public DelimitedFormat(String id,
+                           String description,
+                           Character delimiter,
+                           Boolean endingDelimiter,
+                           Framing framing,
+                           Character frameDelimiter,
+                           Integer offset,
+                           List<Column> columns) {
+        this(id, description, delimiter, endingDelimiter, framing, frameDelimiter, offset, columns, false, 0, 0);
+    }
+
+    /**
+     * Builds a delimited format.
+     *
+     * @param id              an identifier for the format
+     * @param description     a description of the format
+     * @param delimiter       a delimiter
+     * @param endingDelimiter an ending delimiter
+     * @param framing         a framing type
+     * @param frameDelimiter  a frame delimiter
+     * @param offset          an offset
+     * @param columns         the columns
+     * @param hasHeader       a flag indicating whether to include a header
+     *                        when serializing a set of records
+     * @param skipFirst       the number of records to skip when parsing a set
+     *                        of records
+     * @param skipLast        the number of ending records to skip when parsing
+     *                        a set of records
+     */
     @JsonCreator
     public DelimitedFormat(@JsonProperty("id") String id,
                            @JsonProperty("description") String description,
@@ -49,7 +81,10 @@ public class DelimitedFormat implements Format, Serializable {
                            @JsonProperty("framing") Framing framing,
                            @JsonProperty("frameDelimiter") Character frameDelimiter,
                            @JsonProperty("offset") Integer offset,
-                           @JsonProperty("columns") List<Column> columns) {
+                           @JsonProperty("columns") List<Column> columns,
+                           @JsonProperty("withHeader") Boolean hasHeader,
+                           @JsonProperty("skipFirst") Integer skipFirst,
+                           @JsonProperty("skipLast") Integer skipLast) {
         this.id = id;
         this.description = description;
         this.delimiter = delimiter;
@@ -58,10 +93,15 @@ public class DelimitedFormat implements Format, Serializable {
         this.frameDelimiter = frameDelimiter;
         this.columns = Collections.unmodifiableList(columns);
         this.offset = offset;
+        this.hasHeader = hasHeader;
+        this.skipFirst = skipFirst;
+        this.skipLast = skipLast;
 
         this.parser = new DelimitedParser(this);
         this.serializer = new DelimitedSerializer(this);
     }
+
+    // Static factory methods
 
     /**
      * Returns an unframed delimited format.
@@ -76,7 +116,7 @@ public class DelimitedFormat implements Format, Serializable {
                                            String description,
                                            Character delimiter,
                                            List<Column> columns) {
-        return new DelimitedFormat(id, description, delimiter, false, Framing.NONE, null, 0, columns);
+        return new DelimitedFormat(id, description, delimiter, false, Framing.NONE, null, 0, columns, false, 0, 0);
     }
 
     /**
@@ -94,7 +134,7 @@ public class DelimitedFormat implements Format, Serializable {
                                                Character delimiter,
                                                Character frameDelimiter,
                                                List<Column> columns) {
-        return new DelimitedFormat(id, description, delimiter, false, Framing.REQUIRED, frameDelimiter, 0, columns);
+        return new DelimitedFormat(id, description, delimiter, false, Framing.REQUIRED, frameDelimiter, 0, columns, false, 0, 0);
     }
 
     /**
@@ -112,7 +152,45 @@ public class DelimitedFormat implements Format, Serializable {
                                                    Character delimiter,
                                                    Character frameDelimiter,
                                                    List<Column> columns) {
-        return new DelimitedFormat(id, description, delimiter, false, Framing.OPTIONAL, frameDelimiter, 0, columns);
+        return new DelimitedFormat(id, description, delimiter, false, Framing.OPTIONAL, frameDelimiter, 0, columns, false, 0, 0);
+    }
+
+    // Modifiers
+
+    /**
+     * Returns a version of the format with a header included when serializing
+     * a set of records.
+     *
+     * @return a version of the format with a header included when serializing
+     * a set of records
+     */
+    public DelimitedFormat withHeader() {
+        return new DelimitedFormat(id, description, delimiter, endingDelimiter, framing, frameDelimiter, offset, columns, true, skipFirst, skipLast);
+    }
+
+    /**
+     * Returns a version of the format with the given number of records skipped
+     * when parsing a set of records.
+     *
+     * @param count the number of records to skip when parsing a set of records
+     * @return a delimited format with the given number of records skipped
+     * skipped
+     */
+    public DelimitedFormat skipFirst(int count) {
+        return new DelimitedFormat(id, description, delimiter, endingDelimiter, framing, frameDelimiter, offset, columns, hasHeader, count, skipLast);
+    }
+
+    /**
+     * Returns a version of the format with the given number of ending records skipped
+     * when parsing a set of records.
+     *
+     * @param count the number of ending records to skip when parsing a set
+     *              of records
+     * @return a delimited format with the given number of ending records
+     * skipped
+     */
+    public DelimitedFormat skipLast(int count) {
+        return new DelimitedFormat(id, description, delimiter, endingDelimiter, framing, frameDelimiter, offset, columns, hasHeader, skipFirst, count);
     }
 
     /**
@@ -128,7 +206,10 @@ public class DelimitedFormat implements Format, Serializable {
                                    endingDelimiter, framing,
                                    frameDelimiter,
                                    offset,
-                                   new LinkedList<>(columns));
+                                   new LinkedList<>(columns),
+                                   hasHeader,
+                                   skipFirst,
+                                   skipLast);
     }
 
     /**
@@ -144,8 +225,13 @@ public class DelimitedFormat implements Format, Serializable {
                                    framing,
                                    frameDelimiter,
                                    offset,
-                                   new LinkedList<>(columns));
+                                   new LinkedList<>(columns),
+                                   hasHeader,
+                                   skipFirst,
+                                   skipLast);
     }
+
+    // Getters
 
     /**
      * @return an identifier for the format
@@ -223,6 +309,30 @@ public class DelimitedFormat implements Format, Serializable {
      */
     public List<Column> getColumns() {
         return columns;
+    }
+
+    /**
+     * @return a flag indicating whether to include a header when
+     * serializing a set of records
+     */
+    public Boolean hasHeader() {
+        return hasHeader;
+    }
+
+    /**
+     * @return the number of records to skip when parsing
+     * a set of records
+     */
+    public Integer getSkipFirst() {
+        return skipFirst;
+    }
+
+    /**
+     * @return the number of ending records to skip when parsing
+     * a set of records
+     */
+    public Integer getSkipLast() {
+        return skipLast;
     }
 
     @Override
@@ -318,5 +428,10 @@ public class DelimitedFormat implements Format, Serializable {
     @Override
     public String serializeAndThrow(Record record) {
         return serializer.serialize(record).orElseThrow();
+    }
+
+    @Override
+    public void visit(FormatVisitor visitor) {
+        visitor.accept(this);
     }
 }

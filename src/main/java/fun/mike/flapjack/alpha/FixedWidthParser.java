@@ -57,6 +57,9 @@ public class FixedWidthParser implements Parser, Serializable {
         return ParseResult.withProblems(record, line, problems);
     }
 
+    /**
+     * Use Pipeline API
+     */
     public Stream<ParseResult> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
                 .map(item -> {

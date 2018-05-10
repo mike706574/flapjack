@@ -16,6 +16,10 @@ public class DelimitedParser implements Parser, Serializable {
         this.format = format;
     }
 
+    /**
+     * Use Pipeline API
+     */
+    @Deprecated
     public Stream<ParseResult> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
                 .map(item -> {
