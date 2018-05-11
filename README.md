@@ -15,14 +15,10 @@ Column bar = Column.integer("bar");
 List<Column> columns = Arrays.asList(foo, bar);
 Format format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
 
-ParseResult result = format.parse("bop,1");
-
-Record record = result.getValue();
+Record record = format.parse("bop,1").getValue();
 // => {foo=bop, bar=1}
 
-SerializationResult result = format.serialize(record);
-
-String text = format.serialize(record);
+String text = format.serialize(record).getValue();
 // => "bop,1"
 ```
 
