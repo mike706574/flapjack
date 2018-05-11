@@ -28,6 +28,7 @@ public interface Format {
     /**
      * Parses a serialized value, throwing a ParseException if parsing is
      * unsuccessful.
+     *
      * @param line a serialized string
      * @return a record
      */
@@ -35,6 +36,7 @@ public interface Format {
 
     /**
      * Serializes a map.
+     *
      * @param map a map
      * @return a SerializationResult containing a serialized string if
      * serialization is successful; otherwise, a SerializationResult containing
@@ -44,6 +46,7 @@ public interface Format {
 
     /**
      * Serializes a record.
+     *
      * @param record a record
      * @return a SerializationResult containing a serialized string if
      * serialization is successful; otherwise, a SerializationResult containing
@@ -54,10 +57,11 @@ public interface Format {
     /**
      * Serializes a record, throwing a SerializationException if serialization
      * is unsuccessful.
+     *
      * @param record a record
      * @return a serialized string
      */
     String serializeAndThrow(Record record);
 
-    public void visit(FormatVisitor visitor);
+    void visit(FormatVisitor visitor);
 }

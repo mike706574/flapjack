@@ -5,6 +5,9 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Problem for when a value in a delimited record is improperly framed.
+ */
 public class FramingProblem implements Problem, Serializable {
     private final Integer columnIndex;
     private final Integer charIndex;
@@ -16,10 +19,16 @@ public class FramingProblem implements Problem, Serializable {
         this.charIndex = charIndex;
     }
 
+    /**
+     * the index of improperly framed value
+     */
     public Integer getColumnIndex() {
         return columnIndex;
     }
 
+    /**
+     * @return the character index where the framing problem was found
+     */
     public Integer getCharIndex() {
         return charIndex;
     }

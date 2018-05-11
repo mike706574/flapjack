@@ -6,6 +6,10 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Problem for when the value of a string enumeration field does not match one
+ * of the valid options.
+ */
 public class StringEnumProblem implements Problem {
     private final String id;
     private final String value;
@@ -20,14 +24,23 @@ public class StringEnumProblem implements Problem {
         this.options = options;
     }
 
+    /**
+     * @return the id of the field
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * @return the value of the field
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * @return the valid options
+     */
     public List<String> getOptions() {
         return options;
     }

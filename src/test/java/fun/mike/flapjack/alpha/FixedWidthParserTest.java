@@ -133,7 +133,7 @@ public class FixedWidthParserTest {
         Problem problem = problems.get(0);
         assertTrue(problem instanceof OutOfBoundsProblem);
         OutOfBoundsProblem outOfBoundsProblem = (OutOfBoundsProblem) problem;
-        assertEquals("bar", outOfBoundsProblem.getFieldId());
+        assertEquals("bar", outOfBoundsProblem.getId());
         assertEquals(new Integer(4), outOfBoundsProblem.getEnd());
         assertEquals(new Integer(3), outOfBoundsProblem.getLength());
     }

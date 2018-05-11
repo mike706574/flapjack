@@ -1,5 +1,9 @@
 package fun.mike.flapjack.alpha;
 
+/**
+ * Thrown when an attempt is made to access the parsed value from a result with
+ * parsing problems.
+ */
 public class ParseException extends RuntimeException {
     private final ParseResult result;
 

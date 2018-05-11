@@ -5,6 +5,9 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Problem for when a format is defined incorrectly.
+ */
 public class FormatProblem implements Problem, Serializable {
     private final String message;
 
@@ -17,6 +20,9 @@ public class FormatProblem implements Problem, Serializable {
         return message;
     }
 
+    /**
+     * @return a message describing the format problem
+     */
     public String getMessage() {
         return message;
     }

@@ -2,7 +2,7 @@ package fun.mike.flapjack.alpha;
 
 public class UpdateSkipFirstVisitor implements FormatVisitor {
     private Format newFormat;
-    private int count;
+    private final int count;
 
     public UpdateSkipFirstVisitor(int count) {
         this.count = count;

@@ -5,6 +5,9 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Problem for when a value is missing for a non-nullable field.
+ */
 public class MissingValueProblem implements Problem, Serializable {
     private final String id;
     private final String type;
@@ -16,10 +19,16 @@ public class MissingValueProblem implements Problem, Serializable {
         this.type = type;
     }
 
+    /**
+     * @return the id of the field
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * @return the type of the field
+     */
     public String getType() {
         return type;
     }

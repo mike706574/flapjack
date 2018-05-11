@@ -5,6 +5,9 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Problem for when a fixed-width record is not long enough to contain a field.
+ */
 public class OutOfBoundsProblem implements Problem, Serializable {
     private final String id;
     private final Integer end;
@@ -26,14 +29,23 @@ public class OutOfBoundsProblem implements Problem, Serializable {
                              length);
     }
 
-    public String getFieldId() {
+    /**
+     * @return the id of the field
+     */
+    public String getId() {
         return this.id;
     }
 
+    /**
+     * @return the character index of the end of the field
+     */
     public Integer getEnd() {
         return this.end;
     }
 
+    /**
+     * @return the length of the fixed-width record
+     */
     public Integer getLength() {
         return this.length;
     }

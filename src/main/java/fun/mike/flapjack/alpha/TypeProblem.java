@@ -3,6 +3,9 @@ package fun.mike.flapjack.alpha;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Problem for when the value of a field does match the expected type.
+ */
 public class TypeProblem implements Problem {
     private final String id;
     private final String type;
@@ -17,14 +20,23 @@ public class TypeProblem implements Problem {
         this.value = value;
     }
 
+    /**
+     * @return the id of the field
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * @return the type of the field
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * @return the value of the field
+     */
     public String getValue() {
         return value;
     }

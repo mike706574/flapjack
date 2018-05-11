@@ -5,7 +5,7 @@ package fun.mike.flapjack.alpha;
  */
 public interface Parser {
     /**
-     * @deprecated Use format.parse()
+     * @deprecated Use format.parse(String)
      */
     @Deprecated
     static ParseResult parse(Format format, String line) {
@@ -13,10 +13,11 @@ public interface Parser {
     }
 
     /**
-     * Parses a line
-     * @param line
+     * Parses a line.
+     *
+     * @param line a line
      * @return a result containing the parsed record if successful, otherwise,
-     *         a result containing the problems
+     * a result containing the problems
      */
     ParseResult parse(String line);
 }

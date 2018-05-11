@@ -3,7 +3,6 @@ package fun.mike.flapjack.alpha;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import fun.mike.record.alpha.Record;
 import org.junit.Rule;
