@@ -5,6 +5,10 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Problem used when a value does not fit in a fixed-width record during
+ * serialization.
+ */
 public class TruncationProblem implements Problem {
     private final String id;
     private final String type;

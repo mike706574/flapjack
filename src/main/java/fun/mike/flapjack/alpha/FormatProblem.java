@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Problem for when a format is defined incorrectly.
+ * Problem used when a format is defined incorrectly.
  */
 public class FormatProblem implements Problem, Serializable {
     private final String message;

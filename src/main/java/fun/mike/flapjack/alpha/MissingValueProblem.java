@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Problem for when a value is missing for a non-nullable field.
+ * Problem used when a value is missing for a non-nullable field.
  */
 public class MissingValueProblem implements Problem, Serializable {
     private final String id;

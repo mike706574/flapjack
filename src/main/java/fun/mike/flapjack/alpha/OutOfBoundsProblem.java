@@ -6,7 +6,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Problem for when a fixed-width record is not long enough to contain a field.
+ * Problem used when a fixed-width record is not long enough to contain a
+ * field.
  */
 public class OutOfBoundsProblem implements Problem, Serializable {
     private final String id;

@@ -17,7 +17,7 @@ public class DelimitedParser implements Parser, Serializable {
     }
 
     /**
-     * Use Pipeline API
+     * @deprecated Use Pipeline API
      */
     @Deprecated
     public Stream<ParseResult> stream(Stream<String> lines) {

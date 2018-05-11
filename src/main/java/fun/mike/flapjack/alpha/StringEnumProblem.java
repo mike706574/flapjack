@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Problem for when the value of a string enumeration field does not match one
+ * Problem used when the value of a string enumeration field does not match one
  * of the valid options.
  */
 public class StringEnumProblem implements Problem {

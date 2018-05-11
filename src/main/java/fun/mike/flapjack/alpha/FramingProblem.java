@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Problem for when a value in a delimited record is improperly framed.
+ * Problem used when a value in a delimited record is improperly framed.
  */
 public class FramingProblem implements Problem, Serializable {
     private final Integer columnIndex;
@@ -20,7 +20,7 @@ public class FramingProblem implements Problem, Serializable {
     }
 
     /**
-     * the index of improperly framed value
+     * @return the index of improperly framed value
      */
     public Integer getColumnIndex() {
         return columnIndex;
