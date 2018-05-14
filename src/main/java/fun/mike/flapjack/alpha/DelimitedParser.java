@@ -35,6 +35,9 @@ public class DelimitedParser implements Parser, Serializable {
 
     public ParseResult parseUnframedLine(String line) {
         Record record = new Record();
+
+        record.setMetadataProperty("line", line);
+
         List<Problem> problems = new LinkedList<>();
 
         StringBuffer cell = new StringBuffer();
@@ -81,6 +84,9 @@ public class DelimitedParser implements Parser, Serializable {
 
     public ParseResult parseFramedLine(String line) {
         Record record = new Record();
+
+        record.setMetadataProperty("line", line);
+
         List<Problem> problems = new LinkedList<>();
 
         StringBuffer cell = new StringBuffer();

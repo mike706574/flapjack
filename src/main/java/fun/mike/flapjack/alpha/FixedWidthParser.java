@@ -18,6 +18,9 @@ public class FixedWidthParser implements Parser, Serializable {
 
     public ParseResult parse(String line) {
         Record record = new Record();
+
+        record.setMetadataProperty("line", line);
+
         List<Problem> problems = new LinkedList<>();
 
         int lineLength = line.length();
@@ -58,8 +61,9 @@ public class FixedWidthParser implements Parser, Serializable {
     }
 
     /**
-     * Use Pipeline API
+     * @deprecated Use Pipeline API
      */
+    @Deprecated
     public Stream<ParseResult> stream(Stream<String> lines) {
         return StreamUtils.zipWithIndex(lines)
                 .map(item -> {

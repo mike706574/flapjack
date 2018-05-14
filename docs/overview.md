@@ -49,7 +49,8 @@ Here's what it looks like as JSON:
     }
   ],
   "skipFirst": 0,
-  "skipLast": 0
+  "skipLast": 0,
+  "hasHeader": false
 }
 ```
 

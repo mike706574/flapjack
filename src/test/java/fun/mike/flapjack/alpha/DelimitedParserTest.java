@@ -29,10 +29,12 @@ public class DelimitedParserTest {
         ParseResult result = parser.parse("\"baz\",\"burp\"");
 
         assertTrue(result.isOk());
-        Record record1 = result.getValue();
-        assertEquals(2, record1.size());
-        assertEquals("baz", record1.get("foo"));
-        assertEquals("burp", record1.get("bar"));
+
+        Record record = result.getValue();
+        assertEquals("\"baz\",\"burp\"", record.getMetadataProperty("line"));
+        assertEquals(2, record.size());
+        assertEquals("baz", record.get("foo"));
+        assertEquals("burp", record.get("bar"));
     }
 
     @Test

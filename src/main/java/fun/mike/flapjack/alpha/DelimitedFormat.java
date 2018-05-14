@@ -315,6 +315,7 @@ public class DelimitedFormat implements Format, Serializable {
      * @return a flag indicating whether to include a header when
      * serializing a set of records
      */
+    @JsonProperty("hasHeader")
     public Boolean hasHeader() {
         return hasHeader;
     }
