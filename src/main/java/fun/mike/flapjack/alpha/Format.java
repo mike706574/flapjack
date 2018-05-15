@@ -63,5 +63,17 @@ public interface Format {
      */
     String serializeAndThrow(Record record);
 
+    /**
+     * Returns the identifier for the format.
+     * @return the identifier for the format
+     */
+    String getId();
+
+    /**
+     * Returns the description for the format.
+     * @return the description of the format
+     */
+    public String getDescription();
+
     void visit(FormatVisitor visitor);
 }
