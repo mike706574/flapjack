@@ -99,4 +99,15 @@ public class FixedWidthParserTest {
         assertEquals(new Integer(4), outOfBoundsProblem.getEnd());
         assertEquals(new Integer(3), outOfBoundsProblem.getLength());
     }
+
+    @Test
+    public void what() {
+        FixedWidthFormat.builder()
+                .withFields(Arrays.asList())
+                .skipFirst(0)
+                .skipLast(0)
+                .build();
+
+
+    }
 }

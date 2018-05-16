@@ -2,6 +2,7 @@ package fun.mike.flapjack.alpha;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -57,13 +58,20 @@ public class FixedWidthFormat implements Format, Serializable {
         this.fields = Collections.unmodifiableList(fields);
         this.skipFirst = skipFirst;
         this.skipLast = skipLast;
-
         this.parser = new FixedWidthParser(this);
         this.serializer = new FixedWidthSerializer(this);
     }
 
+    private FixedWidthFormat(Builder builder) {
+        this(builder.id, builder.description, builder.fields, builder.skipFirst, builder.skipLast);
+    }
+
     public static FixedWidthFormat basic(String id, String description, List<Field> fields) {
         return new FixedWidthFormat(id, description, fields);
+    }
+
+    public static IId builder() {
+        return new Builder();
     }
 
     /**
@@ -223,5 +231,136 @@ public class FixedWidthFormat implements Format, Serializable {
     @Override
     public void visit(FormatVisitor visitor) {
         visitor.accept(this);
+    }
+
+    interface ISkipping {
+        ISkipping skipLast(int count);
+        ISkipping skipFirst(int count);
+        FixedWidthFormat build();
+    }
+
+    interface IFields {
+        ISkipping withFields(List<Field> fields);
+        IFields addField(Field field);
+        IFields addFields(List<Field> fields);
+        ISkipping skipLast(int count);
+        ISkipping skipFirst(int count);
+        FixedWidthFormat build();
+    }
+
+    interface IDescription {
+        IFields withDescription(String description);
+        ISkipping withFields(List<Field> fields);
+        IFields addField(Field field);
+        IFields addFields(List<Field> fields);
+    }
+
+    interface IId {
+        IDescription withId(String id);
+        ISkipping withFields(List<Field> fields);
+        IFields addField(Field field);
+        IFields addFields(List<Field> fields);
+    }
+
+    /**
+     * {@code FixedWidthFormat} builder static inner class.
+     */
+    public static final class Builder implements ISkipping, IFields, IDescription, IId {
+        private int skipLast = 0;
+        private int skipFirst = 0;
+        private List<Field> fields = new LinkedList<>();
+        private String description;
+        private String id;
+
+        private Builder() {}
+
+        /**
+         * TODO
+         *
+         * @param count TODO
+         * @return a reference to this Builder
+         */
+        @Override
+        public ISkipping skipLast(int count) {
+            this.skipLast = count;
+            return this;
+        }
+
+        /**
+         * TODO
+         *
+         * @param count TODO
+         * @return a reference to this Builder
+         */
+        @Override
+        public ISkipping skipFirst(int count) {
+            this.skipFirst = count;
+            return this;
+        }
+
+        /**
+         * TODO
+         *
+         * @param fields TODO
+         * @return a reference to this Builder
+         */
+        @Override
+        public ISkipping withFields(List<Field> fields) {
+            this.fields = fields;
+            return this;
+        }
+
+        /**
+         * TODO
+         * @param field
+         * @return
+         */
+        @Override
+        public IFields addField(Field field) {
+            this.fields.add(field);
+            return this;
+        }
+
+        /**
+         * TODO
+         * @param fields
+         * @return
+         */
+        @Override
+        public IFields addFields(List<Field> fields) {
+            this.fields.addAll(fields);
+            return this;
+        }
+
+        /**
+         * TODO
+         * @param description
+         * @return
+         */
+        @Override
+        public IFields withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        /**
+         * TODO
+         * @param id
+         * @return
+         */
+        @Override
+        public IDescription withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        /**
+         * Returns a {@code FixedWidthFormat} built from the parameters previously set.
+         *
+         * @return a {@code FixedWidthFormat} built with parameters of this {@code FixedWidthFormat.Builder}
+         */
+        public FixedWidthFormat build() {
+            return new FixedWidthFormat(this);
+        }
     }
 }

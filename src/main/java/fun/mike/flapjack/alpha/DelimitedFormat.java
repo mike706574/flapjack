@@ -101,6 +101,10 @@ public class DelimitedFormat implements Format, Serializable {
         this.serializer = new DelimitedSerializer(this);
     }
 
+    private DelimitedFormat(Builder builder) {
+        this(builder.id, builder.description, builder.delimiter, builder.endingDelimiter, builder.framing, builder.frameDelimiter, builder.offset, builder.columns, builder.hasHeader, builder.skipFirst, builder.skipLast);
+    }
+
     // Static factory methods
 
     /**
@@ -153,6 +157,10 @@ public class DelimitedFormat implements Format, Serializable {
                                                    Character frameDelimiter,
                                                    List<Column> columns) {
         return new DelimitedFormat(id, description, delimiter, false, Framing.OPTIONAL, frameDelimiter, 0, columns, false, 0, 0);
+    }
+
+    public static IId builder() {
+        return new Builder();
     }
 
     // Modifiers
@@ -434,5 +442,171 @@ public class DelimitedFormat implements Format, Serializable {
     @Override
     public void visit(FormatVisitor visitor) {
         visitor.accept(this);
+    }
+
+    interface IOptional {
+        IOptional withHeader();
+        IOptional skipLast(Integer count);
+        IOptional skipFirst(Integer count);
+        IOptional withOffset(Integer offset);
+        IOptional withEndingDelimiter();
+        DelimitedFormat build();
+    }
+
+    interface IColumns {
+        IOptional withColumns(List<Column> columns);
+        IColumns addColumns(List<Column> columns);
+        IColumns addColumn(Column column);
+        IOptional withHeader();
+        IOptional skipLast(Integer count);
+        IOptional skipFirst(Integer count);
+        IOptional withOffset(Integer offset);
+        IOptional withEndingDelimiter();
+        DelimitedFormat build();
+    }
+
+    interface IFraming {
+        IColumns alwaysFramed(Character frameDelimiter);
+        IColumns optionallyFramed(Character frameDelimiter);
+        IColumns unframed();
+    }
+
+    interface IDelimiter {
+        IFraming withDelimiter(Character delimiter);
+    }
+
+    interface IDescription {
+        IDelimiter withDescription(String description);
+        IFraming withDelimiter(Character delimiter);
+    }
+
+    interface IId {
+        IDescription withId(String id);
+        IFraming withDelimiter(Character delimiter);
+    }
+
+    /**
+     * {@code DelimitedFormat} builder static inner class.
+     */
+    public static final class Builder implements IId, IDescription, IDelimiter, IFraming, IColumns, IOptional {
+
+        private Integer skipLast = 0;
+        private Integer skipFirst = 0;
+        private Boolean hasHeader = false;
+        private List<Column> columns = new LinkedList<>();
+        private Integer offset = 0;
+        private Character frameDelimiter;
+        private Framing framing = Framing.NONE;
+        private Boolean endingDelimiter = false;
+        private Character delimiter;
+        private String description;
+        private String id;
+
+        private Builder() {}
+
+        /**
+         * TODO
+         * @param count
+         * @return
+         */
+        @Override
+        public IOptional skipLast(Integer count) {
+            this.skipLast = count;
+            return this;
+        }
+
+        /**
+         * TODO
+         * @param count
+         * @return
+         */
+        @Override
+        public IOptional skipFirst(Integer count) {
+            this.skipFirst = count;
+            return this;
+        }
+
+        @Override
+        public IOptional withHeader() {
+            this.hasHeader = true;
+            return this;
+        }
+
+        @Override
+        public IOptional withColumns(List<Column> columns) {
+            this.columns = columns;
+            return this;
+        }
+
+        @Override
+        public IColumns addColumns(List<Column> columns) {
+            this.columns.addAll(columns);
+            return this;
+        }
+
+        @Override
+        public IColumns addColumn(Column column) {
+            this.columns.add(column);
+            return this;
+        }
+
+        @Override
+        public IOptional withOffset(Integer offset) {
+            this.offset = offset;
+            return this;
+        }
+
+        @Override
+        public IColumns unframed() {
+            this.framing = Framing.NONE;
+            return this;
+        }
+
+        @Override
+        public IColumns alwaysFramed(Character frameDelimiter) {
+            this.framing = Framing.REQUIRED;
+            this.frameDelimiter = frameDelimiter;
+            return this;
+        }
+
+        @Override
+        public IColumns optionallyFramed(Character frameDelimiter) {
+            this.framing = Framing.OPTIONAL;
+            this.frameDelimiter = frameDelimiter;
+            return this;
+        }
+
+        @Override
+        public IOptional withEndingDelimiter() {
+            this.endingDelimiter = true;
+            return this;
+        }
+
+        @Override
+        public IFraming withDelimiter(Character delimiter) {
+            this.delimiter = delimiter;
+            return this;
+        }
+
+        @Override
+        public IDelimiter withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        @Override
+        public IDescription withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        /**
+         * Returns a {@code DelimitedFormat} built from the parameters previously set.
+         *
+         * @return a {@code DelimitedFormat} built with parameters of this {@code DelimitedFormat.Builder}
+         */
+        public DelimitedFormat build() {
+            return new DelimitedFormat(this);
+        }
     }
 }

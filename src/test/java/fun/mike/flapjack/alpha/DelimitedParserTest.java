@@ -425,4 +425,16 @@ public class DelimitedParserTest {
 
         assertTrue(result.explain(), result.isOk());
     }
+
+    @Test
+    public void what() {
+
+        DelimitedFormat.builder()
+                .withId("x")
+                .withDescription("Z")
+                .withDelimiter(',')
+                .alwaysFramed('"')
+                .build();
+
+    }
 }
