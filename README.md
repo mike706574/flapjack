@@ -13,7 +13,13 @@ This simple example shows how to parse and serialize a delimited record.
 Column foo = Column.string("foo");
 Column bar = Column.integer("bar");
 List<Column> columns = Arrays.asList(foo, bar);
-Format format = DelimitedFormat.unframed("baz", "Baz", ',', columns);
+Format format = DelimitedFormat.builder()
+    .withId("baz")
+    .withDescription("Baz")
+    .unframed()
+    .withDelimiter(',')
+    .withColumns(columns)
+    .build();
 
 Record record = format.parse("bop,1").getValue();
 // => {foo=bop, bar=1}

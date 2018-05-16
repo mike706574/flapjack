@@ -73,7 +73,7 @@ public interface Format {
      * Returns the description for the format.
      * @return the description of the format
      */
-    public String getDescription();
+    String getDescription();
 
     void visit(FormatVisitor visitor);
 }

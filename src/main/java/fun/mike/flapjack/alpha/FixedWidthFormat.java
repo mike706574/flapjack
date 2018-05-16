@@ -275,10 +275,8 @@ public class FixedWidthFormat implements Format, Serializable {
         private Builder() {}
 
         /**
-         * TODO
-         *
-         * @param count TODO
-         * @return a reference to this Builder
+         * @param count the number of ending records to skip when parsing
+         *              a set of records
          */
         @Override
         public ISkipping skipLast(int count) {
@@ -287,10 +285,8 @@ public class FixedWidthFormat implements Format, Serializable {
         }
 
         /**
-         * TODO
-         *
-         * @param count TODO
-         * @return a reference to this Builder
+         * @param count the number of records to skip when parsing a set of
+         *              records
          */
         @Override
         public ISkipping skipFirst(int count) {
@@ -299,10 +295,7 @@ public class FixedWidthFormat implements Format, Serializable {
         }
 
         /**
-         * TODO
-         *
-         * @param fields TODO
-         * @return a reference to this Builder
+         * @param fields fields
          */
         @Override
         public ISkipping withFields(List<Field> fields) {
@@ -311,9 +304,7 @@ public class FixedWidthFormat implements Format, Serializable {
         }
 
         /**
-         * TODO
-         * @param field
-         * @return
+         * @param field a field to add
          */
         @Override
         public IFields addField(Field field) {
@@ -322,9 +313,7 @@ public class FixedWidthFormat implements Format, Serializable {
         }
 
         /**
-         * TODO
-         * @param fields
-         * @return
+         * @param fields fields to add
          */
         @Override
         public IFields addFields(List<Field> fields) {
@@ -333,9 +322,7 @@ public class FixedWidthFormat implements Format, Serializable {
         }
 
         /**
-         * TODO
-         * @param description
-         * @return
+         * @param description a description of the format
          */
         @Override
         public IFields withDescription(String description) {
@@ -344,9 +331,7 @@ public class FixedWidthFormat implements Format, Serializable {
         }
 
         /**
-         * TODO
-         * @param id
-         * @return
+         * @param id an identifier for the format
          */
         @Override
         public IDescription withId(String id) {

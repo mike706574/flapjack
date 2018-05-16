@@ -20,14 +20,14 @@ public class DelimitedFormat implements Format, Serializable {
     private final String id;
     private final String description;
     private final Character delimiter;
-    private final Boolean endingDelimiter;
+    private final boolean endingDelimiter;
     private final Framing framing;
     private final Character frameDelimiter;
-    private final Integer offset;
+    private final int offset;
     private final List<Column> columns;
-    private final Boolean hasHeader;
-    private final Integer skipFirst;
-    private final Integer skipLast;
+    private final boolean hasHeader;
+    private final int skipFirst;
+    private final int skipLast;
 
     private final DelimitedParser parser;
     private final DelimitedSerializer serializer;
@@ -38,7 +38,8 @@ public class DelimitedFormat implements Format, Serializable {
      * @param id              an identifier for the format
      * @param description     a description of the format
      * @param delimiter       a delimiter
-     * @param endingDelimiter an ending delimiter
+     * @param endingDelimiter a flag indicating whether a delimiter will be
+     *                        present at the end of each record
      * @param framing         a framing type
      * @param frameDelimiter  a frame delimiter
      * @param offset          an offset
@@ -47,10 +48,10 @@ public class DelimitedFormat implements Format, Serializable {
     public DelimitedFormat(String id,
                            String description,
                            Character delimiter,
-                           Boolean endingDelimiter,
+                           boolean endingDelimiter,
                            Framing framing,
                            Character frameDelimiter,
-                           Integer offset,
+                           int offset,
                            List<Column> columns) {
         this(id, description, delimiter, endingDelimiter, framing, frameDelimiter, offset, columns, false, 0, 0);
     }
@@ -61,7 +62,8 @@ public class DelimitedFormat implements Format, Serializable {
      * @param id              an identifier for the format
      * @param description     a description of the format
      * @param delimiter       a delimiter
-     * @param endingDelimiter an ending delimiter
+     * @param endingDelimiter a flag indicating whether a delimiter will be
+     *                        present at the end of each record
      * @param framing         a framing type
      * @param frameDelimiter  a frame delimiter
      * @param offset          an offset
@@ -77,14 +79,14 @@ public class DelimitedFormat implements Format, Serializable {
     public DelimitedFormat(@JsonProperty("id") String id,
                            @JsonProperty("description") String description,
                            @JsonProperty("delimiter") Character delimiter,
-                           @JsonProperty("endingDelimiter") Boolean endingDelimiter,
+                           @JsonProperty("endingDelimiter") boolean endingDelimiter,
                            @JsonProperty("framing") Framing framing,
                            @JsonProperty("frameDelimiter") Character frameDelimiter,
-                           @JsonProperty("offset") Integer offset,
+                           @JsonProperty("offset") int offset,
                            @JsonProperty("columns") List<Column> columns,
-                           @JsonProperty("withHeader") Boolean hasHeader,
-                           @JsonProperty("skipFirst") Integer skipFirst,
-                           @JsonProperty("skipLast") Integer skipLast) {
+                           @JsonProperty("withHeader") boolean hasHeader,
+                           @JsonProperty("skipFirst") int skipFirst,
+                           @JsonProperty("skipLast") int skipLast) {
         this.id = id;
         this.description = description;
         this.delimiter = delimiter;
@@ -207,7 +209,7 @@ public class DelimitedFormat implements Format, Serializable {
      * @param offset an offset
      * @return a version of the format with the given offset
      */
-    public DelimitedFormat withOffset(Integer offset) {
+    public DelimitedFormat withOffset(int offset) {
         return new DelimitedFormat(id,
                                    description,
                                    delimiter,
@@ -263,7 +265,8 @@ public class DelimitedFormat implements Format, Serializable {
     }
 
     /**
-     * @return true if the format has an ending delimiter; otherwise, false.
+     * @return true if a delimiter will be present at the end of each record;
+     *         otherwise, false
      */
     public Boolean hasEndingDelimiter() {
         return endingDelimiter;
@@ -308,7 +311,7 @@ public class DelimitedFormat implements Format, Serializable {
     /**
      * @return the offset
      */
-    public Integer getOffset() {
+    public int getOffset() {
         return offset;
     }
 
@@ -332,7 +335,7 @@ public class DelimitedFormat implements Format, Serializable {
      * @return the number of records to skip when parsing
      * a set of records
      */
-    public Integer getSkipFirst() {
+    public int getSkipFirst() {
         return skipFirst;
     }
 
@@ -340,7 +343,7 @@ public class DelimitedFormat implements Format, Serializable {
      * @return the number of ending records to skip when parsing
      * a set of records
      */
-    public Integer getSkipLast() {
+    public int getSkipLast() {
         return skipLast;
     }
 
@@ -446,9 +449,9 @@ public class DelimitedFormat implements Format, Serializable {
 
     interface IOptional {
         IOptional withHeader();
-        IOptional skipLast(Integer count);
-        IOptional skipFirst(Integer count);
-        IOptional withOffset(Integer offset);
+        IOptional skipLast(int count);
+        IOptional skipFirst(int count);
+        IOptional withOffset(int offset);
         IOptional withEndingDelimiter();
         DelimitedFormat build();
     }
@@ -458,9 +461,9 @@ public class DelimitedFormat implements Format, Serializable {
         IColumns addColumns(List<Column> columns);
         IColumns addColumn(Column column);
         IOptional withHeader();
-        IOptional skipLast(Integer count);
-        IOptional skipFirst(Integer count);
-        IOptional withOffset(Integer offset);
+        IOptional skipLast(int count);
+        IOptional skipFirst(int count);
+        IOptional withOffset(int offset);
         IOptional withEndingDelimiter();
         DelimitedFormat build();
     }
@@ -490,11 +493,11 @@ public class DelimitedFormat implements Format, Serializable {
      */
     public static final class Builder implements IId, IDescription, IDelimiter, IFraming, IColumns, IOptional {
 
-        private Integer skipLast = 0;
-        private Integer skipFirst = 0;
+        private int skipLast = 0;
+        private int skipFirst = 0;
         private Boolean hasHeader = false;
         private List<Column> columns = new LinkedList<>();
-        private Integer offset = 0;
+        private int offset = 0;
         private Character frameDelimiter;
         private Framing framing = Framing.NONE;
         private Boolean endingDelimiter = false;
@@ -505,23 +508,21 @@ public class DelimitedFormat implements Format, Serializable {
         private Builder() {}
 
         /**
-         * TODO
-         * @param count
-         * @return
+         * @param count the number of ending records to skip when parsing
+         *              a set of records
          */
         @Override
-        public IOptional skipLast(Integer count) {
+        public IOptional skipLast(int count) {
             this.skipLast = count;
             return this;
         }
 
         /**
-         * TODO
-         * @param count
-         * @return
+         * @param count the number of records to skip when parsing a set of
+         *              records
          */
         @Override
-        public IOptional skipFirst(Integer count) {
+        public IOptional skipFirst(int count) {
             this.skipFirst = count;
             return this;
         }
@@ -532,26 +533,38 @@ public class DelimitedFormat implements Format, Serializable {
             return this;
         }
 
+        /**
+         * @param columns columns
+         */
         @Override
         public IOptional withColumns(List<Column> columns) {
             this.columns = columns;
             return this;
         }
 
+        /**
+         * @param columns columns to add
+         */
         @Override
         public IColumns addColumns(List<Column> columns) {
             this.columns.addAll(columns);
             return this;
         }
 
+        /**
+         * @param column a column to add
+         */
         @Override
         public IColumns addColumn(Column column) {
             this.columns.add(column);
             return this;
         }
 
+        /**
+         * @param offset an offset
+         */
         @Override
-        public IOptional withOffset(Integer offset) {
+        public IOptional withOffset(int offset) {
             this.offset = offset;
             return this;
         }
@@ -562,6 +575,9 @@ public class DelimitedFormat implements Format, Serializable {
             return this;
         }
 
+        /**
+         * @param frameDelimiter a frame delimiter
+         */
         @Override
         public IColumns alwaysFramed(Character frameDelimiter) {
             this.framing = Framing.REQUIRED;
@@ -569,6 +585,9 @@ public class DelimitedFormat implements Format, Serializable {
             return this;
         }
 
+        /**
+         * @param frameDelimiter a frame delimiter
+         */
         @Override
         public IColumns optionallyFramed(Character frameDelimiter) {
             this.framing = Framing.OPTIONAL;
@@ -582,18 +601,27 @@ public class DelimitedFormat implements Format, Serializable {
             return this;
         }
 
+        /**
+         * @param delimiter a delimiter
+         */
         @Override
         public IFraming withDelimiter(Character delimiter) {
             this.delimiter = delimiter;
             return this;
         }
 
+        /**
+         * @param description a description of the format
+         */
         @Override
         public IDelimiter withDescription(String description) {
             this.description = description;
             return this;
         }
 
+        /**
+         * @param id an identifier for the format
+         */
         @Override
         public IDescription withId(String id) {
             this.id = id;

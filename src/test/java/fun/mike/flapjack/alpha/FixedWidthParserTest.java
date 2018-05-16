@@ -1,8 +1,8 @@
 package fun.mike.flapjack.alpha;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import fun.mike.record.alpha.Record;
 import org.junit.Rule;
@@ -64,8 +64,8 @@ public class FixedWidthParserTest {
 
         FixedWidthParser parser = new FixedWidthParser(format);
 
-        List<String> lines = Arrays.asList(
-                                           "54321fghij");
+        List<String> lines = Collections.singletonList(
+                "54321fghij");
 
         ParseResult result = parser.parse("1234567890");
 
@@ -103,7 +103,7 @@ public class FixedWidthParserTest {
     @Test
     public void what() {
         FixedWidthFormat.builder()
-                .withFields(Arrays.asList())
+                .withFields(Collections.emptyList())
                 .skipFirst(0)
                 .skipLast(0)
                 .build();
