@@ -266,7 +266,7 @@ public class DelimitedFormat implements Format, Serializable {
 
     /**
      * @return true if a delimiter will be present at the end of each record;
-     *         otherwise, false
+     * otherwise, false
      */
     public Boolean hasEndingDelimiter() {
         return endingDelimiter;
@@ -449,28 +449,43 @@ public class DelimitedFormat implements Format, Serializable {
 
     interface IOptional {
         IOptional withHeader();
+
         IOptional skipLast(int count);
+
         IOptional skipFirst(int count);
+
         IOptional withOffset(int offset);
+
         IOptional withEndingDelimiter();
+
         DelimitedFormat build();
     }
 
     interface IColumns {
         IOptional withColumns(List<Column> columns);
+
         IColumns addColumns(List<Column> columns);
+
         IColumns addColumn(Column column);
+
         IOptional withHeader();
+
         IOptional skipLast(int count);
+
         IOptional skipFirst(int count);
+
         IOptional withOffset(int offset);
+
         IOptional withEndingDelimiter();
+
         DelimitedFormat build();
     }
 
     interface IFraming {
         IColumns alwaysFramed(Character frameDelimiter);
+
         IColumns optionallyFramed(Character frameDelimiter);
+
         IColumns unframed();
     }
 
@@ -480,11 +495,13 @@ public class DelimitedFormat implements Format, Serializable {
 
     interface IDescription {
         IDelimiter withDescription(String description);
+
         IFraming withDelimiter(Character delimiter);
     }
 
     interface IId {
         IDescription withId(String id);
+
         IFraming withDelimiter(Character delimiter);
     }
 
@@ -505,7 +522,8 @@ public class DelimitedFormat implements Format, Serializable {
         private String description;
         private String id;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         /**
          * @param count the number of ending records to skip when parsing

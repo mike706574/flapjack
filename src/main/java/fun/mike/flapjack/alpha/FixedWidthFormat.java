@@ -66,6 +66,14 @@ public class FixedWidthFormat implements Format, Serializable {
         this(builder.id, builder.description, builder.fields, builder.skipFirst, builder.skipLast);
     }
 
+    /**
+     * Builds a basic fixed-width format.
+     *
+     * @param id          an identifier for the format
+     * @param description a description of the format
+     * @param fields      the fields
+     * @return the format
+     */
     public static FixedWidthFormat basic(String id, String description, List<Field> fields) {
         return new FixedWidthFormat(id, description, fields);
     }
@@ -235,30 +243,43 @@ public class FixedWidthFormat implements Format, Serializable {
 
     interface ISkipping {
         ISkipping skipLast(int count);
+
         ISkipping skipFirst(int count);
+
         FixedWidthFormat build();
     }
 
     interface IFields {
         ISkipping withFields(List<Field> fields);
+
         IFields addField(Field field);
+
         IFields addFields(List<Field> fields);
+
         ISkipping skipLast(int count);
+
         ISkipping skipFirst(int count);
+
         FixedWidthFormat build();
     }
 
     interface IDescription {
         IFields withDescription(String description);
+
         ISkipping withFields(List<Field> fields);
+
         IFields addField(Field field);
+
         IFields addFields(List<Field> fields);
     }
 
     interface IId {
         IDescription withId(String id);
+
         ISkipping withFields(List<Field> fields);
+
         IFields addField(Field field);
+
         IFields addFields(List<Field> fields);
     }
 
@@ -272,7 +293,8 @@ public class FixedWidthFormat implements Format, Serializable {
         private String description;
         private String id;
 
-        private Builder() {}
+        private Builder() {
+        }
 
         /**
          * @param count the number of ending records to skip when parsing
