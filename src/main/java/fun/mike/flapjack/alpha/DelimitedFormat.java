@@ -161,7 +161,7 @@ public class DelimitedFormat implements Format, Serializable {
         return new DelimitedFormat(id, description, delimiter, false, Framing.OPTIONAL, frameDelimiter, 0, columns, false, 0, 0);
     }
 
-    public static IId builder() {
+    public static IdStep builder() {
         return new Builder();
     }
 
@@ -447,68 +447,68 @@ public class DelimitedFormat implements Format, Serializable {
         visitor.accept(this);
     }
 
-    interface IOptional {
-        IOptional withHeader();
+    public interface OptionalStep {
+        OptionalStep withHeader();
 
-        IOptional skipLast(int count);
+        OptionalStep skipLast(int count);
 
-        IOptional skipFirst(int count);
+        OptionalStep skipFirst(int count);
 
-        IOptional withOffset(int offset);
+        OptionalStep withOffset(int offset);
 
-        IOptional withEndingDelimiter();
-
-        DelimitedFormat build();
-    }
-
-    interface IColumns {
-        IOptional withColumns(List<Column> columns);
-
-        IColumns addColumns(List<Column> columns);
-
-        IColumns addColumn(Column column);
-
-        IOptional withHeader();
-
-        IOptional skipLast(int count);
-
-        IOptional skipFirst(int count);
-
-        IOptional withOffset(int offset);
-
-        IOptional withEndingDelimiter();
+        OptionalStep withEndingDelimiter();
 
         DelimitedFormat build();
     }
 
-    interface IFraming {
-        IColumns alwaysFramed(Character frameDelimiter);
+    public interface ColumnStep {
+        OptionalStep withColumns(List<Column> columns);
 
-        IColumns optionallyFramed(Character frameDelimiter);
+        ColumnStep addColumns(List<Column> columns);
 
-        IColumns unframed();
+        ColumnStep addColumn(Column column);
+
+        OptionalStep withHeader();
+
+        OptionalStep skipLast(int count);
+
+        OptionalStep skipFirst(int count);
+
+        OptionalStep withOffset(int offset);
+
+        OptionalStep withEndingDelimiter();
+
+        DelimitedFormat build();
     }
 
-    interface IDelimiter {
-        IFraming withDelimiter(Character delimiter);
+    public interface FramingStep {
+        ColumnStep alwaysFramed(Character frameDelimiter);
+
+        ColumnStep optionallyFramed(Character frameDelimiter);
+
+        ColumnStep unframed();
     }
 
-    interface IDescription {
-        IDelimiter withDescription(String description);
-
-        IFraming withDelimiter(Character delimiter);
+    public interface DelimiterStep {
+        FramingStep withDelimiter(Character delimiter);
     }
 
-    interface IId {
-        IDescription withId(String id);
+    public interface DescriptionStep {
+        DelimiterStep withDescription(String description);
 
-        IFraming withDelimiter(Character delimiter);
+        FramingStep withDelimiter(Character delimiter);
+    }
+
+    public interface IdStep {
+        DescriptionStep withId(String id);
+
+        FramingStep withDelimiter(Character delimiter);
     }
 
     /**
      * {@code DelimitedFormat} builder static inner class.
      */
-    public static final class Builder implements IId, IDescription, IDelimiter, IFraming, IColumns, IOptional {
+    public static final class Builder implements IdStep, DescriptionStep, DelimiterStep, FramingStep, ColumnStep, OptionalStep {
 
         private int skipLast = 0;
         private int skipFirst = 0;
@@ -530,7 +530,7 @@ public class DelimitedFormat implements Format, Serializable {
          *              a set of records
          */
         @Override
-        public IOptional skipLast(int count) {
+        public OptionalStep skipLast(int count) {
             this.skipLast = count;
             return this;
         }
@@ -540,13 +540,13 @@ public class DelimitedFormat implements Format, Serializable {
          *              records
          */
         @Override
-        public IOptional skipFirst(int count) {
+        public OptionalStep skipFirst(int count) {
             this.skipFirst = count;
             return this;
         }
 
         @Override
-        public IOptional withHeader() {
+        public OptionalStep withHeader() {
             this.hasHeader = true;
             return this;
         }
@@ -555,7 +555,7 @@ public class DelimitedFormat implements Format, Serializable {
          * @param columns columns
          */
         @Override
-        public IOptional withColumns(List<Column> columns) {
+        public OptionalStep withColumns(List<Column> columns) {
             this.columns = columns;
             return this;
         }
@@ -564,7 +564,7 @@ public class DelimitedFormat implements Format, Serializable {
          * @param columns columns to add
          */
         @Override
-        public IColumns addColumns(List<Column> columns) {
+        public ColumnStep addColumns(List<Column> columns) {
             this.columns.addAll(columns);
             return this;
         }
@@ -573,7 +573,7 @@ public class DelimitedFormat implements Format, Serializable {
          * @param column a column to add
          */
         @Override
-        public IColumns addColumn(Column column) {
+        public ColumnStep addColumn(Column column) {
             this.columns.add(column);
             return this;
         }
@@ -582,13 +582,13 @@ public class DelimitedFormat implements Format, Serializable {
          * @param offset an offset
          */
         @Override
-        public IOptional withOffset(int offset) {
+        public OptionalStep withOffset(int offset) {
             this.offset = offset;
             return this;
         }
 
         @Override
-        public IColumns unframed() {
+        public ColumnStep unframed() {
             this.framing = Framing.NONE;
             return this;
         }
@@ -597,7 +597,7 @@ public class DelimitedFormat implements Format, Serializable {
          * @param frameDelimiter a frame delimiter
          */
         @Override
-        public IColumns alwaysFramed(Character frameDelimiter) {
+        public ColumnStep alwaysFramed(Character frameDelimiter) {
             this.framing = Framing.REQUIRED;
             this.frameDelimiter = frameDelimiter;
             return this;
@@ -607,14 +607,14 @@ public class DelimitedFormat implements Format, Serializable {
          * @param frameDelimiter a frame delimiter
          */
         @Override
-        public IColumns optionallyFramed(Character frameDelimiter) {
+        public ColumnStep optionallyFramed(Character frameDelimiter) {
             this.framing = Framing.OPTIONAL;
             this.frameDelimiter = frameDelimiter;
             return this;
         }
 
         @Override
-        public IOptional withEndingDelimiter() {
+        public OptionalStep withEndingDelimiter() {
             this.endingDelimiter = true;
             return this;
         }
@@ -623,7 +623,7 @@ public class DelimitedFormat implements Format, Serializable {
          * @param delimiter a delimiter
          */
         @Override
-        public IFraming withDelimiter(Character delimiter) {
+        public FramingStep withDelimiter(Character delimiter) {
             this.delimiter = delimiter;
             return this;
         }
@@ -632,7 +632,7 @@ public class DelimitedFormat implements Format, Serializable {
          * @param description a description of the format
          */
         @Override
-        public IDelimiter withDescription(String description) {
+        public DelimiterStep withDescription(String description) {
             this.description = description;
             return this;
         }
@@ -641,7 +641,7 @@ public class DelimitedFormat implements Format, Serializable {
          * @param id an identifier for the format
          */
         @Override
-        public IDescription withId(String id) {
+        public DescriptionStep withId(String id) {
             this.id = id;
             return this;
         }

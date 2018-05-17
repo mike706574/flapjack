@@ -78,7 +78,7 @@ public class FixedWidthFormat implements Format, Serializable {
         return new FixedWidthFormat(id, description, fields);
     }
 
-    public static IId builder() {
+    public static IdStep builder() {
         return new Builder();
     }
 
@@ -241,52 +241,52 @@ public class FixedWidthFormat implements Format, Serializable {
         visitor.accept(this);
     }
 
-    interface ISkipping {
-        ISkipping skipLast(int count);
+    interface OptionalStep {
+        OptionalStep skipLast(int count);
 
-        ISkipping skipFirst(int count);
-
-        FixedWidthFormat build();
-    }
-
-    interface IFields {
-        ISkipping withFields(List<Field> fields);
-
-        IFields addField(Field field);
-
-        IFields addFields(List<Field> fields);
-
-        ISkipping skipLast(int count);
-
-        ISkipping skipFirst(int count);
+        OptionalStep skipFirst(int count);
 
         FixedWidthFormat build();
     }
 
-    interface IDescription {
-        IFields withDescription(String description);
+    interface FieldStep {
+        OptionalStep withFields(List<Field> fields);
 
-        ISkipping withFields(List<Field> fields);
+        FieldStep addField(Field field);
 
-        IFields addField(Field field);
+        FieldStep addFields(List<Field> fields);
 
-        IFields addFields(List<Field> fields);
+        OptionalStep skipLast(int count);
+
+        OptionalStep skipFirst(int count);
+
+        FixedWidthFormat build();
     }
 
-    interface IId {
-        IDescription withId(String id);
+    interface DescriptionStep {
+        FieldStep withDescription(String description);
 
-        ISkipping withFields(List<Field> fields);
+        OptionalStep withFields(List<Field> fields);
 
-        IFields addField(Field field);
+        FieldStep addField(Field field);
 
-        IFields addFields(List<Field> fields);
+        FieldStep addFields(List<Field> fields);
+    }
+
+    interface IdStep {
+        DescriptionStep withId(String id);
+
+        OptionalStep withFields(List<Field> fields);
+
+        FieldStep addField(Field field);
+
+        FieldStep addFields(List<Field> fields);
     }
 
     /**
      * {@code FixedWidthFormat} builder static inner class.
      */
-    public static final class Builder implements ISkipping, IFields, IDescription, IId {
+    public static final class Builder implements OptionalStep, FieldStep, DescriptionStep, IdStep {
         private int skipLast = 0;
         private int skipFirst = 0;
         private List<Field> fields = new LinkedList<>();
@@ -301,7 +301,7 @@ public class FixedWidthFormat implements Format, Serializable {
          *              a set of records
          */
         @Override
-        public ISkipping skipLast(int count) {
+        public OptionalStep skipLast(int count) {
             this.skipLast = count;
             return this;
         }
@@ -311,7 +311,7 @@ public class FixedWidthFormat implements Format, Serializable {
          *              records
          */
         @Override
-        public ISkipping skipFirst(int count) {
+        public OptionalStep skipFirst(int count) {
             this.skipFirst = count;
             return this;
         }
@@ -320,7 +320,7 @@ public class FixedWidthFormat implements Format, Serializable {
          * @param fields fields
          */
         @Override
-        public ISkipping withFields(List<Field> fields) {
+        public OptionalStep withFields(List<Field> fields) {
             this.fields = fields;
             return this;
         }
@@ -329,7 +329,7 @@ public class FixedWidthFormat implements Format, Serializable {
          * @param field a field to add
          */
         @Override
-        public IFields addField(Field field) {
+        public FieldStep addField(Field field) {
             this.fields.add(field);
             return this;
         }
@@ -338,7 +338,7 @@ public class FixedWidthFormat implements Format, Serializable {
          * @param fields fields to add
          */
         @Override
-        public IFields addFields(List<Field> fields) {
+        public FieldStep addFields(List<Field> fields) {
             this.fields.addAll(fields);
             return this;
         }
@@ -347,7 +347,7 @@ public class FixedWidthFormat implements Format, Serializable {
          * @param description a description of the format
          */
         @Override
-        public IFields withDescription(String description) {
+        public FieldStep withDescription(String description) {
             this.description = description;
             return this;
         }
@@ -356,7 +356,7 @@ public class FixedWidthFormat implements Format, Serializable {
          * @param id an identifier for the format
          */
         @Override
-        public IDescription withId(String id) {
+        public DescriptionStep withId(String id) {
             this.id = id;
             return this;
         }
