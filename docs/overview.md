@@ -22,8 +22,16 @@ import fun.mike.flapjack.alpha.
 Column foo = Column.string("foo");
 Column bar = Column.string("bar");
 List<Column> columns = Arrays.asList(foo, bar);
-Format baz = DelimitedFormat.unframed("baz", "Baz", ',', columns);
+Format baz = DelimitedFormat.builder()
+    .withId("baz")
+    .withDescription("Baz")
+    .unframed()
+    .withDelimiter(',')
+    .withColumns(columns)
+    .build();
 ```
+
+
 
 Here's what it looks like as JSON:
 
@@ -73,7 +81,11 @@ import fun.mike.flapjack.alpha.Field;
 Field foo = Field.string("foo", 3);
 Field bar = Field.string("bar", 2);
 List<Field> fields = Arrays.asList(foo, bar);
-Format baz = FixedWidthFormat.basic("baz", "Baz", fields);
+Format baz = FixedWidthFormat.builder()
+    .withId("baz")
+    .withDescription("Baz")
+    .withFields(fields)
+    .build();
 ```
 
 Here's what it looks like as JSON:
