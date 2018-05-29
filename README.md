@@ -16,8 +16,8 @@ List<Column> columns = Arrays.asList(foo, bar);
 Format format = DelimitedFormat.builder()
     .withId("baz")
     .withDescription("Baz")
-    .unframed()
     .withDelimiter(',')
+    .unframed()
     .withColumns(columns)
     .build();
 
