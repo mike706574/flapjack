@@ -161,7 +161,7 @@ public class Column implements Serializable {
      * @return a nullable BigDecimal column
      */
     public static Column nullableBigDecimal(String id) {
-        return new Column(id, "big-decimal", new HashMap<>());
+        return bigDecimal(id).nullable();
     }
 
     /**
