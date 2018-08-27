@@ -17,6 +17,10 @@ public class FixedWidthParser implements Parser, Serializable {
     }
 
     public ParseResult parse(String line) {
+        if(line.equals("")) {
+            return ParseResult.withProblem(Record.empty(), line, new EmptyLineProblem());
+        }
+
         Record record = new Record();
 
         record.setMetadataProperty("line", line);

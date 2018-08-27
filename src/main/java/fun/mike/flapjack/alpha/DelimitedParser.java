@@ -30,6 +30,9 @@ public class DelimitedParser implements Parser, Serializable {
     }
 
     public ParseResult parse(String line) {
+        if(line.equals("")) {
+            return ParseResult.withProblem(Record.empty(), line, new EmptyLineProblem());
+        }
         return format.isFramed() ? parseFramedLine(line) : parseUnframedLine(line);
     }
 

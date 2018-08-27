@@ -427,14 +427,26 @@ public class DelimitedParserTest {
     }
 
     @Test
-    public void what() {
+    public void empty() {
+        List<Column> columns = Arrays.asList(Column.with("foo", "string"),
+                                             Column.with("bar", "string"));
 
-        DelimitedFormat.builder()
-                .withId("x")
-                .withDescription("Z")
+        DelimitedFormat format = DelimitedFormat.builder()
+                .withId("baz")
+                .withDescription("Baz")
                 .withDelimiter(',')
                 .alwaysFramed('"')
+                .withColumns(columns)
                 .build();
 
+        DelimitedParser parser = new DelimitedParser(format);
+
+        ParseResult result = parser.parse("");
+
+        assertTrue(result.hasProblems());
+
+        assertEquals(1, result.getProblems().size());
+
+        assertEquals(new EmptyLineProblem(), result.getProblems().get(0));
     }
 }

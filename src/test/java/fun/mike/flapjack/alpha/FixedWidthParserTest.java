@@ -101,13 +101,18 @@ public class FixedWidthParserTest {
     }
 
     @Test
-    public void what() {
-        FixedWidthFormat.builder()
-                .withFields(Collections.emptyList())
-                .skipFirst(0)
-                .skipLast(0)
-                .build();
+    public void empty() {
+        List<Field> fields = Arrays.asList(Field.with("foo", 2, "string"),
+                                           Field.with("bar", 2, "string"));
+        FixedWidthFormat format = new FixedWidthFormat("baz", "Baz", fields);
+        FixedWidthParser parser = new FixedWidthParser(format);
 
+        ParseResult result = parser.parse("");
 
+        assertTrue(result.hasProblems());
+
+        assertEquals(1, result.getProblems().size());
+
+        assertEquals(new EmptyLineProblem(), result.getProblems().get(0));
     }
 }
