@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
- * A problem found during serialization or problem.
+ * A problem found during serialization or parsing.
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
 @JsonSubTypes({
@@ -16,7 +16,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @Type(value = FramingProblem.class, name = "framing"),
         @Type(value = TruncationProblem.class, name = "truncation"),
         @Type(value = FormatProblem.class, name = "format"),
-        @Type(value = MissingValueProblem.class, name = "missing-value")
+        @Type(value = MissingValueProblem.class, name = "missing-value"),
+        @Type(value = EmptyLineProblem.class, name = "empty-line")
 })
 public interface Problem {
     String explain();
