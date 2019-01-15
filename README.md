@@ -1,7 +1,7 @@
 # flapjack
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/fun.mike/flapjack-alpha/badge.svg)](https://maven-badges.herokuapp.com/maven-central/fun.mike/flapjack-alpha)
-[![Javadocs](https://www.javadoc.io/badge/fun.mike/flapjack-alpha.svg)](https://www.javadoc.io/doc/fun.mike/flapjack-alpha)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/fun.mike/flapjack-beta/badge.svg)](https://maven-badges.herokuapp.com/maven-central/fun.mike/flapjack-beta)
+[![Javadocs](https://www.javadoc.io/badge/fun.mike/flapjack-beta.svg)](https://www.javadoc.io/doc/fun.mike/flapjack-beta)
 
 Flat file parsing and serialization library for Java.
 
@@ -32,7 +32,7 @@ String text = format.serialize(record).getValue();
 
 - [Overview](docs/overview.md)
 - [Examples](docs/examples.md)
-- [API Docs](https://www.javadoc.io/doc/fun.mike/flapjack-alpha)
+- [API Docs](https://www.javadoc.io/doc/fun.mike/flapjack-beta)
 
 ## Build
 
