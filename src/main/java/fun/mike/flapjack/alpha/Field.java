@@ -7,8 +7,6 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static fun.mike.map.alpha.Factory.mapOf;
-
 /**
  * A field in a fixed-width format.
  */
@@ -215,7 +213,9 @@ public class Field implements Serializable {
      * @return a date field with the given format
      */
     public static Field date(String id, int length, String format) {
-        return new Field(id, length, "date", mapOf("format", "yyyyMMdd"));
+        Map<String, Object> props = new HashMap<>();
+        props.put("format", "yyyyMMdd");
+        return new Field(id, length, "date", props);
     }
 
     /**

@@ -59,5 +59,4 @@ public class FixedWidthFormatExplainer {
         }
         return value.toString();
     }
-
 }

@@ -1,11 +1,15 @@
 package fun.mike.flapjack.alpha;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import fun.mike.io.alpha.Spitter;
 import fun.mike.record.alpha.Record;
 
 public class FlatFileOutputContext implements OutputContext<Nothing> {
@@ -70,7 +74,7 @@ public class FlatFileOutputContext implements OutputContext<Nothing> {
     }
 
     private final class FlatFileOutputChannel implements OutputChannel<Nothing> {
-        private final Spitter spitter;
+        private final BufferedWriter writer;
         private final Format format;
 
         private final List<Failure> failures;
@@ -78,11 +82,21 @@ public class FlatFileOutputContext implements OutputContext<Nothing> {
         public FlatFileOutputChannel(String path, Format format) {
             this.format = format;
 
-            this.spitter = new Spitter(path);
+            try {
+                this.writer = new BufferedWriter(new FileWriter(path));
+            } catch (IOException ex) {
+                throw new UncheckedIOException(ex);
+            }
 
             if (format instanceof DelimitedFormat) {
                 boolean includeHeader = ((DelimitedFormat)format).hasHeader();
-                spitter.spit(HeaderBuilder.build((DelimitedFormat) format));
+
+                try {
+                    writer.write(HeaderBuilder.build((DelimitedFormat) format));
+                    writer.newLine();
+                } catch (IOException ex) {
+                    throw new UncheckedIOException(ex);
+                }
             }
 
             this.failures = new LinkedList<>();
@@ -94,7 +108,14 @@ public class FlatFileOutputContext implements OutputContext<Nothing> {
 
             if (serializationResult.isOk()) {
                 String outputLine = serializationResult.getValue();
-                spitter.spit(outputLine);
+
+                try {
+                    writer.write(outputLine);
+                    writer.newLine();
+                } catch (IOException ex) {
+                    throw new UncheckedIOException(ex);
+                }
+
                 return Optional.empty();
             }
 
@@ -112,7 +133,11 @@ public class FlatFileOutputContext implements OutputContext<Nothing> {
 
         @Override
         public void close() {
-            spitter.close();
+            try {
+                writer.close();
+            } catch (IOException ex) {
+                throw new UncheckedIOException(ex);
+            }
         }
     }
 }

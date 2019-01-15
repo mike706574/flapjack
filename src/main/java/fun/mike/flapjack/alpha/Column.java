@@ -7,8 +7,6 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import static fun.mike.map.alpha.Factory.mapOf;
-
 /**
  * A column in a delimited format.
  */
@@ -183,7 +181,9 @@ public class Column implements Serializable {
      * @return a date column with the given format
      */
     public static Column date(String id, String format) {
-        return new Column(id, "date", mapOf("format", format));
+        Map<String, Object> props = new HashMap<>();
+        props.put("format", format);
+        return new Column(id, "date", props);
     }
 
     /**

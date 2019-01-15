@@ -5,9 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import fun.mike.io.alpha.IO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,11 @@ public class FlatFileInputChannel implements InputChannel {
 
         this.lineIndex = 0;
 
-        try (Stream<String> stream = IO.streamLines(path)) {
+        try (Stream<String> stream = Files.lines(Paths.get(path))) {
             lineCount = (int) stream.count();
+        }
+        catch(IOException ex) {
+            throw new UncheckedIOException(ex);
         }
 
         skipFirst = GetSkipFirstVisitor.visit(format);
@@ -53,8 +57,6 @@ public class FlatFileInputChannel implements InputChannel {
             lineIndex++;
             readLine(reader);
         }
-
-
 
         int number = lineIndex + 1;
         lineIndex++;

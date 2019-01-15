@@ -7,11 +7,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import fun.mike.record.alpha.Record;
 import fun.mike.record.alpha.TypeMismatchException;
-
-import static fun.mike.map.alpha.Get.requiredString;
 
 public class ValueSerializer implements Serializable {
     private static final Map<String, ValueSerializationFunction> typeSerializers;
@@ -77,7 +76,8 @@ public class ValueSerializer implements Serializable {
                                                        Map<String, Object> props,
                                                        Record record) {
         Date value = record.getDate(id);
-        String format = requiredString(props, "format");
+
+        String format = getRequiredString(props, "format");
         SimpleDateFormat formatter = new SimpleDateFormat(format);
         String serializedValue = formatter.format(value);
         return ValueOrProblem.value(serializedValue);
@@ -106,5 +106,29 @@ public class ValueSerializer implements Serializable {
                                                          Record record) {
         String value = record.getString(id);
         return ValueOrProblem.value(value);
+    }
+
+    private static String getRequiredString(Map<String, Object> map, String key) {
+        if (!map.containsKey(key)) {
+            String message = String.format("Missing required string value for key \"%s\".",
+                                           key);
+            throw new NoSuchElementException(message);
+        }
+
+        Object value = map.get(key);
+
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof String) {
+            return (String) value;
+        }
+
+        String message = String.format("Value \"%s\" of class \"%s\" for key \"%s\" must be a string.",
+                                       value,
+                                       value.getClass().getName(),
+                                       key);
+        throw new IllegalArgumentException(message);
     }
 }

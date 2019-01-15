@@ -78,11 +78,6 @@
       <version>${slf4j.version}</version>
     </dependency>
     <dependency>
-      <groupId>fun.mike</groupId>
-      <artifactId>map-support-alpha</artifactId>
-      <version>0.0.16</version>
-    </dependency>
-    <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-annotations</artifactId>
       <version>${jackson.version}</version>
@@ -97,11 +92,6 @@
       <artifactId>jackson-databind</artifactId>
       <version>${jackson.version}</version>
     </dependency>
-    <dependency>
-      <groupId>fun.mike</groupId>
-      <artifactId>io-support-alpha</artifactId>
-      <version>0.0.13</version>
-    </dependency>
 
     <dependency>
       <groupId>junit</groupId>
@@ -113,6 +103,18 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>${slf4j.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>fun.mike</groupId>
+      <artifactId>io-support-alpha</artifactId>
+      <version>0.0.13</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>fun.mike</groupId>
+      <artifactId>map-support-alpha</artifactId>
+      <version>0.0.16</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
