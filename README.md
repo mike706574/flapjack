@@ -31,6 +31,7 @@ String text = format.serialize(record).getValue();
 ## Resources
 
 - [Overview](docs/overview.md)
+- [Pipelines](docs/pipelines.md)
 - [Examples](docs/examples.md)
 - [API Docs](https://www.javadoc.io/doc/fun.mike/flapjack-beta)
 
