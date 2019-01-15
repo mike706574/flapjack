@@ -15,9 +15,9 @@ A delimited format specifies how a record is delimited and framed as well as how
 Here's an example of building a delimited format called `baz` for the record "bop,1", which contains 2 columns - `foo`, a string, and `bar`, an integer:
 
 ```java
-import fun.mike.flapjack.alpha.DelimitedFormat
-import fun.mike.flapjack.alpha.Format;
-import fun.mike.flapjack.alpha.
+import fun.mike.flapjack.beta.DelimitedFormat
+import fun.mike.flapjack.beta.Format;
+import fun.mike.flapjack.beta.
 
 Column foo = Column.string("foo");
 Column bar = Column.string("bar");
@@ -74,9 +74,9 @@ List<Field> fields = Arrays.asList(Field.string("foo", 3),
                                    Field.integer("bar", 2));
 
 ```java
-import fun.mike.flapjack.alpha.FixedWidthFormat;˘
-import fun.mike.flapjack.alpha.Format;
-import fun.mike.flapjack.alpha.Field;
+import fun.mike.flapjack.beta.FixedWidthFormat;˘
+import fun.mike.flapjack.beta.Format;
+import fun.mike.flapjack.beta.Field;
 
 Field foo = Field.string("foo", 3);
 Field bar = Field.string("bar", 2);
@@ -151,7 +151,7 @@ If there were any errors parsing the record, `getValue` will throw a `ParseExcep
 ```java
 Map<String, Record> map = result.getValue();
 format.parse("bop,x");
-// => fun.mike.flapjack.alpha.ParseException
+// => fun.mike.flapjack.beta.ParseException
 ```
 
 Rather than checking the result with `isOk` and using `getValue`, you can provide a default with `orElse`:
