@@ -67,7 +67,15 @@ public class PipelineResult<T> implements Result<T> {
         if (isOk()) {
             return value;
         }
-        throw new RuntimeException("TODO");
+
+        String failureSummary = failures.stream()
+            .map(Failure::explain)
+            .collect(Collectors.joining("\n\n"));
+
+        String message = String.format("%d failures.\n\n%s",
+                                       failures.size(),
+                                       failureSummary);
+        throw new RuntimeException(message);
     }
 
     public int getInputCount() {
