@@ -3,7 +3,7 @@ package fun.mike.flapjack.beta;
 import java.io.Serializable;
 
 /**
- * Problem used the line is empty.
+ * Problem used when the line is empty.
  */
 public class EmptyLineProblem implements Problem, Serializable {
     @Override

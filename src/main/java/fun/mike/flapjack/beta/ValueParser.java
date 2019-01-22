@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +27,10 @@ public class ValueParser implements Serializable {
                 return parseInt(id, type, props, value);
             case "date":
                 return parseDate(id, type, props, value);
+            case "local-date":
+                return parseLocalDate(id, type, props, value);
+            case "local-date-time":
+                return parseLocalDateTime(id, type, props, value);
             case "double":
                 return parseDouble(id, type, props, value);
             case "big-decimal":
@@ -242,11 +250,132 @@ public class ValueParser implements Serializable {
             return ValueOrProblem.problem(new TypeProblem(id, type, value));
         }
 
-        SimpleDateFormat formatter = new SimpleDateFormat(format);
+        SimpleDateFormat formatter;
+        try {
+            formatter = new SimpleDateFormat(format);
+        } catch (IllegalArgumentException ex) {
+            String message = String.format("Property \"format\" for date field \"%s\" with value \"%s\" must be a valid date format.",
+                                           id,
+                                           format);
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
         try {
             Date date = formatter.parse(value);
             return ValueOrProblem.value(date);
         } catch (ParseException ex) {
+            return ValueOrProblem.problem(new TypeProblem(id, type, value));
+        }
+    }
+
+    private static ValueOrProblem<LocalDate> parseLocalDate(String id,
+                                                            String type,
+                                                            Map<String, Object> props,
+                                                            String value) {
+        Object rawFormat = props.get("format");
+
+        if (rawFormat == null) {
+            String message = String.format("Property \"format\" is required for LocalDate field \"%s\".", id);
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
+        if (!(rawFormat instanceof String)) {
+            String message = String.format("Property \"format\" for LocalDate field \"%s\" must be a string - got value \"%s\" of type \"%s\".",
+                                           id,
+                                           rawFormat,
+                                           rawFormat.getClass().getName());
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
+        String format = (String) rawFormat;
+
+        if (isBlank(value)) {
+            ValueOrProblem nullableOrProblem = getNullableFlag(id, props);
+
+            if (nullableOrProblem.hasProblem()) {
+                return ValueOrProblem.problem(nullableOrProblem.getProblem());
+            }
+
+            Boolean nullable = (Boolean) nullableOrProblem.getValue();
+
+            if (nullable) {
+                return ValueOrProblem.value(null);
+            }
+
+            return ValueOrProblem.problem(new TypeProblem(id, type, value));
+        }
+
+        DateTimeFormatter formatter;
+
+        try {
+            formatter = DateTimeFormatter.ofPattern(format);
+        } catch (IllegalArgumentException ex) {
+            String message = String.format("Property \"format\" for LocalDate field \"%s\" with value \"%s\" must be a valid date format.",
+                                           id,
+                                           format);
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
+        try {
+            LocalDate localDate = LocalDate.parse(value, formatter);
+            return ValueOrProblem.value(localDate);
+        } catch (DateTimeParseException ex) {
+            return ValueOrProblem.problem(new TypeProblem(id, type, value));
+        }
+    }
+
+    private static ValueOrProblem<LocalDateTime> parseLocalDateTime(String id,
+                                                                    String type,
+                                                                    Map<String, Object> props,
+                                                                    String value) {
+        Object rawFormat = props.get("format");
+
+        if (rawFormat == null) {
+            String message = String.format("Property \"format\" is required for LocalDateTime field \"%s\".", id);
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
+        if (!(rawFormat instanceof String)) {
+            String message = String.format("Property \"format\" for LocalDateTime field \"%s\" must be a string - got value \"%s\" of type \"%s\".",
+                                           id,
+                                           rawFormat,
+                                           rawFormat.getClass().getName());
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
+        String format = (String) rawFormat;
+
+        if (isBlank(value)) {
+            ValueOrProblem nullableOrProblem = getNullableFlag(id, props);
+
+            if (nullableOrProblem.hasProblem()) {
+                return ValueOrProblem.problem(nullableOrProblem.getProblem());
+            }
+
+            Boolean nullable = (Boolean) nullableOrProblem.getValue();
+
+            if (nullable) {
+                return ValueOrProblem.value(null);
+            }
+
+            return ValueOrProblem.problem(new TypeProblem(id, type, value));
+        }
+
+        DateTimeFormatter formatter;
+
+        try {
+            formatter = DateTimeFormatter.ofPattern(format);
+        } catch (IllegalArgumentException ex) {
+              String message = String.format("Property \"format\" for LocalDateTime field \"%s\" with value \"%s\" must be a valid date format.",
+                                           id,
+                                           format);
+            return ValueOrProblem.problem(new FormatProblem(message));
+        }
+
+        try {
+            LocalDateTime localDateTime = LocalDateTime.parse(value, formatter);
+            return ValueOrProblem.value(localDateTime);
+        } catch (DateTimeParseException ex) {
             return ValueOrProblem.problem(new TypeProblem(id, type, value));
         }
     }

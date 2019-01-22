@@ -3,6 +3,9 @@ package fun.mike.flapjack.beta;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -318,6 +321,140 @@ public class ValueParserTest {
         ValueOrProblem result = ValueParser.parse("foo", "date", props, "01012025");
         assertTrue(result.hasProblem());
         assertEquals(new FormatProblem("Property \"format\" for date field \"foo\" must be a string - got value \"5\" of type \"java.lang.Integer\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void invalidDateFormat() {
+        String format = "eakfneakw";
+        Map<String, Object> props = mapOf("format", format);
+
+        String unformattedDate = "19950215";
+        ValueOrProblem result = ValueParser.parse("foo", "date", props, unformattedDate);
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" for date field \"foo\" with value \"eakfneakw\" must be a valid date format."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void formattedLocalDate() {
+        String format = "yyyyMMdd";
+        Map<String, Object> props = mapOf("format", format);
+
+        String unformattedDate = "19950215";
+        ValueOrProblem validResult = ValueParser.parse("foo", "local-date", props, unformattedDate);
+        assertFalse(validResult.hasProblem());
+
+        LocalDate expectedLocalDate = LocalDate.of(1995, 2, 15);
+        assertEquals(expectedLocalDate, validResult.getValue());
+
+        ValueOrProblem invalidResult = ValueParser.parse("foo", "local-date", props, "bar");
+        assertTrue(invalidResult.hasProblem());
+        assertEquals(new TypeProblem("foo", "local-date", "bar"),
+                     invalidResult.getProblem());
+    }
+
+    @Test
+    public void nullableFormattedLocalDate() {
+        String format = "yyyyMMdd";
+        Map<String, Object> props = mapOf("format", format,
+                                          "nullable", true);
+
+        ValueOrProblem result = ValueParser.parse("foo", "local-date", props, "        ");
+        assertFalse(result.hasProblem());
+        assertNull(result.getValue());
+    }
+
+    @Test
+    public void missingLocalDateFormat() {
+        Map<String, Object> props = mapOf();
+
+        ValueOrProblem result = ValueParser.parse("foo", "local-date", props, "01012025");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" is required for LocalDate field \"foo\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void wrongLocalDateFormatType() {
+        Map<String, Object> props = mapOf("format", 5);
+
+        ValueOrProblem result = ValueParser.parse("foo", "local-date", props, "01012025");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" for LocalDate field \"foo\" must be a string - got value \"5\" of type \"java.lang.Integer\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void invalidLocalDateFormat() {
+        String format = "eakfneakw";
+        Map<String, Object> props = mapOf("format", format);
+
+        String unformattedDate = "19950215";
+        ValueOrProblem result = ValueParser.parse("foo", "local-date", props, unformattedDate);
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" for LocalDate field \"foo\" with value \"eakfneakw\" must be a valid date format."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void formattedLocalDateTime() {
+        String format = "yyyy-MM-dd HH:mm:ss";
+        Map<String, Object> props = mapOf("format", format);
+
+        String unformattedDate = "1995-02-15 01:00:00";
+        ValueOrProblem validResult = ValueParser.parse("foo", "local-date-time", props, unformattedDate);
+        assertFalse(validResult.hasProblem());
+
+        LocalDateTime expectedTime = LocalDateTime.of(1995, 2, 15, 1, 0, 0);
+        assertEquals(expectedTime, validResult.getValue());
+
+        ValueOrProblem invalidResult = ValueParser.parse("foo", "local-date-time", props, "bar");
+        assertTrue(invalidResult.hasProblem());
+        assertEquals(new TypeProblem("foo", "local-date-time", "bar"),
+                     invalidResult.getProblem());
+    }
+
+    @Test
+    public void nullableFormattedLocalDateTime() {
+        String format = "yyyy-MM-dd 01:00:00";
+        Map<String, Object> props = mapOf("format", format,
+                                          "nullable", true);
+
+        ValueOrProblem result = ValueParser.parse("foo", "local-date-time", props, "        ");
+        assertFalse(result.hasProblem());
+        assertNull(result.getValue());
+    }
+
+    @Test
+    public void missingLocalDateTimeFormat() {
+        Map<String, Object> props = mapOf();
+
+        ValueOrProblem result = ValueParser.parse("foo", "local-date-time", props, "01-01-2025 01:00:00");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" is required for LocalDateTime field \"foo\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void wrongLocalDateTimeFormatType() {
+        Map<String, Object> props = mapOf("format", 5);
+
+        ValueOrProblem result = ValueParser.parse("foo", "local-date-time", props, "01-01-2025 01:00:00");
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" for LocalDateTime field \"foo\" must be a string - got value \"5\" of type \"java.lang.Integer\"."),
+                     result.getProblem());
+    }
+
+    @Test
+    public void invalidLocalDateTimeFormat() {
+        String format = "eakfneakw";
+        Map<String, Object> props = mapOf("format", format);
+
+        String unformattedDate = "1995-02-15 01:00:00";
+        ValueOrProblem result = ValueParser.parse("foo", "local-date-time", props, unformattedDate);
+        assertTrue(result.hasProblem());
+        assertEquals(new FormatProblem("Property \"format\" for LocalDateTime field \"foo\" with value \"eakfneakw\" must be a valid date format."),
                      result.getProblem());
     }
 
