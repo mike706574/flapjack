@@ -1,5 +1,6 @@
 package fun.mike.flapjack.beta;
 
+// TODO: Next major verison - rename to FlatFileInputPipelineBuilder
 public class FlatInputFilePipelineBuilder extends InputPipelineBuilder {
     private final String inputPath;
     private Format inputFormat;

@@ -1,5 +1,6 @@
 package fun.mike.flapjack.beta;
 
+import java.io.Reader;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,8 +19,13 @@ public interface Pipeline<V> {
         return new InputContextPipelineBuilder(context);
     }
 
+    // TODO: Next major version - rename to "fromFlatFile"
     static FlatInputFilePipelineBuilder fromFile(String path, Format format) {
         return new FlatInputFilePipelineBuilder(path, format);
+    }
+
+    static FlatReaderInputPipelineBuilder fromFlatReader(Reader reader, Format format) {
+        return new FlatReaderInputPipelineBuilder(reader, format);
     }
 
     static OperationPipelineBuilder fromIterable(Iterable<Record> list) {

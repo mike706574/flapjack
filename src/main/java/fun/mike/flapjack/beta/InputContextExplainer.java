@@ -21,7 +21,20 @@ public class InputContextExplainer implements InputContextVisitor {
                                   "Format: " + formatSummary(inputContext));
     }
 
+    @Override
+    public void accept(FlatReaderInputContext inputContext) {
+        explanation = String.join("\n",
+                                  "Reading from a Reader.",
+                                  "Format: " + formatSummary(inputContext));
+    }
+
     private String formatSummary(FlatFileInputContext inputContext) {
+        Format format = inputContext.getFormat();
+        boolean logFormat = inputContext.logFormat();
+        return logFormat ? FormatExplainer.explain(format) : format.getId();
+    }
+
+    private String formatSummary(FlatReaderInputContext inputContext) {
         Format format = inputContext.getFormat();
         boolean logFormat = inputContext.logFormat();
         return logFormat ? FormatExplainer.explain(format) : format.getId();
