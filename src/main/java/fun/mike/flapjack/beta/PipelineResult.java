@@ -68,12 +68,18 @@ public class PipelineResult<T> implements Result<T> {
             return value;
         }
 
+        int failureCount = failures.size();
+
         String failureSummary = failures.stream()
+            .limit(25)
             .map(Failure::explain)
             .collect(Collectors.joining("\n\n"));
 
-        String message = String.format("%d failures.\n\n%s",
-                                       failures.size(),
+        String limitNote = failureCount > 25 ? " (showing first 25)" : "";
+
+        String message = String.format("%d failures%s\n\n%s",
+                                       failureCount,
+                                       limitNote,
                                        failureSummary);
         throw new RuntimeException(message);
     }

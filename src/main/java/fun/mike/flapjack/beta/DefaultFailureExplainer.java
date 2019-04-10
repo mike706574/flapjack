@@ -72,8 +72,14 @@ public class DefaultFailureExplainer implements FailureVisitor {
         }
 
         Record metadata = failure.getRecord().getMetadata();
-        int number = metadata.optionalInteger("number").orElse(failure.getNumber());
-        String line = metadata.optionalString("line").orElse(failure.getLine());
+        int number = failure.getNumber();
+        String line = failure.getLine();
+
+        if(metadata != null) {
+            number = metadata.optionalInteger("number").orElse(number);
+            line = metadata.optionalString("line").orElse(line);
+        }
+
         return new Details(number, line);
     }
 
