@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +25,9 @@ public class ValueSerializer implements Serializable {
         typeSerializers.put("trimmed-string", ValueSerializer::serializeString);
         typeSerializers.put("integer", ValueSerializer::serializeInteger);
         typeSerializers.put("date", ValueSerializer::serializeDate);
+        typeSerializers.put("local-date", ValueSerializer::serializeLocalDate);
+        typeSerializers.put("local-date-time", ValueSerializer::serializeLocalDateTime);
+        typeSerializers.put("double", ValueSerializer::serializeDouble);
         typeSerializers.put("big-decimal", ValueSerializer::serializeBigDecimal);
         typeSerializers.put("string-enum", ValueSerializer::serializeString);
     }
@@ -79,6 +86,28 @@ public class ValueSerializer implements Serializable {
 
         String format = getRequiredString(props, "format");
         SimpleDateFormat formatter = new SimpleDateFormat(format);
+        String serializedValue = formatter.format(value);
+        return ValueOrProblem.value(serializedValue);
+    }
+
+    public static ValueOrProblem<String> serializeLocalDate(String id,
+                                                            Map<String, Object> props,
+                                                            Record record) {
+        LocalDate value = record.getLocalDate(id);
+        return serializeTemporalAccessor(value, props);
+    }
+
+    public static ValueOrProblem<String> serializeLocalDateTime(String id,
+                                                                Map<String, Object> props,
+                                                                Record record) {
+        LocalDateTime value = record.getLocalDateTime(id);
+        return serializeTemporalAccessor(value, props);
+    }
+
+    private static ValueOrProblem<String> serializeTemporalAccessor(TemporalAccessor value,
+                                                                    Map<String, Object> props) {
+        String format = getRequiredString(props, "format");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
         String serializedValue = formatter.format(value);
         return ValueOrProblem.value(serializedValue);
     }
