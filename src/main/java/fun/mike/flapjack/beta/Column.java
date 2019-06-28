@@ -198,6 +198,54 @@ public class Column implements Serializable {
     }
 
     /**
+     * Builds a local date column with the given format.
+     *
+     * @param id     an identifier
+     * @param format a date format
+     * @return a local date column with the given format
+     */
+    public static Column localDate(String id, String format) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("format", format);
+        return new Column(id, "local-date", props);
+    }
+
+    /**
+     * Builds a nullable local date column with the given format.
+     *
+     * @param id     an identifier
+     * @param format a date format
+     * @return a nullable local date column with the given format
+     */
+    public static Column nullableLocalDate(String id, String format) {
+        return localDate(id, format).nullable();
+    }
+
+    /**
+     * Builds a local date time column with the given format.
+     *
+     * @param id     an identifier
+     * @param format a date time format
+     * @return a local date time column with the given format
+     */
+    public static Column localDateTime(String id, String format) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("format", format);
+        return new Column(id, "local-date-time", props);
+    }
+
+    /**
+     * Builds a nullable local date time column with the given format.
+     *
+     * @param id     an identifier
+     * @param format a date time format
+     * @return a nullable local date time column with the given format
+     */
+    public static Column nullableLocalDateTime(String id, String format) {
+        return localDateTime(id, format).nullable();
+    }
+
+    /**
      * Builds a filler column.
      *
      * @param id an identifier

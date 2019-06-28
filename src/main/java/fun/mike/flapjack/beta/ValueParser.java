@@ -42,7 +42,6 @@ public class ValueParser implements Serializable {
         return ValueOrProblem.problem(new NoSuchTypeProblem(id, type));
     }
 
-    // TODO: Move.
     private static boolean isBlank(String str) {
         return str == null || str.trim().equals("");
     }

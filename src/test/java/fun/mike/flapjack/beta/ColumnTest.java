@@ -90,7 +90,6 @@ public class ColumnTest {
         assertEquals("big-decimal", col.getType());
         assertEquals(mapOf("nullable", true), col.getProps());
 
-
         col = Column.date("foo", "yyyyMMdd");
         assertEquals("foo", col.getId());
         assertEquals("date", col.getType());
@@ -104,6 +103,38 @@ public class ColumnTest {
         col = Column.nullableDate("foo", "yyyyMMdd");
         assertEquals("foo", col.getId());
         assertEquals("date", col.getType());
+        assertEquals(mapOf("format", "yyyyMMdd",
+                           "nullable", true), col.getProps());
+
+        col = Column.localDate("foo", "yyyyMMdd");
+        assertEquals("foo", col.getId());
+        assertEquals("local-date", col.getType());
+        assertEquals(mapOf("format", "yyyyMMdd"), col.getProps());
+
+        col = Column.localDate("foo", "yyyyMMdd");
+        assertEquals("foo", col.getId());
+        assertEquals("local-date", col.getType());
+        assertEquals(mapOf("format", "yyyyMMdd"), col.getProps());
+
+        col = Column.nullableLocalDate("foo", "yyyyMMdd");
+        assertEquals("foo", col.getId());
+        assertEquals("local-date", col.getType());
+        assertEquals(mapOf("format", "yyyyMMdd",
+                           "nullable", true), col.getProps());
+
+        col = Column.localDateTime("foo", "yyyyMMdd");
+        assertEquals("foo", col.getId());
+        assertEquals("local-date-time", col.getType());
+        assertEquals(mapOf("format", "yyyyMMdd"), col.getProps());
+
+        col = Column.localDateTime("foo", "yyyyMMdd");
+        assertEquals("foo", col.getId());
+        assertEquals("local-date-time", col.getType());
+        assertEquals(mapOf("format", "yyyyMMdd"), col.getProps());
+
+        col = Column.nullableLocalDateTime("foo", "yyyyMMdd");
+        assertEquals("foo", col.getId());
+        assertEquals("local-date-time", col.getType());
         assertEquals(mapOf("format", "yyyyMMdd",
                            "nullable", true), col.getProps());
 
