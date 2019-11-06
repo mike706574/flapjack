@@ -241,7 +241,7 @@ public class FixedWidthFormat implements Format, Serializable {
         visitor.accept(this);
     }
 
-    interface OptionalStep {
+    public interface OptionalStep {
         OptionalStep skipLast(int count);
 
         OptionalStep skipFirst(int count);
@@ -249,7 +249,7 @@ public class FixedWidthFormat implements Format, Serializable {
         FixedWidthFormat build();
     }
 
-    interface FieldStep {
+    public interface FieldStep {
         OptionalStep withFields(List<Field> fields);
 
         FieldStep addField(Field field);
@@ -263,7 +263,7 @@ public class FixedWidthFormat implements Format, Serializable {
         FixedWidthFormat build();
     }
 
-    interface DescriptionStep {
+    public interface DescriptionStep {
         FieldStep withDescription(String description);
 
         OptionalStep withFields(List<Field> fields);
@@ -273,7 +273,7 @@ public class FixedWidthFormat implements Format, Serializable {
         FieldStep addFields(List<Field> fields);
     }
 
-    interface IdStep {
+    public interface IdStep {
         DescriptionStep withId(String id);
 
         OptionalStep withFields(List<Field> fields);
